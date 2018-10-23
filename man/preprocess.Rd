@@ -58,6 +58,7 @@ Lastly, a small amount of noise is added to \code{x} to break ties. The
 magnitude of the noise is controlled by \code{jitter.factor}.
 }
 \examples{
-TODO
+rep1.df <- idr2d:::chiapet$rep1.df
+rep1.df$fdr <- preprocess(rep1.df$fdr, "multiplicative.inverse")
 
 }

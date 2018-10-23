@@ -27,20 +27,33 @@ anchorOverlap(rep1.anchor, rep2.anchor, max.gap = 1000L)
   end coordinate
 }}
 
-\item{max.gap}{integer; maximum gap in nucleotides allowed between two anchors for
+\item{max.gap}{integer; maximum gap in nucleotides allowed between two
+anchors for
 them to be considered as overlapping (defaults to \code{1000L})}
 }
 \value{
-A data frame with the following columns:
+A data frame where each row is an overlapping anchor pair.
+There are two columns:
 \tabular{rl}{
-  \code{"queryHits"} \tab TODO\cr
-  \code{"subjectHits"} \tab TODO
+  \code{"rep1.idx"} \tab anchor index in data frame \code{rep1.anchor} \cr
+  \code{"rep2.idx"} \tab anchor index in data frame \code{rep2.anchor}
 }
 }
 \description{
-TODO
+Identifies all overlapping anchor pairs (m:n mapping).
 }
 \examples{
-TODO
+rep1.df <- idr2d:::chiapet$rep1.df
+rep2.df <- idr2d:::chiapet$rep2.df
+
+rep1.anchor.a <- data.frame(chr = rep1.df[, 1],
+                            start = rep1.df[, 2],
+                            end = rep1.df[, 3])
+rep2.anchor.a <- data.frame(chr = rep2.df[, 1],
+                            start = rep2.df[, 2],
+                            end = rep2.df[, 3])
+
+anchor.a.overlap <- anchorOverlap(rep1.anchor.a, rep2.anchor.a)
+
 
 }

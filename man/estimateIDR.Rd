@@ -2,14 +2,14 @@
 % Please edit documentation in R/main.R
 \name{estimateIDR}
 \alias{estimateIDR}
-\title{TOOD}
+\title{Estimates IDR for Genomic Interaction Data}
 \usage{
 estimateIDR(rep1.df, rep2.df, value.transformation = c("identity",
   "additive.inverse", "multiplicative.inverse", "log",
   "log.additive.inverse"), ambiguity.resolution.method = c("value",
-  "overlap", "midpoint", "expansion"), mu = 0.1, sigma = 1,
-  rho = 0.2, p = 0.5, eps = 0.001, max.iteration = 30,
-  max.factor = 1.5, jitter.factor = 1e-04)
+  "overlap", "midpoint", "expansion"), max.factor = 1.5,
+  jitter.factor = 1e-04, mu = 0.1, sigma = 1, rho = 0.2, p = 0.5,
+  eps = 0.001, max.iteration = 30)
 }
 \arguments{
 \item{rep1.df}{data frame of observations (i.e., genomic interactions) of
@@ -88,7 +88,8 @@ are resolved. Available methods:
   anchor A and replicate 2 interaction anchor A,
   plus replicate 1 interaction anchor B and replicate 2 interaction anchor B,
   normalized by their lengths\cr
-  \code{"midpoint"} \tab the interaction pair is chosen which has the smallest
+  \code{"midpoint"} \tab the interaction pair is chosen which has the
+  smallest
   distance between their anchor midpoints, i.e., distance from midpoint of
   replicate 1 interaction anchor A to midpoint of
   replicate 2 interaction anchor A, plus distance from midpoint of
@@ -99,6 +100,13 @@ are resolved. Available methods:
   copied \emph{n} times and each copy is assigned to one of the interactions
   in replicate 2
 }}
+
+\item{max.factor}{numeric; controls the replacement values for \code{Inf}
+and \code{-Inf}. \code{Inf} are replaced by \code{max(x) * max.factor} and
+\code{-Inf} are replaced by \code{min(x) / max.factor}.}
+
+\item{jitter.factor}{numeric; controls the magnitude of the noise that
+is added to \code{x}. This is done to break ties in \code{x}.}
 
 \item{mu}{ a starting value for the mean of the reproducible component.}
 
@@ -113,14 +121,8 @@ are resolved. Available methods:
 \item{eps}{ Stopping criterion. Iterations stop when the increment of
     log-likelihood is < eps*log-likelihood, Default=0.001.}
 
-\item{max.iteration}{integer; maximum number of iterations (defaults to 30)}
-
-\item{max.factor}{numeric; controls the replacement values for \code{Inf}
-and \code{-Inf}. \code{Inf} are replaced by \code{max(x) * max.factor} and
-\code{-Inf} are replaced by \code{min(x) / max.factor}.}
-
-\item{jitter.factor}{numeric; controls the magnitude of the noise that
-is added to \code{x}. This is done to break ties in \code{x}.}
+\item{max.iteration}{integer; maximum number of iterations for
+IDR estimation (defaults to 30)}
 }
 \value{
 Original data frames \code{rep1.df} and \code{rep2.df} with
@@ -129,13 +131,18 @@ corresponding interaction in the other replicate. If no corresponding
 interaction was found, \code{idr} is set to \code{NA}.
 }
 \description{
-TODO
+This method estimates Irreproducible Discovery Rates (IDR) between
+two replicates of experiments identifying genomic interactions, such as
+HiC, ChIA-PET, and HiChIP.
 }
 \examples{
-TODO
+idr.df <- estimateIDR(idr2d:::chiapet$rep1.df,
+                      idr2d:::chiapet$rep2.df,
+                      value.transformation = "multiplicative.inverse")
 
-\dontrun{
-TODO
 }
-
+\references{
+Q. Li, J. B. Brown, H. Huang and P. J. Bickel. (2011) Measuring
+reproducibility of high-throughput experiments. Annals of Applied
+Statistics, Vol. 5, No. 3, 1752-1779.
 }

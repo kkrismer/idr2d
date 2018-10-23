@@ -1,25 +1,8 @@
 
-#' @importFrom dplyr arrange_
-#' @importFrom futile.logger flog.warn
-#' @importFrom futile.logger flog.info
-sortBy <- function(df, column.name) {
-    if (nrow(df) > 0) {
-        # shuffle to break preexisting order
-        df <- df[sample.int(nrow(df)), ]
-
-        df <- dplyr::arrange_(df, column.name)
-
-        futile.logger::flog.info("data sorted")
-    } else {
-        futile.logger::flog.warn("empty data frame")
-    }
-    return(df)
-}
-
 #' @title Identifies Overlapping Anchors
 #'
 #' @description
-#' TODO
+#' Identifies all overlapping anchor pairs (m:n mapping).
 #'
 #' @param rep1.anchor data frame with the following columns:
 #' \tabular{rl}{
@@ -39,17 +22,30 @@ sortBy <- function(df, column.name) {
 #'   \code{end} \tab integer; genomic location of anchor in replicate 2 -
 #'   end coordinate
 #' }
-#' @param max.gap integer; maximum gap in nucleotides allowed between two anchors for
+#' @param max.gap integer; maximum gap in nucleotides allowed between two
+#' anchors for
 #' them to be considered as overlapping (defaults to \code{1000L})
 #'
-#' @return A data frame with the following columns:
+#' @return A data frame where each row is an overlapping anchor pair.
+#' There are two columns:
 #' \tabular{rl}{
-#'   \code{"queryHits"} \tab TODO\cr
-#'   \code{"subjectHits"} \tab TODO
+#'   \code{"rep1.idx"} \tab anchor index in data frame \code{rep1.anchor} \cr
+#'   \code{"rep2.idx"} \tab anchor index in data frame \code{rep2.anchor}
 #' }
 #'
 #' @examples
-#' TODO
+#' rep1.df <- idr2d:::chiapet$rep1.df
+#' rep2.df <- idr2d:::chiapet$rep2.df
+#'
+#' rep1.anchor.a <- data.frame(chr = rep1.df[, 1],
+#'                             start = rep1.df[, 2],
+#'                             end = rep1.df[, 3])
+#' rep2.anchor.a <- data.frame(chr = rep2.df[, 1],
+#'                             start = rep2.df[, 2],
+#'                             end = rep2.df[, 3])
+#'
+#' anchor.a.overlap <- anchorOverlap(rep1.anchor.a, rep2.anchor.a)
+#'
 #'
 #' @importFrom GenomicRanges makeGRangesFromDataFrame
 #' @importFrom GenomeInfoDb seqlevels
@@ -68,9 +64,11 @@ anchorOverlap <- function(rep1.anchor, rep2.anchor, max.gap = 1000L) {
   GenomeInfoDb::seqlevels(rep2.ranges) <- combined.seq.levels
 
   # get overlap between replicates, accept 1000 bp gap
-  return(data.frame(GenomicRanges::findOverlaps(rep1.ranges, rep2.ranges,
-    maxgap = max.gap
-  )))
+  overlap.df <- data.frame(GenomicRanges::findOverlaps(rep1.ranges,
+                                                       rep2.ranges,
+                                                       maxgap = max.gap))
+  colnames(overlap.df) <- c("rep1.idx", "rep2.idx")
+  return(overlap.df)
 }
 
 #' @title Distance between Anchor Midpoints of two Interactions
@@ -204,10 +202,16 @@ calculateRelativeOverlap <- function(int1.anchor.a.start, int1.anchor.a.end,
     return((anchor.a.overlap + anchor.b.overlap) /
                (anchor.a.combined.length + anchor.b.combined.length))
 }
-#' @title TODO
+#' @title Established m:n mapping between interactions from replicate 1 and 2
 #'
 #' @description
-#' TODO
+#' This method returns all overlapping interactions between two replicates.
+#' For each pair of overlapping interactions, the
+#' \emph{ambiguity resolution value} (ARV) is calculated, which helps to reduce
+#' the m:n mapping to a 1:1 mapping. The semantics of the ARV depend on the
+#' specified \code{ambiguity.resolution.method}, but in general interaction
+#' pairs with lower ARVs have priority over interaction pairs with higher ARVs
+#' when the bijective mapping is established.
 #'
 #' @param rep1.df data frame of observations (i.e., genomic interactions) of
 #' replicate 1, with at least the following columns (position of columns
@@ -263,7 +267,8 @@ calculateRelativeOverlap <- function(int1.anchor.a.start, int1.anchor.a.end,
 #'   anchor A and replicate 2 interaction anchor A,
 #'   plus replicate 1 interaction anchor B and replicate 2 interaction anchor B,
 #'   normalized by their lengths\cr
-#'   \code{"midpoint"} \tab the interaction pair is chosen which has the smallest
+#'   \code{"midpoint"} \tab the interaction pair is chosen which has the
+#'   smallest
 #'   distance between their anchor midpoints, i.e., distance from midpoint of
 #'   replicate 1 interaction anchor A to midpoint of
 #'   replicate 2 interaction anchor A, plus distance from midpoint of
@@ -286,9 +291,25 @@ calculateRelativeOverlap <- function(int1.anchor.a.start, int1.anchor.a.end,
 #'   mapping. Interaction pairs with lower \code{arv} are prioritized.\tab
 #' }
 #'
-#'
 #' @examples
-#' TODO
+#' ambiguity.resolution.method <- "multiplicative.inverse"
+#' rep1.df <- idr2d:::chiapet$rep1.df
+#' rep1.df$fdr <- preprocess(rep1.df$fdr, ambiguity.resolution.method)
+#'
+#' rep2.df <- idr2d:::chiapet$rep2.df
+#' rep2.df$fdr <- preprocess(rep2.df$fdr, ambiguity.resolution.method)
+#'
+#' mapping <- establishBijection(rep1.df, rep2.df, ambiguity.resolution.method)
+#'
+#' # shuffle to break preexisting order
+#' rep1.df <- rep1.df[sample.int(nrow(rep1.df)), ]
+#' rep2.df <- rep2.df[sample.int(nrow(rep2.df)), ]
+#'
+#' # sort by value column
+#' rep1.df <- dplyr::arrange(rep1.df, rep1.df$fdr)
+#' rep2.df <- dplyr::arrange(rep2.df, rep2.df$fdr)
+#'
+#' pairs.df <- overlap(rep1.df, rep2.df, ambiguity.resolution.method)
 #'
 #' @importFrom futile.logger flog.warn
 #' @importFrom futile.logger flog.info
@@ -322,10 +343,10 @@ overlap <- function(rep1.df, rep2.df,
             max.gap = max.gap
         )
 
-        a <- paste0(overlaps.anchorsA.df$queryHits, "-",
-                    overlaps.anchorsA.df$subjectHits)
-        b <- paste0(overlaps.anchorsB.df$queryHits, "-",
-                    overlaps.anchorsB.df$subjectHits)
+        a <- paste0(overlaps.anchorsA.df$rep1.idx, "-",
+                    overlaps.anchorsA.df$rep2.idx)
+        b <- paste0(overlaps.anchorsB.df$rep1.idx, "-",
+                    overlaps.anchorsB.df$rep2.idx)
 
         replicates <- intersect(a, b)
 

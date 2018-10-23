@@ -66,7 +66,8 @@ are resolved. Available methods:
   anchor A and replicate 2 interaction anchor A,
   plus replicate 1 interaction anchor B and replicate 2 interaction anchor B,
   normalized by their lengths\cr
-  \code{"midpoint"} \tab the interaction pair is chosen which has the smallest
+  \code{"midpoint"} \tab the interaction pair is chosen which has the
+  smallest
   distance between their anchor midpoints, i.e., distance from midpoint of
   replicate 1 interaction anchor A to midpoint of
   replicate 2 interaction anchor A, plus distance from midpoint of
@@ -78,7 +79,8 @@ are resolved. Available methods:
   in replicate 2
 }}
 
-\item{max.gap}{integer; maximum gap in nucleotides allowed between two anchors for
+\item{max.gap}{integer; maximum gap in nucleotides allowed between two
+anchors for
 them to be considered as overlapping (defaults to \code{1000L})}
 }
 \value{
@@ -88,9 +90,23 @@ corresponding interaction in the other replicate. If no corresponding
 interaction was found, \code{replicate.idx} is set to \code{NA}.
 }
 \description{
-TODO
+This method establishes a bijective assignment between interactions from
+replicate 1 and 2. An interaction in replicate 1 is assigned to an
+interaction in replicate 2 if and only if (1) both anchors of the
+interactions
+overlap (or the gap between anchor A/B in replicate 1 and 2 is less than
+or equal to \code{max.gap}), and (2) there is no other interaction in
+replicate 2 that overlaps with the interaction in replicate 1 and has a
+lower \emph{ambiguity resolution value}.
 }
 \examples{
-TODO
+ambiguity.resolution.method <- "multiplicative.inverse"
+rep1.df <- idr2d:::chiapet$rep1.df
+rep1.df$fdr <- preprocess(rep1.df$fdr, ambiguity.resolution.method)
+
+rep2.df <- idr2d:::chiapet$rep2.df
+rep2.df$fdr <- preprocess(rep2.df$fdr, ambiguity.resolution.method)
+
+mapping <- establishBijection(rep1.df, rep2.df, ambiguity.resolution.method)
 
 }

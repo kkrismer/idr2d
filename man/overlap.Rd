@@ -2,7 +2,7 @@
 % Please edit documentation in R/auxiliary.R
 \name{overlap}
 \alias{overlap}
-\title{TODO}
+\title{Established m:n mapping between interactions from replicate 1 and 2}
 \usage{
 overlap(rep1.df, rep2.df, ambiguity.resolution.method = c("value",
   "overlap", "midpoint", "expansion"), max.gap = 1000L)
@@ -64,7 +64,8 @@ are resolved. Available methods:
   anchor A and replicate 2 interaction anchor A,
   plus replicate 1 interaction anchor B and replicate 2 interaction anchor B,
   normalized by their lengths\cr
-  \code{"midpoint"} \tab the interaction pair is chosen which has the smallest
+  \code{"midpoint"} \tab the interaction pair is chosen which has the
+  smallest
   distance between their anchor midpoints, i.e., distance from midpoint of
   replicate 1 interaction anchor A to midpoint of
   replicate 2 interaction anchor A, plus distance from midpoint of
@@ -76,7 +77,8 @@ are resolved. Available methods:
   in replicate 2
 }}
 
-\item{max.gap}{integer; maximum gap in nucleotides allowed between two anchors for
+\item{max.gap}{integer; maximum gap in nucleotides allowed between two
+anchors for
 them to be considered as overlapping (defaults to \code{1000L})}
 }
 \value{
@@ -91,9 +93,32 @@ data frame with the following columns:
 }
 }
 \description{
-TODO
+This method returns all overlapping interactions between two replicates.
+For each pair of overlapping interactions, the
+\emph{ambiguity resolution value} (ARV) is calculated, which helps to reduce
+the m:n mapping to a 1:1 mapping. The semantics of the ARV depend on the
+specified \code{ambiguity.resolution.method}, but in general interaction
+pairs with lower ARVs have priority over interaction pairs with higher ARVs
+when the bijective mapping is established.
 }
 \examples{
-TODO
+ambiguity.resolution.method <- "multiplicative.inverse"
+rep1.df <- idr2d:::chiapet$rep1.df
+rep1.df$fdr <- preprocess(rep1.df$fdr, ambiguity.resolution.method)
+
+rep2.df <- idr2d:::chiapet$rep2.df
+rep2.df$fdr <- preprocess(rep2.df$fdr, ambiguity.resolution.method)
+
+mapping <- establishBijection(rep1.df, rep2.df, ambiguity.resolution.method)
+
+# shuffle to break preexisting order
+rep1.df <- rep1.df[sample.int(nrow(rep1.df)), ]
+rep2.df <- rep2.df[sample.int(nrow(rep2.df)), ]
+
+# sort by value column
+rep1.df <- dplyr::arrange(rep1.df, rep1.df$fdr)
+rep2.df <- dplyr::arrange(rep2.df, rep2.df$fdr)
+
+pairs.df <- overlap(rep1.df, rep2.df, ambiguity.resolution.method)
 
 }

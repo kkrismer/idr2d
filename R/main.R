@@ -3,7 +3,14 @@
 #' and 2
 #'
 #' @description
-#' TODO
+#' This method establishes a bijective assignment between interactions from
+#' replicate 1 and 2. An interaction in replicate 1 is assigned to an
+#' interaction in replicate 2 if and only if (1) both anchors of the
+#' interactions
+#' overlap (or the gap between anchor A/B in replicate 1 and 2 is less than
+#' or equal to \code{max.gap}), and (2) there is no other interaction in
+#' replicate 2 that overlaps with the interaction in replicate 1 and has a
+#' lower \emph{ambiguity resolution value}.
 #'
 #' @inheritParams overlap
 #'
@@ -13,8 +20,16 @@
 #' interaction was found, \code{replicate.idx} is set to \code{NA}.
 #'
 #' @examples
-#' TODO
+#' ambiguity.resolution.method <- "multiplicative.inverse"
+#' rep1.df <- idr2d:::chiapet$rep1.df
+#' rep1.df$fdr <- preprocess(rep1.df$fdr, ambiguity.resolution.method)
 #'
+#' rep2.df <- idr2d:::chiapet$rep2.df
+#' rep2.df$fdr <- preprocess(rep2.df$fdr, ambiguity.resolution.method)
+#'
+#' mapping <- establishBijection(rep1.df, rep2.df, ambiguity.resolution.method)
+#'
+#' @importFrom dplyr arrange
 #' @importFrom dplyr group_by
 #' @importFrom dplyr slice
 #' @importFrom futile.logger flog.info
@@ -36,12 +51,18 @@ establishBijection <- function(rep1.df, rep2.df,
                                                          "midpoint",
                                                          "expansion"))
 
-    rep1.df <- sortBy(rep1.df, "value")
-    rep2.df <- sortBy(rep2.df, "value")
-
-    pairs.df <- overlap(rep1.df, rep2.df, ambiguity.resolution.method, max.gap)
-
     if (nrow(rep1.df) > 0 && nrow(rep2.df) > 0) {
+        # shuffle to break preexisting order
+        rep1.df <- rep1.df[sample.int(nrow(rep1.df)), ]
+        rep2.df <- rep2.df[sample.int(nrow(rep2.df)), ]
+
+        # sort by value column
+        rep1.df <- dplyr::arrange(rep1.df, rep1.df[, 7])
+        rep2.df <- dplyr::arrange(rep2.df, rep2.df[, 7])
+
+        pairs.df <- overlap(rep1.df, rep2.df,
+                            ambiguity.resolution.method, max.gap)
+
         if (ambiguity.resolution.method == "expansion") {
             rep1.df <- data.frame(
                 chrA = rep1.df$chrA[pairs.df$rep1.idx],
@@ -160,7 +181,8 @@ establishBijection <- function(rep1.df, rep2.df,
 #' for IDR analysis
 #'
 #' @examples
-#' TODO
+#' rep1.df <- idr2d:::chiapet$rep1.df
+#' rep1.df$fdr <- preprocess(rep1.df$fdr, "multiplicative.inverse")
 #'
 #' @importFrom idr est.IDR
 #' @export
@@ -207,12 +229,20 @@ preprocess <- function(x, value.transformation = c("identity",
     return(x)
 }
 
-#' @title TOOD
+#' @title Estimates IDR for Genomic Interaction Data
 #'
 #' @description
-#' TODO
+#' This method estimates Irreproducible Discovery Rates (IDR) between
+#' two replicates of experiments identifying genomic interactions, such as
+#' HiC, ChIA-PET, and HiChIP.
 #'
-#' @param max.iteration integer; maximum number of iterations (defaults to 30)
+#' @references
+#' Q. Li, J. B. Brown, H. Huang and P. J. Bickel. (2011) Measuring
+#' reproducibility of high-throughput experiments. Annals of Applied
+#' Statistics, Vol. 5, No. 3, 1752-1779.
+#'
+#' @param max.iteration integer; maximum number of iterations for
+#' IDR estimation (defaults to 30)
 #' @inheritParams idr::est.IDR
 #' @inheritParams preprocess
 #' @inheritParams establishBijection
@@ -223,11 +253,9 @@ preprocess <- function(x, value.transformation = c("identity",
 #' interaction was found, \code{idr} is set to \code{NA}.
 #'
 #' @examples
-#' TODO
-#'
-#' \dontrun{
-#' TODO
-#' }
+#' idr.df <- estimateIDR(idr2d:::chiapet$rep1.df,
+#'                       idr2d:::chiapet$rep2.df,
+#'                       value.transformation = "multiplicative.inverse")
 #'
 #' @importFrom futile.logger flog.info
 #' @importFrom dplyr arrange
@@ -243,17 +271,18 @@ estimateIDR <- function(rep1.df, rep2.df,
                                                         "overlap",
                                                         "midpoint",
                                                         "expansion"),
-                        mu = 0.1, sigma = 1.0, rho = 0.2, p = 0.5,
-                        eps = 0.001, max.iteration = 30,
                         max.factor = 1.5,
-                        jitter.factor = 0.0001) {
+                        jitter.factor = 0.0001,
+                        mu = 0.1, sigma = 1.0, rho = 0.2, p = 0.5,
+                        eps = 0.001, max.iteration = 30) {
     # avoid CRAN warnings
     rep2.idx <- rep1.value <- rep2.value <- idr <- NULL
 
-    rep1.df$value <- preprocess(rep1.df$value, value.transformation,
+    rep1.df[, 7] <- preprocess(rep1.df[, 7], value.transformation,
                                 max.factor = max.factor,
                                 jitter.factor = jitter.factor)
-    rep2.df$value <- preprocess(rep2.df$value, value.transformation,
+
+    rep2.df[, 7] <- preprocess(rep2.df[, 7], value.transformation,
                                 max.factor = max.factor,
                                 jitter.factor = jitter.factor)
 
@@ -265,6 +294,7 @@ estimateIDR <- function(rep1.df, rep2.df,
         rep1.value = mapping$rep1.df[, 7],
         rep2.value = mapping$rep2.df[mapping$rep1.df$replicate.idx, 7]
     )
+
     idx.df <- dplyr::filter(idx.df, !is.na(rep2.idx) & !is.infinite(rep2.idx))
 
     idr.matrix <- as.matrix(dplyr::select(idx.df, rep1.value, rep2.value))
@@ -274,7 +304,6 @@ estimateIDR <- function(rep1.df, rep2.df,
 
     # TODO check IDR vs idr?
     idx.df$idr <- idr.results$IDR
-    futile.logger::flog.info("done34")
 
     if (nrow(rep1.df) > 0) {
         rep1.df$idr <- as.numeric(NA)
@@ -286,7 +315,6 @@ estimateIDR <- function(rep1.df, rep2.df,
     } else {
         rep1.df$idr <- numeric(0)
     }
-    futile.logger::flog.info("done4")
 
     if (nrow(rep2.df) > 0) {
         rep2.df$idr <- as.numeric(NA)
@@ -298,7 +326,6 @@ estimateIDR <- function(rep1.df, rep2.df,
     } else {
         rep2.df$idr <- numeric(0)
     }
-    futile.logger::flog.info("done5")
 
     return(list(rep1.df = rep1.df, rep2.df = rep2.df))
 }
