@@ -1,0 +1,44 @@
+Package: idr2d
+Title: Irreproducible discovery rate for genomic interaction
+    data
+Version: 0.99.0
+Authors@R: 
+    c(person(given = "Konstantin",
+             family = "Krismer",
+             role = c("aut", "cre", "cph"),
+             email = "krismer@mit.edu",
+             comment = c(ORCID = "0000-0001-8994-3416")),
+      person(given = "David",
+             family = "Gifford",
+             role = c("ths", "cph"),
+             email = "gifford@mit.edu",
+             comment = c(ORCID = "0000-0003-1709-4034")))
+Maintainer: Konstantin Krismer <krismer@mit.edu>
+Description: This package measures reproducibility between
+    genomic experiments that produce two-dimensional peaks (interactions
+    between peaks), such as HiC and ChIA-PET. idr2d is an extension of the
+    original idr package, which is intended for (one-dimensional) ChIP-seq
+    peaks.
+License: MIT + file LICENSE
+Depends:
+    R (>= 3.5)
+Imports:
+    dplyr (>= 0.7.6),
+    futile.logger (>= 1.4.3),
+    GenomeInfoDb (>= 1.16.0),
+    GenomicRanges (>= 1.32.7),
+    idr (>= 1.2),
+    magrittr (>= 1.5),
+    methods,
+    stringr (>= 1.3.1)
+Suggests:
+    knitr (>= 1.20),
+    rmarkdown (>= 1.10),
+    roxygen2 (>= 6.1.0),
+    testthat (>= 2.0.1)
+VignetteBuilder: 
+    knitr
+biocViews: DNA3DStructure, GeneRegulation, PeakDetection,
+    Epigenetics, FunctionalGenomics, Classification, HiC
+Encoding: UTF-8
+RoxygenNote: 6.1.0

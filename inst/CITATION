@@ -1,0 +1,23 @@
+citHeader("Please cite the following if utilizing Transite: ")
+citEntry(entry="article",
+  author =  personList(as.person("Konstantin Krismer"),
+                       as.person("Yuchun Guo"),
+                       as.person("David K. Gifford")),
+  title = "IDR2D: title",
+  year = 2018,
+	doi = "XX",
+	publisher = "Cold Spring Harbor Laboratory",
+	URL = "https://www.biorxiv.org/xxx",
+	eprint = "https://www.biorxiv.org/xxx.pdf",
+	journal = "bioRxiv",
+  textVersion =
+    paste("Konstantin Krismer, Yuchun Guo, and
+           David K. Gifford",
+          "IDR2D: title",
+          "bioRxiv XX, 2018, doi: https://doi.org/xxx",
+          sep = "\n")
+)
+citFooter("This free open-source software implements academic
+research by the authors and co-workers. If you use it,
+please support the project by citing the appropriate
+article.")
