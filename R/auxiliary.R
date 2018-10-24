@@ -294,10 +294,10 @@ calculateRelativeOverlap <- function(int1.anchor.a.start, int1.anchor.a.end,
 #'
 #' @examples
 #' rep1.df <- idr2d:::chiapet$rep1.df
-#' rep1.df$fdr <- preprocess(rep1.df$fdr, "multiplicative.inverse")
+#' rep1.df$fdr <- preprocess(rep1.df$fdr, "log.additive.inverse")
 #'
 #' rep2.df <- idr2d:::chiapet$rep2.df
-#' rep2.df$fdr <- preprocess(rep2.df$fdr, "multiplicative.inverse")
+#' rep2.df$fdr <- preprocess(rep2.df$fdr, "log.additive.inverse")
 #'
 #' mapping <- establishBijection(rep1.df, rep2.df)
 #'

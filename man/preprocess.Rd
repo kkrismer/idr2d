@@ -59,6 +59,6 @@ magnitude of the noise is controlled by \code{jitter.factor}.
 }
 \examples{
 rep1.df <- idr2d:::chiapet$rep1.df
-rep1.df$fdr <- preprocess(rep1.df$fdr, "multiplicative.inverse")
+rep1.df$fdr <- preprocess(rep1.df$fdr, "log.additive.inverse")
 
 }

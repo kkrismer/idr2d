@@ -21,10 +21,10 @@
 #'
 #' @examples
 #' rep1.df <- idr2d:::chiapet$rep1.df
-#' rep1.df$fdr <- preprocess(rep1.df$fdr, "multiplicative.inverse")
+#' rep1.df$fdr <- preprocess(rep1.df$fdr, "log.additive.inverse")
 #'
 #' rep2.df <- idr2d:::chiapet$rep2.df
-#' rep2.df$fdr <- preprocess(rep2.df$fdr, "multiplicative.inverse")
+#' rep2.df$fdr <- preprocess(rep2.df$fdr, "log.additive.inverse")
 #'
 #' mapping <- establishBijection(rep1.df, rep2.df)
 #'
@@ -181,7 +181,7 @@ establishBijection <- function(rep1.df, rep2.df,
 #'
 #' @examples
 #' rep1.df <- idr2d:::chiapet$rep1.df
-#' rep1.df$fdr <- preprocess(rep1.df$fdr, "multiplicative.inverse")
+#' rep1.df$fdr <- preprocess(rep1.df$fdr, "log.additive.inverse")
 #'
 #' @importFrom idr est.IDR
 #' @export
@@ -254,7 +254,7 @@ preprocess <- function(x, value.transformation = c("identity",
 #' @examples
 #' idr.df <- estimateIDR(idr2d:::chiapet$rep1.df,
 #'                       idr2d:::chiapet$rep2.df,
-#'                       value.transformation = "multiplicative.inverse")
+#'                       value.transformation = "log.additive.inverse")
 #'
 #' @importFrom futile.logger flog.info
 #' @importFrom dplyr arrange
