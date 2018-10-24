@@ -62,42 +62,10 @@ establishBijection <- function(rep1.df, rep2.df,
                             ambiguity.resolution.method, max.gap)
 
         if (ambiguity.resolution.method == "expansion") {
-            rep1.df <- data.frame(
-                chrA = rep1.df$chrA[pairs.df$rep1.idx],
-                startA = rep1.df$startA[pairs.df$rep1.idx],
-                endA = rep1.df$endA[pairs.df$rep1.idx],
-                chrB = rep1.df$chrB[pairs.df$rep1.idx],
-                startB = rep1.df$startB[pairs.df$rep1.idx],
-                endB = rep1.df$endB[pairs.df$rep1.idx],
-                countAB = rep1.df$countAB[pairs.df$rep1.idx],
-                countA = rep1.df$countA[pairs.df$rep1.idx],
-                countB = rep1.df$countB[pairs.df$rep1.idx],
-                lengthA = rep1.df$lengthA[pairs.df$rep1.idx],
-                lengthB = rep1.df$lengthB[pairs.df$rep1.idx],
-                distance = rep1.df$distance[pairs.df$rep1.idx],
-                pp = rep1.df$pp[pairs.df$rep1.idx],
-                pvalue = rep1.df$pvalue[pairs.df$rep1.idx],
-                fdr = rep1.df$fdr[pairs.df$rep1.idx],
-                replicate.idx = seq_len(nrow(pairs.df))
-            )
-            rep2.df <- data.frame(
-                chrA = rep2.df$chrA[pairs.df$rep2.idx],
-                startA = rep2.df$startA[pairs.df$rep2.idx],
-                endA = rep2.df$endA[pairs.df$rep2.idx],
-                chrB = rep2.df$chrB[pairs.df$rep2.idx],
-                startB = rep2.df$startB[pairs.df$rep2.idx],
-                endB = rep2.df$endB[pairs.df$rep2.idx],
-                countAB = rep2.df$countAB[pairs.df$rep2.idx],
-                countA = rep2.df$countA[pairs.df$rep2.idx],
-                countB = rep2.df$countB[pairs.df$rep2.idx],
-                lengthA = rep2.df$lengthA[pairs.df$rep2.idx],
-                lengthB = rep2.df$lengthB[pairs.df$rep2.idx],
-                distance = rep2.df$distance[pairs.df$rep2.idx],
-                pp = rep2.df$pp[pairs.df$rep2.idx],
-                pvalue = rep2.df$pvalue[pairs.df$rep2.idx],
-                fdr = rep2.df$fdr[pairs.df$rep2.idx],
-                replicate.idx = seq_len(nrow(pairs.df))
-            )
+            rep1.df <- rep1.df[pairs.df$rep1.idx, ]
+            rep1.df$replicate.idx <- seq_len(nrow(pairs.df))
+            rep2.df <- rep2.df[pairs.df$rep2.idx, ]
+            rep2.df$replicate.idx <- seq_len(nrow(pairs.df))
         } else {
             top.pairs.df <- pairs.df %>% dplyr::group_by(rep1.idx) %>%
                 dplyr::slice(which.min(arv))
@@ -240,15 +208,16 @@ preprocess <- function(x, value.transformation = c("identity",
 #' @inheritParams preprocess
 #' @inheritParams establishBijection
 #'
-#' @return Original data frames \code{rep1.df} and \code{rep2.df} with
+#' @return List with two components (\code{rep1.df} and \code{rep1.df})
+#' containing the original data frames \code{rep1.df} and \code{rep2.df} with
 #' additional column \code{idr}, which holds the IDR of the interaction and the
 #' corresponding interaction in the other replicate. If no corresponding
 #' interaction was found, \code{idr} is set to \code{NA}.
 #'
 #' @examples
-#' idr.df <- estimateIDR(idr2d:::chiapet$rep1.df,
-#'                       idr2d:::chiapet$rep2.df,
-#'                       value.transformation = "log.additive.inverse")
+#' idr.results <- estimateIDR(idr2d:::chiapet$rep1.df,
+#'                            idr2d:::chiapet$rep2.df,
+#'                            value.transformation = "log.additive.inverse")
 #'
 #' @importFrom dplyr arrange
 #' @importFrom dplyr filter
