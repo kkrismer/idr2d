@@ -312,7 +312,6 @@ calculateRelativeOverlap <- function(int1.anchor.a.start, int1.anchor.a.end,
 #' pairs.df <- overlap(rep1.df, rep2.df)
 #'
 #' @importFrom futile.logger flog.warn
-#' @importFrom futile.logger flog.info
 #' @export
 overlap <- function(rep1.df, rep2.df,
                     ambiguity.resolution.method = c("value", "overlap",

@@ -31,7 +31,6 @@
 #' @importFrom dplyr arrange
 #' @importFrom dplyr group_by
 #' @importFrom dplyr slice
-#' @importFrom futile.logger flog.info
 #' @importFrom futile.logger flog.warn
 #' @importFrom magrittr "%>%"
 #' @export
@@ -105,8 +104,6 @@ establishBijection <- function(rep1.df, rep2.df,
             top.pairs.df <- top.pairs.df %>% dplyr::group_by(rep2.idx) %>%
                 dplyr::slice(which.min(arv))
 
-            futile.logger::flog.info("top pairs selected")
-
             # replicated interaction ID
 
             rep1.df$replicate.idx <- NA
@@ -122,14 +119,11 @@ establishBijection <- function(rep1.df, rep2.df,
             rep2.df$replicate.idx[top.pairs.df$rep2.idx] <-
                 top.pairs.df$rep1.idx
         }
-
-        futile.logger::flog.info("pairs assigned")
     } else {
         rep1.df$replicate.idx <- integer(0)
         rep2.df$replicate.idx <- integer(0)
     }
 
-    futile.logger::flog.info("overlap established")
     return(list(rep1.df = rep1.df, rep2.df = rep2.df))
 }
 
@@ -256,7 +250,6 @@ preprocess <- function(x, value.transformation = c("identity",
 #'                       idr2d:::chiapet$rep2.df,
 #'                       value.transformation = "log.additive.inverse")
 #'
-#' @importFrom futile.logger flog.info
 #' @importFrom dplyr arrange
 #' @importFrom dplyr filter
 #' @export
@@ -306,9 +299,6 @@ estimateIDR <- function(rep1.df, rep2.df,
 
     if (nrow(rep1.df) > 0) {
         rep1.df$idr <- as.numeric(NA)
-        futile.logger::flog.info(nrow(rep1.df))
-        futile.logger::flog.info(nrow(idx.df))
-
         rep1.df$idr[idx.df$rep1.idx] <- idx.df$idr
         rep1.df <- dplyr::arrange(rep1.df, idr)
     } else {
@@ -317,9 +307,6 @@ estimateIDR <- function(rep1.df, rep2.df,
 
     if (nrow(rep2.df) > 0) {
         rep2.df$idr <- as.numeric(NA)
-        futile.logger::flog.info(nrow(rep2.df))
-        futile.logger::flog.info(nrow(idx.df))
-
         rep2.df$idr[idx.df$rep2.idx] <- idx.df$idr
         rep2.df <- dplyr::arrange(rep2.df, idr)
     } else {
