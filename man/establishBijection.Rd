@@ -100,13 +100,12 @@ replicate 2 that overlaps with the interaction in replicate 1 and has a
 lower \emph{ambiguity resolution value}.
 }
 \examples{
-ambiguity.resolution.method <- "multiplicative.inverse"
 rep1.df <- idr2d:::chiapet$rep1.df
-rep1.df$fdr <- preprocess(rep1.df$fdr, ambiguity.resolution.method)
+rep1.df$fdr <- preprocess(rep1.df$fdr, "multiplicative.inverse")
 
 rep2.df <- idr2d:::chiapet$rep2.df
-rep2.df$fdr <- preprocess(rep2.df$fdr, ambiguity.resolution.method)
+rep2.df$fdr <- preprocess(rep2.df$fdr, "multiplicative.inverse")
 
-mapping <- establishBijection(rep1.df, rep2.df, ambiguity.resolution.method)
+mapping <- establishBijection(rep1.df, rep2.df)
 
 }

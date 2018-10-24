@@ -53,22 +53,23 @@
 #' @importFrom GenomicRanges findOverlaps
 #' @export
 anchorOverlap <- function(rep1.anchor, rep2.anchor, max.gap = 1000L) {
-  rep1.ranges <- GenomicRanges::makeGRangesFromDataFrame(rep1.anchor)
-  rep2.ranges <- GenomicRanges::makeGRangesFromDataFrame(rep2.anchor)
+    rep1.ranges <- GenomicRanges::makeGRangesFromDataFrame(rep1.anchor)
+    rep2.ranges <- GenomicRanges::makeGRangesFromDataFrame(rep2.anchor)
 
-  # adjust seq levels
-  seq.levels.r1 <- GenomeInfoDb::seqlevels(rep1.ranges)
-  seq.levels.r2 <- GenomeInfoDb::seqlevels(rep2.ranges)
-  combined.seq.levels <- stringr::str_sort(union(seq.levels.r1, seq.levels.r2))
-  GenomeInfoDb::seqlevels(rep1.ranges) <- combined.seq.levels
-  GenomeInfoDb::seqlevels(rep2.ranges) <- combined.seq.levels
+    # adjust seq levels
+    seq.levels.r1 <- GenomeInfoDb::seqlevels(rep1.ranges)
+    seq.levels.r2 <- GenomeInfoDb::seqlevels(rep2.ranges)
+    combined.seq.levels <- stringr::str_sort(union(seq.levels.r1,
+                                                   seq.levels.r2))
+    GenomeInfoDb::seqlevels(rep1.ranges) <- combined.seq.levels
+    GenomeInfoDb::seqlevels(rep2.ranges) <- combined.seq.levels
 
-  # get overlap between replicates, accept 1000 bp gap
-  overlap.df <- data.frame(GenomicRanges::findOverlaps(rep1.ranges,
-                                                       rep2.ranges,
-                                                       maxgap = max.gap))
-  colnames(overlap.df) <- c("rep1.idx", "rep2.idx")
-  return(overlap.df)
+    # get overlap between replicates, accept 1000 bp gap
+    overlap.df <- data.frame(GenomicRanges::findOverlaps(rep1.ranges,
+                                                         rep2.ranges,
+                                                         maxgap = max.gap))
+    colnames(overlap.df) <- c("rep1.idx", "rep2.idx")
+    return(overlap.df)
 }
 
 #' @title Distance between Anchor Midpoints of two Interactions
@@ -292,14 +293,13 @@ calculateRelativeOverlap <- function(int1.anchor.a.start, int1.anchor.a.end,
 #' }
 #'
 #' @examples
-#' ambiguity.resolution.method <- "multiplicative.inverse"
 #' rep1.df <- idr2d:::chiapet$rep1.df
-#' rep1.df$fdr <- preprocess(rep1.df$fdr, ambiguity.resolution.method)
+#' rep1.df$fdr <- preprocess(rep1.df$fdr, "multiplicative.inverse")
 #'
 #' rep2.df <- idr2d:::chiapet$rep2.df
-#' rep2.df$fdr <- preprocess(rep2.df$fdr, ambiguity.resolution.method)
+#' rep2.df$fdr <- preprocess(rep2.df$fdr, "multiplicative.inverse")
 #'
-#' mapping <- establishBijection(rep1.df, rep2.df, ambiguity.resolution.method)
+#' mapping <- establishBijection(rep1.df, rep2.df)
 #'
 #' # shuffle to break preexisting order
 #' rep1.df <- rep1.df[sample.int(nrow(rep1.df)), ]
@@ -309,7 +309,7 @@ calculateRelativeOverlap <- function(int1.anchor.a.start, int1.anchor.a.end,
 #' rep1.df <- dplyr::arrange(rep1.df, rep1.df$fdr)
 #' rep2.df <- dplyr::arrange(rep2.df, rep2.df$fdr)
 #'
-#' pairs.df <- overlap(rep1.df, rep2.df, ambiguity.resolution.method)
+#' pairs.df <- overlap(rep1.df, rep2.df)
 #'
 #' @importFrom futile.logger flog.warn
 #' @importFrom futile.logger flog.info

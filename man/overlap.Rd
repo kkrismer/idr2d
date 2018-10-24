@@ -102,14 +102,13 @@ pairs with lower ARVs have priority over interaction pairs with higher ARVs
 when the bijective mapping is established.
 }
 \examples{
-ambiguity.resolution.method <- "multiplicative.inverse"
 rep1.df <- idr2d:::chiapet$rep1.df
-rep1.df$fdr <- preprocess(rep1.df$fdr, ambiguity.resolution.method)
+rep1.df$fdr <- preprocess(rep1.df$fdr, "multiplicative.inverse")
 
 rep2.df <- idr2d:::chiapet$rep2.df
-rep2.df$fdr <- preprocess(rep2.df$fdr, ambiguity.resolution.method)
+rep2.df$fdr <- preprocess(rep2.df$fdr, "multiplicative.inverse")
 
-mapping <- establishBijection(rep1.df, rep2.df, ambiguity.resolution.method)
+mapping <- establishBijection(rep1.df, rep2.df)
 
 # shuffle to break preexisting order
 rep1.df <- rep1.df[sample.int(nrow(rep1.df)), ]
@@ -119,6 +118,6 @@ rep2.df <- rep2.df[sample.int(nrow(rep2.df)), ]
 rep1.df <- dplyr::arrange(rep1.df, rep1.df$fdr)
 rep2.df <- dplyr::arrange(rep2.df, rep2.df$fdr)
 
-pairs.df <- overlap(rep1.df, rep2.df, ambiguity.resolution.method)
+pairs.df <- overlap(rep1.df, rep2.df)
 
 }

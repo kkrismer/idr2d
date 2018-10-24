@@ -20,14 +20,13 @@
 #' interaction was found, \code{replicate.idx} is set to \code{NA}.
 #'
 #' @examples
-#' ambiguity.resolution.method <- "multiplicative.inverse"
 #' rep1.df <- idr2d:::chiapet$rep1.df
-#' rep1.df$fdr <- preprocess(rep1.df$fdr, ambiguity.resolution.method)
+#' rep1.df$fdr <- preprocess(rep1.df$fdr, "multiplicative.inverse")
 #'
 #' rep2.df <- idr2d:::chiapet$rep2.df
-#' rep2.df$fdr <- preprocess(rep2.df$fdr, ambiguity.resolution.method)
+#' rep2.df$fdr <- preprocess(rep2.df$fdr, "multiplicative.inverse")
 #'
-#' mapping <- establishBijection(rep1.df, rep2.df, ambiguity.resolution.method)
+#' mapping <- establishBijection(rep1.df, rep2.df)
 #'
 #' @importFrom dplyr arrange
 #' @importFrom dplyr group_by
@@ -80,7 +79,7 @@ establishBijection <- function(rep1.df, rep2.df,
                 pp = rep1.df$pp[pairs.df$rep1.idx],
                 pvalue = rep1.df$pvalue[pairs.df$rep1.idx],
                 fdr = rep1.df$fdr[pairs.df$rep1.idx],
-                replicate.idx = 1:nrow(pairs.df)
+                replicate.idx = seq_len(nrow(pairs.df))
             )
             rep2.df <- data.frame(
                 chrA = rep2.df$chrA[pairs.df$rep2.idx],
@@ -98,7 +97,7 @@ establishBijection <- function(rep1.df, rep2.df,
                 pp = rep2.df$pp[pairs.df$rep2.idx],
                 pvalue = rep2.df$pvalue[pairs.df$rep2.idx],
                 fdr = rep2.df$fdr[pairs.df$rep2.idx],
-                replicate.idx = 1:nrow(pairs.df)
+                replicate.idx = seq_len(nrow(pairs.df))
             )
         } else {
             top.pairs.df <- pairs.df %>% dplyr::group_by(rep1.idx) %>%
