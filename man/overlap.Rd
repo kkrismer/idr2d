@@ -84,8 +84,8 @@ data frame with the following columns:
   index in \code{rep1.df})\cr
   \code{rep2.idx} \tab index of interaction in replicate 2 (i.e., row
   index in \code{rep2.df})\cr
-  \code{arv} ambiguity resolution value used turn m:n mapping into 1:1
-  mapping. Interaction pairs with lower \code{arv} are prioritized.\tab
+  \code{arv} \tab ambiguity resolution value used turn m:n mapping into 1:1
+  mapping. Interaction pairs with lower \code{arv} are prioritized.
 }
 }
 \description{

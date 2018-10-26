@@ -284,8 +284,8 @@ calculateRelativeOverlap <- function(int1.anchor.a.start, int1.anchor.a.end,
 #'   index in \code{rep1.df})\cr
 #'   \code{rep2.idx} \tab index of interaction in replicate 2 (i.e., row
 #'   index in \code{rep2.df})\cr
-#'   \code{arv} ambiguity resolution value used turn m:n mapping into 1:1
-#'   mapping. Interaction pairs with lower \code{arv} are prioritized.\tab
+#'   \code{arv} \tab ambiguity resolution value used turn m:n mapping into 1:1
+#'   mapping. Interaction pairs with lower \code{arv} are prioritized.
 #' }
 #'
 #' @examples
@@ -305,7 +305,6 @@ calculateRelativeOverlap <- function(int1.anchor.a.start, int1.anchor.a.end,
 #'
 #' pairs.df <- overlap(rep1.df, rep2.df)
 #'
-#' @importFrom futile.logger flog.warn
 #' @export
 overlap <- function(rep1.df, rep2.df,
                     ambiguity.resolution.method = c("value", "overlap",
