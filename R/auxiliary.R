@@ -203,7 +203,7 @@ calculateRelativeOverlap <- function(int1.anchor.a.start, int1.anchor.a.end,
     return((anchor.a.overlap + anchor.b.overlap) /
                (anchor.a.combined.length + anchor.b.combined.length))
 }
-#' @title Established m:n mapping between interactions from replicate 1 and 2
+#' @title Establish m:n mapping between interactions from replicate 1 and 2
 #'
 #' @description
 #' This method returns all overlapping interactions between two replicates.
@@ -298,8 +298,6 @@ calculateRelativeOverlap <- function(int1.anchor.a.start, int1.anchor.a.end,
 #'
 #' rep2.df <- idr2d:::chiapet$rep2.df
 #' rep2.df$fdr <- preprocess(rep2.df$fdr, "log.additive.inverse")
-#'
-#' mapping <- establishBijection(rep1.df, rep2.df)
 #'
 #' # shuffle to break preexisting order
 #' rep1.df <- rep1.df[sample.int(nrow(rep1.df)), ]
