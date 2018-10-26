@@ -5,7 +5,7 @@
 \title{Establish m:n mapping between interactions from replicate 1 and 2}
 \usage{
 overlap(rep1.df, rep2.df, ambiguity.resolution.method = c("value",
-  "overlap", "midpoint", "expansion"), max.gap = 1000L)
+  "overlap", "midpoint"), max.gap = 1000L)
 }
 \arguments{
 \item{rep1.df}{data frame of observations (i.e., genomic interactions) of
@@ -70,11 +70,7 @@ are resolved. Available methods:
   replicate 1 interaction anchor A to midpoint of
   replicate 2 interaction anchor A, plus distance from midpoint of
   replicate 1 interaction anchor B to midpoint of
-  replicate 2 interaction anchor B \cr
-  \code{"expansion"} \tab if one interaction in replicate 1 overlaps with
-  \emph{n} interactions in replicate 2, the interaction of replicate 1 is
-  copied \emph{n} times and each copy is assigned to one of the interactions
-  in replicate 2
+  replicate 2 interaction anchor B
 }}
 
 \item{max.gap}{integer; maximum gap in nucleotides allowed between two

@@ -274,11 +274,7 @@ calculateRelativeOverlap <- function(int1.anchor.a.start, int1.anchor.a.end,
 #'   replicate 1 interaction anchor A to midpoint of
 #'   replicate 2 interaction anchor A, plus distance from midpoint of
 #'   replicate 1 interaction anchor B to midpoint of
-#'   replicate 2 interaction anchor B \cr
-#'   \code{"expansion"} \tab if one interaction in replicate 1 overlaps with
-#'   \emph{n} interactions in replicate 2, the interaction of replicate 1 is
-#'   copied \emph{n} times and each copy is assigned to one of the interactions
-#'   in replicate 2
+#'   replicate 2 interaction anchor B
 #' }
 #' @inheritParams anchorOverlap
 #'
@@ -313,13 +309,12 @@ calculateRelativeOverlap <- function(int1.anchor.a.start, int1.anchor.a.end,
 #' @export
 overlap <- function(rep1.df, rep2.df,
                     ambiguity.resolution.method = c("value", "overlap",
-                                                    "midpoint", "expansion"),
+                                                    "midpoint"),
                     max.gap = 1000L) {
     ambiguity.resolution.method <- match.arg(ambiguity.resolution.method,
                                              choices = c("value",
                                                          "overlap",
-                                                         "midpoint",
-                                                         "expansion"))
+                                                         "midpoint"))
     if (nrow(rep1.df) > 0 && nrow(rep2.df) > 0) {
         overlaps.anchorsA.df <- anchorOverlap(
             data.frame(chr = rep1.df[, 1],
@@ -377,9 +372,6 @@ overlap <- function(rep1.df, rep2.df,
                 rep2.df[idx.rep2, 2], rep2.df[idx.rep2, 3],
                 rep2.df[idx.rep2, 5], rep2.df[idx.rep2, 6]
             )
-        } else if (ambiguity.resolution.method == "expansion") {
-            # no action required
-            arv <- rep(0, length(idx.rep1))
         } else {
             stop(paste0("unknown ambiguity resolution method: ",
                         ambiguity.resolution.method))

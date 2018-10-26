@@ -37,8 +37,7 @@
 establishBijection <- function(rep1.df, rep2.df,
                                ambiguity.resolution.method = c("value",
                                                                "overlap",
-                                                               "midpoint",
-                                                               "expansion"),
+                                                               "midpoint"),
                                max.gap = 1000L) {
     # avoid CRAN warnings
     rep1.idx <- rep2.idx <- arv <- NULL
@@ -46,8 +45,7 @@ establishBijection <- function(rep1.df, rep2.df,
     ambiguity.resolution.method <- match.arg(ambiguity.resolution.method,
                                              choices = c("value",
                                                          "overlap",
-                                                         "midpoint",
-                                                         "expansion"))
+                                                         "midpoint"))
 
     if (nrow(rep1.df) > 0 && nrow(rep2.df) > 0) {
         # shuffle to break preexisting order
@@ -61,33 +59,25 @@ establishBijection <- function(rep1.df, rep2.df,
         pairs.df <- overlap(rep1.df, rep2.df,
                             ambiguity.resolution.method, max.gap)
 
-        # TODO remove expansion
-        if (ambiguity.resolution.method == "expansion") {
-            rep1.df <- rep1.df[pairs.df$rep1.idx, ]
-            rep1.df$replicate.idx <- seq_len(nrow(pairs.df))
-            rep2.df <- rep2.df[pairs.df$rep2.idx, ]
-            rep2.df$replicate.idx <- seq_len(nrow(pairs.df))
-        } else {
-            top.pairs.df <- pairs.df %>% dplyr::group_by(rep1.idx) %>%
-                dplyr::slice(which.min(arv))
-            top.pairs.df <- top.pairs.df %>% dplyr::group_by(rep2.idx) %>%
-                dplyr::slice(which.min(arv))
+        top.pairs.df <- pairs.df %>% dplyr::group_by(rep1.idx) %>%
+            dplyr::slice(which.min(arv))
+        top.pairs.df <- top.pairs.df %>% dplyr::group_by(rep2.idx) %>%
+            dplyr::slice(which.min(arv))
 
-            # replicated interaction ID
+        # replicated interaction ID
 
-            rep1.df$replicate.idx <- NA
-            rep2.df$replicate.idx <- NA
+        rep1.df$replicate.idx <- NA
+        rep2.df$replicate.idx <- NA
 
-            if (nrow(top.pairs.df) != length(unique(top.pairs.df$rep1.idx)) &&
-                nrow(top.pairs.df) != length(unique(top.pairs.df$rep2.idx))) {
-                futile.logger::flog.warn("ambiguous interaction assignments")
-            }
-
-            rep1.df$replicate.idx[top.pairs.df$rep1.idx] <-
-                top.pairs.df$rep2.idx
-            rep2.df$replicate.idx[top.pairs.df$rep2.idx] <-
-                top.pairs.df$rep1.idx
+        if (nrow(top.pairs.df) != length(unique(top.pairs.df$rep1.idx)) &&
+            nrow(top.pairs.df) != length(unique(top.pairs.df$rep2.idx))) {
+            futile.logger::flog.warn("ambiguous interaction assignments")
         }
+
+        rep1.df$replicate.idx[top.pairs.df$rep1.idx] <-
+            top.pairs.df$rep2.idx
+        rep2.df$replicate.idx[top.pairs.df$rep2.idx] <-
+            top.pairs.df$rep1.idx
     } else {
         rep1.df$replicate.idx <- integer(0)
         rep2.df$replicate.idx <- integer(0)
@@ -240,8 +230,7 @@ estimateIDR <- function(rep1.df, rep2.df,
                                                  "log.additive.inverse"),
                         ambiguity.resolution.method = c("value",
                                                         "overlap",
-                                                        "midpoint",
-                                                        "expansion"),
+                                                        "midpoint"),
                         max.factor = 1.5,
                         jitter.factor = 0.0001,
                         mu = 0.1, sigma = 1.0, rho = 0.2, p = 0.5,
