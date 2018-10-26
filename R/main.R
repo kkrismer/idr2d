@@ -61,6 +61,7 @@ establishBijection <- function(rep1.df, rep2.df,
         pairs.df <- overlap(rep1.df, rep2.df,
                             ambiguity.resolution.method, max.gap)
 
+        # TODO remove expansion
         if (ambiguity.resolution.method == "expansion") {
             rep1.df <- rep1.df[pairs.df$rep1.idx, ]
             rep1.df$replicate.idx <- seq_len(nrow(pairs.df))
@@ -184,8 +185,16 @@ preprocess <- function(x, value.transformation = c("identity",
         x <- (-1) * log(x)
     }
 
+    if (length(unique(x)) < 10) {
+        futile.logger::flog.warn("low complexity value distribution")
+    }
+
     # add jitter to break ties
-    x <- jitter(x, factor = jitter.factor)
+    invisible(tryCatch({
+        x <- jitter(x, factor = jitter.factor)
+    }, error = function(e) {
+        futile.logger::flog.warn(e)
+    }))
 
     return(x)
 }
@@ -221,6 +230,7 @@ preprocess <- function(x, value.transformation = c("identity",
 #'
 #' @importFrom dplyr arrange
 #' @importFrom dplyr filter
+#' @importFrom futile.logger flog.warn
 #' @export
 estimateIDR <- function(rep1.df, rep2.df,
                         value.transformation = c("identity",
@@ -249,37 +259,69 @@ estimateIDR <- function(rep1.df, rep2.df,
 
     mapping <- establishBijection(rep1.df, rep2.df, ambiguity.resolution.method)
 
-    idx.df <- data.frame(
-        rep1.idx = seq_len(nrow(mapping$rep1.df)),
-        rep2.idx = mapping$rep1.df$replicate.idx,
-        rep1.value = mapping$rep1.df[, 7],
-        rep2.value = mapping$rep2.df[mapping$rep1.df$replicate.idx, 7]
-    )
+    if (nrow(mapping$rep1.df) > 0 && nrow(mapping$rep2.df) > 0) {
+        idx.df <- data.frame(
+            rep1.idx = seq_len(nrow(mapping$rep1.df)),
+            rep2.idx = mapping$rep1.df$replicate.idx,
+            rep1.value = mapping$rep1.df[, 7],
+            rep2.value = mapping$rep2.df[mapping$rep1.df$replicate.idx, 7]
+        )
 
-    idx.df <- dplyr::filter(idx.df, !is.na(rep2.idx) & !is.infinite(rep2.idx))
+        idx.df <- dplyr::filter(idx.df, !is.na(rep2.idx) & !is.infinite(rep2.idx))
 
-    idr.matrix <- as.matrix(dplyr::select(idx.df, rep1.value, rep2.value))
+        if (nrow(idx.df) > 0) {
+            idr.matrix <- as.matrix(dplyr::select(idx.df, rep1.value, rep2.value))
 
-    idr.results <- idr::est.IDR(idr.matrix, mu, sigma, rho, p, eps = eps,
-                                max.ite = max.iteration)
+            if (length(unique(idr.matrix[, 1])) < 10 ||
+                length(unique(idr.matrix[, 2])) < 10) {
+                futile.logger::flog.warn("low complexity data set")
+            }
 
-    # TODO check IDR vs idr?
-    idx.df$idr <- idr.results$IDR
+            invisible(tryCatch({
+                idr.results <- idr::est.IDR(idr.matrix, mu, sigma, rho, p, eps = eps,
+                                            max.ite = max.iteration)
+                # TODO check IDR vs idr?
+                idx.df$idr <- idr.results$IDR
+            }, error = function(e) {
+                idx.df$idr <- as.numeric(NA)
+                futile.logger::flog.warn(e)
+            }))
+        } else {
+            idx.df$idr <- numeric(0)
+        }
 
-    if (nrow(rep1.df) > 0) {
-        rep1.df$idr <- as.numeric(NA)
-        rep1.df$idr[idx.df$rep1.idx] <- idx.df$idr
-        rep1.df <- dplyr::arrange(rep1.df, idr)
+        if (nrow(rep1.df) > 0) {
+            rep1.df$idr <- as.numeric(NA)
+            if (length(idx.df$idr) > 0) {
+                rep1.df$idr[idx.df$rep1.idx] <- idx.df$idr
+                rep1.df <- dplyr::arrange(rep1.df, idr)
+            }
+        } else {
+            rep1.df$idr <- numeric(0)
+        }
+
+        if (nrow(rep2.df) > 0) {
+            rep2.df$idr <- as.numeric(NA)
+            if (length(idx.df$idr) > 0) {
+                rep2.df$idr[idx.df$rep2.idx] <- idx.df$idr
+                rep2.df <- dplyr::arrange(rep2.df, idr)
+            }
+
+        } else {
+            rep2.df$idr <- numeric(0)
+        }
     } else {
-        rep1.df$idr <- numeric(0)
-    }
+        if (nrow(rep1.df) > 0) {
+            rep1.df$idr <- as.numeric(NA)
+        } else {
+            rep1.df$idr <- numeric(0)
+        }
 
-    if (nrow(rep2.df) > 0) {
-        rep2.df$idr <- as.numeric(NA)
-        rep2.df$idr[idx.df$rep2.idx] <- idx.df$idr
-        rep2.df <- dplyr::arrange(rep2.df, idr)
-    } else {
-        rep2.df$idr <- numeric(0)
+        if (nrow(rep2.df) > 0) {
+            rep2.df$idr <- as.numeric(NA)
+        } else {
+            rep2.df$idr <- numeric(0)
+        }
     }
 
     return(list(rep1.df = rep1.df, rep2.df = rep2.df))
