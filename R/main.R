@@ -183,7 +183,7 @@ preprocess <- function(x, value.transformation = c("identity",
     invisible(tryCatch({
         x <- jitter(x, factor = jitter.factor)
     }, error = function(e) {
-        futile.logger::flog.warn(e)
+        futile.logger::flog.warn(stringr::str_trim(e))
     }))
 
     return(x)
@@ -221,6 +221,7 @@ preprocess <- function(x, value.transformation = c("identity",
 #' @importFrom dplyr arrange
 #' @importFrom dplyr filter
 #' @importFrom futile.logger flog.warn
+#' @importFrom stringr str_trim
 #' @export
 estimateIDR <- function(rep1.df, rep2.df,
                         value.transformation = c("identity",
@@ -273,7 +274,7 @@ estimateIDR <- function(rep1.df, rep2.df,
                 idx.df$idr <- idr.results$IDR
             }, error = function(e) {
                 idx.df$idr <- as.numeric(NA)
-                futile.logger::flog.warn(e)
+                futile.logger::flog.warn(stringr::str_trim(e))
             }))
         } else {
             idx.df$idr <- numeric(0)
