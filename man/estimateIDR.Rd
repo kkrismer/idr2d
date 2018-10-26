@@ -125,7 +125,8 @@ is added to \code{x}. This is done to break ties in \code{x}.}
 IDR estimation (defaults to 30)}
 }
 \value{
-Original data frames \code{rep1.df} and \code{rep2.df} with
+List with two components (\code{rep1.df} and \code{rep1.df})
+containing the original data frames \code{rep1.df} and \code{rep2.df} with
 additional column \code{idr}, which holds the IDR of the interaction and the
 corresponding interaction in the other replicate. If no corresponding
 interaction was found, \code{idr} is set to \code{NA}.
@@ -136,9 +137,9 @@ two replicates of experiments identifying genomic interactions, such as
 HiC, ChIA-PET, and HiChIP.
 }
 \examples{
-idr.df <- estimateIDR(idr2d:::chiapet$rep1.df,
-                      idr2d:::chiapet$rep2.df,
-                      value.transformation = "log.additive.inverse")
+idr.results <- estimateIDR(idr2d:::chiapet$rep1.df,
+                           idr2d:::chiapet$rep2.df,
+                           value.transformation = "log.additive.inverse")
 
 }
 \references{
