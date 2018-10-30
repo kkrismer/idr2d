@@ -8,8 +8,8 @@ estimateIDR(rep1.df, rep2.df, value.transformation = c("identity",
   "additive.inverse", "multiplicative.inverse", "log",
   "log.additive.inverse"), ambiguity.resolution.method = c("value",
   "overlap", "midpoint"), max.factor = 1.5, jitter.factor = 1e-04,
-  mu = 0.1, sigma = 1, rho = 0.2, p = 0.5, eps = 0.001,
-  max.iteration = 30)
+  max.gap = 1000L, mu = 0.1, sigma = 1, rho = 0.2, p = 0.5,
+  eps = 0.001, max.iteration = 30)
 }
 \arguments{
 \item{rep1.df}{data frame of observations (i.e., genomic interactions) of
@@ -103,6 +103,10 @@ and \code{-Inf}. \code{Inf} are replaced by \code{max(x) * max.factor} and
 
 \item{jitter.factor}{numeric; controls the magnitude of the noise that
 is added to \code{x}. This is done to break ties in \code{x}.}
+
+\item{max.gap}{integer; maximum gap in nucleotides allowed between two
+anchors for
+them to be considered as overlapping (defaults to \code{1000L})}
 
 \item{mu}{ a starting value for the mean of the reproducible component.}
 

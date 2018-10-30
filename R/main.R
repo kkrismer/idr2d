@@ -234,6 +234,7 @@ estimateIDR <- function(rep1.df, rep2.df,
                                                         "midpoint"),
                         max.factor = 1.5,
                         jitter.factor = 0.0001,
+                        max.gap = 1000L,
                         mu = 0.1, sigma = 1.0, rho = 0.2, p = 0.5,
                         eps = 0.001, max.iteration = 30) {
     # avoid CRAN warnings
@@ -247,7 +248,8 @@ estimateIDR <- function(rep1.df, rep2.df,
                                 max.factor = max.factor,
                                 jitter.factor = jitter.factor)
 
-    mapping <- establishBijection(rep1.df, rep2.df, ambiguity.resolution.method)
+    mapping <- establishBijection(rep1.df, rep2.df, ambiguity.resolution.method,
+                                  max.gap = max.gap)
 
     if (nrow(mapping$rep1.df) > 0 && nrow(mapping$rep2.df) > 0) {
         idx.df <- data.frame(
