@@ -284,35 +284,45 @@ estimateIDR <- function(rep1.df, rep2.df,
 
         if (nrow(rep1.df) > 0) {
             rep1.df$idr <- as.numeric(NA)
+            rep1.df$rep.idx <- as.numeric(NA)
             if (length(idx.df$idr) > 0) {
                 rep1.df$idr[idx.df$rep1.idx] <- idx.df$idr
+                rep1.df$rep.idx[idx.df$rep1.idx] <- idx.df$rep2.idx
                 rep1.df <- dplyr::arrange(rep1.df, idr)
             }
         } else {
             rep1.df$idr <- numeric(0)
+            rep1.df$rep.idx <- numeric(0)
         }
 
         if (nrow(rep2.df) > 0) {
             rep2.df$idr <- as.numeric(NA)
+            rep2.df$rep.idx <- as.numeric(NA)
             if (length(idx.df$idr) > 0) {
                 rep2.df$idr[idx.df$rep2.idx] <- idx.df$idr
+                rep2.df$rep.idx[idx.df$rep2.idx] <- idx.df$rep1.idx
                 rep2.df <- dplyr::arrange(rep2.df, idr)
             }
 
         } else {
             rep2.df$idr <- numeric(0)
+            rep2.df$rep.idx <- numeric(0)
         }
     } else {
         if (nrow(rep1.df) > 0) {
             rep1.df$idr <- as.numeric(NA)
+            rep1.df$rep.idx <- as.numeric(NA)
         } else {
             rep1.df$idr <- numeric(0)
+            rep1.df$rep.idx <- numeric(0)
         }
 
         if (nrow(rep2.df) > 0) {
             rep2.df$idr <- as.numeric(NA)
+            rep2.df$rep.idx <- as.numeric(NA)
         } else {
             rep2.df$idr <- numeric(0)
+            rep2.df$rep.idx <- numeric(0)
         }
     }
 
