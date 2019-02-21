@@ -42,4 +42,4 @@ VignetteBuilder:
 biocViews: DNA3DStructure, GeneRegulation, PeakDetection,
     Epigenetics, FunctionalGenomics, Classification, HiC
 Encoding: UTF-8
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
