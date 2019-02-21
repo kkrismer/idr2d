@@ -252,12 +252,16 @@ estimateIDR <- function(rep1.df, rep2.df,
                                   max.gap = max.gap)
 
     if (nrow(mapping$rep1.df) > 0 && nrow(mapping$rep2.df) > 0) {
+        rep1.df <- mapping$rep1.df
+        rep2.df <- mapping$rep2.df
         idx.df <- data.frame(
-            rep1.idx = seq_len(nrow(mapping$rep1.df)),
-            rep2.idx = mapping$rep1.df$replicate.idx,
-            rep1.value = mapping$rep1.df[, 7],
-            rep2.value = mapping$rep2.df[mapping$rep1.df$replicate.idx, 7]
+            rep1.idx = seq_len(nrow(rep1.df)),
+            rep2.idx = rep1.df$replicate.idx,
+            rep1.value = rep1.df[, 7],
+            rep2.value = rep2.df[rep1.df$replicate.idx, 7]
         )
+        rep1.df$replicate.idx <- NULL
+        rep2.df$replicate.idx <- NULL
 
         idx.df <- dplyr::filter(idx.df, !is.na(rep2.idx) & !is.infinite(rep2.idx))
 
@@ -270,7 +274,8 @@ estimateIDR <- function(rep1.df, rep2.df,
             }
 
             invisible(tryCatch({
-                idr.results <- idr::est.IDR(idr.matrix, mu, sigma, rho, p, eps = eps,
+                idr.results <- idr::est.IDR(idr.matrix, mu, sigma, rho, p,
+                                            eps = eps,
                                             max.ite = max.iteration)
                 # TODO check IDR vs idr?
                 idx.df$idr <- idr.results$IDR
