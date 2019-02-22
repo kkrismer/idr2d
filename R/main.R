@@ -209,13 +209,21 @@ preprocess <- function(x, value.transformation = c("identity",
 #' @inheritParams establishBijection
 #'
 #' @return List with two components (\code{rep1.df} and \code{rep1.df})
-#' containing the original data frames \code{rep1.df} and \code{rep2.df} with
-#' additional column \code{idr}, which holds the IDR of the interaction and the
-#' corresponding interaction in the other replicate. If no corresponding
-#' interaction was found, \code{idr} is set to \code{NA}.
+#' containing the interactions from input data frames \code{rep1.df} and
+#' \code{rep2.df} with
+#' the following additional columns:
+#' \tabular{rl}{
+#'   \code{"idx"} \tab interaction index in replicate 1\cr
+#'   \code{"rep.idx"} \tab interaction index of associated replicate interaction
+#'   in replicate 2. If no corresponding
+#'   interaction was found, \code{idr} is set to \code{NA}.\cr
+#'   \code{idr} \tab IDR of the interaction and the
+#'   corresponding interaction in the other replicate. If no corresponding
+#'   interaction was found, \code{idr} is set to \code{NA}.
+#' }
 #'
 #' @examples
-#' idr.results <- estimateIDR(idr2d:::chiapet$rep1.df,
+#' idr.results <- estimateIDR2D(idr2d:::chiapet$rep1.df,
 #'                            idr2d:::chiapet$rep2.df,
 #'                            value.transformation = "log.additive.inverse")
 #'
@@ -224,7 +232,7 @@ preprocess <- function(x, value.transformation = c("identity",
 #' @importFrom futile.logger flog.warn
 #' @importFrom stringr str_trim
 #' @export
-estimateIDR <- function(rep1.df, rep2.df,
+estimateIDR2D <- function(rep1.df, rep2.df,
                         value.transformation = c("identity",
                                                  "additive.inverse",
                                                  "multiplicative.inverse",
@@ -347,4 +355,51 @@ estimateIDR <- function(rep1.df, rep2.df,
     }
 
     return(list(rep1.df = rep1.df, rep2.df = rep2.df))
+}
+
+#' @title Estimates IDR for Genomic Peak Data
+#'
+#' @description
+#' TODO
+#'
+#' @references
+#' Q. Li, J. B. Brown, H. Huang and P. J. Bickel. (2011) Measuring
+#' reproducibility of high-throughput experiments. Annals of Applied
+#' Statistics, Vol. 5, No. 3, 1752-1779.
+#'
+#' @inheritParams estimateIDR2D
+#'
+#' @return List with two components (\code{rep1.df} and \code{rep1.df})
+#' containing the peaks from input data frames \code{rep1.df} and
+#' \code{rep2.df} with
+#' the following additional columns:
+#' \tabular{rl}{
+#'   \code{"idx"} \tab peak index in replicate 1\cr
+#'   \code{"rep.idx"} \tab peak index of associated replicate peak
+#'   in replicate 2. If no corresponding
+#'   peak was found, \code{idr} is set to \code{NA}.\cr
+#'   \code{idr} \tab IDR of the peak and the
+#'   corresponding peak in the other replicate. If no corresponding
+#'   peak was found, \code{idr} is set to \code{NA}.
+#' }
+#'
+#' @examples
+#' # TODO
+#'
+#' @export
+estimateIDR1D <- function(rep1.df, rep2.df,
+                        value.transformation = c("identity",
+                                                   "additive.inverse",
+                                                   "multiplicative.inverse",
+                                                   "log",
+                                                   "log.additive.inverse"),
+                        ambiguity.resolution.method = c("value",
+                                                          "overlap",
+                                                          "midpoint"),
+                        max.factor = 1.5,
+                        jitter.factor = 0.0001,
+                        max.gap = 1000L,
+                        mu = 0.1, sigma = 1.0, rho = 0.2, p = 0.5,
+                        eps = 0.001, max.iteration = 30, local.idr = TRUE) {
+    # TODO
 }

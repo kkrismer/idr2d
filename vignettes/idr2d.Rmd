@@ -65,7 +65,7 @@ library(idr2d)
 
 Estimate IDR:
 ```{r}
-idr.results <- estimateIDR(rep1.df, rep2.df,
+idr.results <- estimateIDR2D(rep1.df, rep2.df,
                            value.transformation = "log.additive.inverse")
 rep1.idr.df <- idr.results$rep1.df
 ```
