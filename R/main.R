@@ -203,6 +203,7 @@ preprocess <- function(x, value.transformation = c("identity",
 #'
 #' @param max.iteration integer; maximum number of iterations for
 #' IDR estimation (defaults to 30)
+#' @param local.idr TODO
 #' @inheritParams idr::est.IDR
 #' @inheritParams preprocess
 #' @inheritParams establishBijection
@@ -236,7 +237,7 @@ estimateIDR <- function(rep1.df, rep2.df,
                         jitter.factor = 0.0001,
                         max.gap = 1000L,
                         mu = 0.1, sigma = 1.0, rho = 0.2, p = 0.5,
-                        eps = 0.001, max.iteration = 30) {
+                        eps = 0.001, max.iteration = 30, local.idr = TRUE) {
     # avoid CRAN warnings
     rep2.idx <- rep1.value <- rep2.value <- idr <- NULL
 
@@ -278,7 +279,11 @@ estimateIDR <- function(rep1.df, rep2.df,
                                             eps = eps,
                                             max.ite = max.iteration)
                 # TODO check IDR vs idr?
-                idx.df$idr <- idr.results$IDR
+                if(local.idr) {
+                    idx.df$idr <- idr.results$idr
+                } else {
+                    idx.df$idr <- idr.results$IDR
+                }
             }, error = function(e) {
                 idx.df$idr <- as.numeric(NA)
                 futile.logger::flog.warn(stringr::str_trim(e))

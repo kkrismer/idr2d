@@ -9,7 +9,7 @@ estimateIDR(rep1.df, rep2.df, value.transformation = c("identity",
   "log.additive.inverse"), ambiguity.resolution.method = c("value",
   "overlap", "midpoint"), max.factor = 1.5, jitter.factor = 1e-04,
   max.gap = 1000L, mu = 0.1, sigma = 1, rho = 0.2, p = 0.5,
-  eps = 0.001, max.iteration = 30)
+  eps = 0.001, max.iteration = 30, local.idr = TRUE)
 }
 \arguments{
 \item{rep1.df}{data frame of observations (i.e., genomic interactions) of
@@ -123,6 +123,8 @@ them to be considered as overlapping (defaults to \code{1000L})}
 
 \item{max.iteration}{integer; maximum number of iterations for
 IDR estimation (defaults to 30)}
+
+\item{local.idr}{TODO}
 }
 \value{
 List with two components (\code{rep1.df} and \code{rep1.df})
