@@ -1,4 +1,90 @@
 
+#' @title Finds One-to-One Correspondence between Peaks from Replicate 1
+#' and 2
+#'
+#' @description
+#' This method establishes a bijective assignment between peaks from
+#' replicate 1 and 2. A peak in replicate 1 is assigned to a
+#' peak in replicate 2 if and only if (1) they overlap (or the gap between the
+#' peaks is less than or equal to \code{max.gap}), and (2) there is no other
+#' peak in
+#' replicate 2 that overlaps with the peak in replicate 1 and has a
+#' lower \emph{ambiguity resolution value}.
+#'
+#' @inheritParams overlap1D
+#'
+#' @return Original data frames \code{rep1.df} and \code{rep2.df} with
+#' additional column \code{replicate.idx}, which specifies the index of the
+#' corresponding peak in the other replicate. If no corresponding
+#' peak was found, \code{replicate.idx} is set to \code{NA}.
+#'
+#' @examples
+#' rep1.df <- idr2d:::chipseq$rep1.df
+#' rep1.df$fdr <- preprocess(rep1.df$fdr, "log.additive.inverse")
+#'
+#' rep2.df <- idr2d:::chipseq$rep2.df
+#' rep2.df$fdr <- preprocess(rep2.df$fdr, "log.additive.inverse")
+#'
+#' mapping <- establishBijection1D(rep1.df, rep2.df)
+#'
+#' @importFrom dplyr arrange
+#' @importFrom dplyr group_by
+#' @importFrom dplyr slice
+#' @importFrom futile.logger flog.warn
+#' @importFrom magrittr "%>%"
+#' @export
+establishBijection1D <- function(rep1.df, rep2.df,
+                                 ambiguity.resolution.method = c("value",
+                                                                 "overlap",
+                                                                 "midpoint"),
+                                 max.gap = 1000L) {
+    # avoid CRAN warnings
+    rep1.idx <- rep2.idx <- arv <- NULL
+
+    ambiguity.resolution.method <- match.arg(ambiguity.resolution.method,
+                                             choices = c("value",
+                                                         "overlap",
+                                                         "midpoint"))
+
+    if (nrow(rep1.df) > 0 && nrow(rep2.df) > 0) {
+        # shuffle to break preexisting order
+        rep1.df <- rep1.df[sample.int(nrow(rep1.df)), ]
+        rep2.df <- rep2.df[sample.int(nrow(rep2.df)), ]
+
+        # sort by value column
+        rep1.df <- dplyr::arrange(rep1.df, rep1.df[, 7])
+        rep2.df <- dplyr::arrange(rep2.df, rep2.df[, 7])
+
+        pairs.df <- overlap1D(rep1.df, rep2.df,
+                            ambiguity.resolution.method, max.gap)
+
+        top.pairs.df <- pairs.df %>% dplyr::group_by(rep1.idx) %>%
+            dplyr::slice(which.min(arv))
+        top.pairs.df <- top.pairs.df %>% dplyr::group_by(rep2.idx) %>%
+            dplyr::slice(which.min(arv))
+
+        # replicated interaction ID
+
+        rep1.df$replicate.idx <- NA
+        rep2.df$replicate.idx <- NA
+
+        if (nrow(top.pairs.df) != length(unique(top.pairs.df$rep1.idx)) &&
+            nrow(top.pairs.df) != length(unique(top.pairs.df$rep2.idx))) {
+            futile.logger::flog.warn("ambiguous interaction assignments")
+        }
+
+        rep1.df$replicate.idx[top.pairs.df$rep1.idx] <-
+            top.pairs.df$rep2.idx
+        rep2.df$replicate.idx[top.pairs.df$rep2.idx] <-
+            top.pairs.df$rep1.idx
+    } else {
+        rep1.df$replicate.idx <- integer(0)
+        rep2.df$replicate.idx <- integer(0)
+    }
+
+    return(list(rep1.df = rep1.df, rep2.df = rep2.df))
+}
+
 #' @title Finds One-to-One Correspondence between Interactions from Replicate 1
 #' and 2
 #'
@@ -12,7 +98,7 @@
 #' replicate 2 that overlaps with the interaction in replicate 1 and has a
 #' lower \emph{ambiguity resolution value}.
 #'
-#' @inheritParams overlap
+#' @inheritParams overlap2D
 #'
 #' @return Original data frames \code{rep1.df} and \code{rep2.df} with
 #' additional column \code{replicate.idx}, which specifies the index of the
@@ -26,7 +112,7 @@
 #' rep2.df <- idr2d:::chiapet$rep2.df
 #' rep2.df$fdr <- preprocess(rep2.df$fdr, "log.additive.inverse")
 #'
-#' mapping <- establishBijection(rep1.df, rep2.df)
+#' mapping <- establishBijection2D(rep1.df, rep2.df)
 #'
 #' @importFrom dplyr arrange
 #' @importFrom dplyr group_by
@@ -34,7 +120,7 @@
 #' @importFrom futile.logger flog.warn
 #' @importFrom magrittr "%>%"
 #' @export
-establishBijection <- function(rep1.df, rep2.df,
+establishBijection2D <- function(rep1.df, rep2.df,
                                ambiguity.resolution.method = c("value",
                                                                "overlap",
                                                                "midpoint"),
@@ -56,7 +142,7 @@ establishBijection <- function(rep1.df, rep2.df,
         rep1.df <- dplyr::arrange(rep1.df, rep1.df[, 7])
         rep2.df <- dplyr::arrange(rep2.df, rep2.df[, 7])
 
-        pairs.df <- overlap(rep1.df, rep2.df,
+        pairs.df <- overlap2D(rep1.df, rep2.df,
                             ambiguity.resolution.method, max.gap)
 
         top.pairs.df <- pairs.df %>% dplyr::group_by(rep1.idx) %>%
@@ -206,7 +292,7 @@ preprocess <- function(x, value.transformation = c("identity",
 #' @param local.idr TODO
 #' @inheritParams idr::est.IDR
 #' @inheritParams preprocess
-#' @inheritParams establishBijection
+#' @inheritParams establishBijection2D
 #'
 #' @return List with two components (\code{rep1.df} and \code{rep1.df})
 #' containing the interactions from input data frames \code{rep1.df} and
@@ -246,19 +332,114 @@ estimateIDR2D <- function(rep1.df, rep2.df,
                         max.gap = 1000L,
                         mu = 0.1, sigma = 1.0, rho = 0.2, p = 0.5,
                         eps = 0.001, max.iteration = 30, local.idr = TRUE) {
+    return(estimateIDR(rep1.df, rep2.df, "IDR2D",
+                       value.transformation,
+                       ambiguity.resolution.method,
+                       max.factor,
+                       jitter.factor,
+                       max.gap,
+                       mu, sigma, rho, p,
+                       eps, max.iteration, local.idr))
+}
+
+#' @title Estimates IDR for Genomic Peak Data
+#'
+#' @description
+#' TODO
+#'
+#' @references
+#' Q. Li, J. B. Brown, H. Huang and P. J. Bickel. (2011) Measuring
+#' reproducibility of high-throughput experiments. Annals of Applied
+#' Statistics, Vol. 5, No. 3, 1752-1779.
+#'
+#' @inheritParams estimateIDR2D
+#'
+#' @return List with two components (\code{rep1.df} and \code{rep1.df})
+#' containing the peaks from input data frames \code{rep1.df} and
+#' \code{rep2.df} with
+#' the following additional columns:
+#' \tabular{rl}{
+#'   \code{"idx"} \tab peak index in replicate 1\cr
+#'   \code{"rep.idx"} \tab peak index of associated replicate peak
+#'   in replicate 2. If no corresponding
+#'   peak was found, \code{idr} is set to \code{NA}.\cr
+#'   \code{idr} \tab IDR of the peak and the
+#'   corresponding peak in the other replicate. If no corresponding
+#'   peak was found, \code{idr} is set to \code{NA}.
+#' }
+#'
+#' @examples
+#' # TODO
+#'
+#' @export
+estimateIDR1D <- function(rep1.df, rep2.df,
+                        value.transformation = c("identity",
+                                                   "additive.inverse",
+                                                   "multiplicative.inverse",
+                                                   "log",
+                                                   "log.additive.inverse"),
+                        ambiguity.resolution.method = c("value",
+                                                          "overlap",
+                                                          "midpoint"),
+                        max.factor = 1.5,
+                        jitter.factor = 0.0001,
+                        max.gap = 1000L,
+                        mu = 0.1, sigma = 1.0, rho = 0.2, p = 0.5,
+                        eps = 0.001, max.iteration = 30, local.idr = TRUE) {
+    return(estimateIDR(rep1.df, rep2.df, "IDR1D",
+                       value.transformation,
+                       ambiguity.resolution.method,
+                       max.factor,
+                       jitter.factor,
+                       max.gap,
+                       mu, sigma, rho, p,
+                       eps, max.iteration, local.idr))
+}
+
+
+estimateIDR <- function(rep1.df, rep2.df, mode = "IDR2D",
+                          value.transformation = c("identity",
+                                                   "additive.inverse",
+                                                   "multiplicative.inverse",
+                                                   "log",
+                                                   "log.additive.inverse"),
+                          ambiguity.resolution.method = c("value",
+                                                          "overlap",
+                                                          "midpoint"),
+                          max.factor = 1.5,
+                          jitter.factor = 0.0001,
+                          max.gap = 1000L,
+                          mu = 0.1, sigma = 1.0, rho = 0.2, p = 0.5,
+                          eps = 0.001, max.iteration = 30, local.idr = TRUE) {
     # avoid CRAN warnings
     rep2.idx <- rep1.value <- rep2.value <- idr <- NULL
 
-    rep1.df[, 7] <- preprocess(rep1.df[, 7], value.transformation,
-                                max.factor = max.factor,
-                                jitter.factor = jitter.factor)
+    if (mode == "IDR1D") {
+        rep1.df[, 4] <- preprocess(rep1.df[, 4], value.transformation,
+                                   max.factor = max.factor,
+                                   jitter.factor = jitter.factor)
 
-    rep2.df[, 7] <- preprocess(rep2.df[, 7], value.transformation,
-                                max.factor = max.factor,
-                                jitter.factor = jitter.factor)
+        rep2.df[, 4] <- preprocess(rep2.df[, 4], value.transformation,
+                                   max.factor = max.factor,
+                                   jitter.factor = jitter.factor)
 
-    mapping <- establishBijection(rep1.df, rep2.df, ambiguity.resolution.method,
-                                  max.gap = max.gap)
+        mapping <- establishBijection1D(rep1.df, rep2.df, ambiguity.resolution.method,
+                                        max.gap = max.gap)
+    } else if (mode == "IDR2D") {
+        rep1.df[, 7] <- preprocess(rep1.df[, 7], value.transformation,
+                                   max.factor = max.factor,
+                                   jitter.factor = jitter.factor)
+
+        rep2.df[, 7] <- preprocess(rep2.df[, 7], value.transformation,
+                                   max.factor = max.factor,
+                                   jitter.factor = jitter.factor)
+
+        mapping <- establishBijection2D(rep1.df, rep2.df, ambiguity.resolution.method,
+                                        max.gap = max.gap)
+    } else {
+        stop("unknown mode")
+    }
+
 
     if (nrow(mapping$rep1.df) > 0 && nrow(mapping$rep2.df) > 0) {
         rep1.df <- mapping$rep1.df
@@ -286,8 +467,7 @@ estimateIDR2D <- function(rep1.df, rep2.df,
                 idr.results <- idr::est.IDR(idr.matrix, mu, sigma, rho, p,
                                             eps = eps,
                                             max.ite = max.iteration)
-                # TODO check IDR vs idr?
-                if(local.idr) {
+                if (local.idr) {
                     idx.df$idr <- idr.results$idr
                 } else {
                     idx.df$idr <- idr.results$IDR
@@ -355,51 +535,4 @@ estimateIDR2D <- function(rep1.df, rep2.df,
     }
 
     return(list(rep1.df = rep1.df, rep2.df = rep2.df))
-}
-
-#' @title Estimates IDR for Genomic Peak Data
-#'
-#' @description
-#' TODO
-#'
-#' @references
-#' Q. Li, J. B. Brown, H. Huang and P. J. Bickel. (2011) Measuring
-#' reproducibility of high-throughput experiments. Annals of Applied
-#' Statistics, Vol. 5, No. 3, 1752-1779.
-#'
-#' @inheritParams estimateIDR2D
-#'
-#' @return List with two components (\code{rep1.df} and \code{rep1.df})
-#' containing the peaks from input data frames \code{rep1.df} and
-#' \code{rep2.df} with
-#' the following additional columns:
-#' \tabular{rl}{
-#'   \code{"idx"} \tab peak index in replicate 1\cr
-#'   \code{"rep.idx"} \tab peak index of associated replicate peak
-#'   in replicate 2. If no corresponding
-#'   peak was found, \code{idr} is set to \code{NA}.\cr
-#'   \code{idr} \tab IDR of the peak and the
-#'   corresponding peak in the other replicate. If no corresponding
-#'   peak was found, \code{idr} is set to \code{NA}.
-#' }
-#'
-#' @examples
-#' # TODO
-#'
-#' @export
-estimateIDR1D <- function(rep1.df, rep2.df,
-                        value.transformation = c("identity",
-                                                   "additive.inverse",
-                                                   "multiplicative.inverse",
-                                                   "log",
-                                                   "log.additive.inverse"),
-                        ambiguity.resolution.method = c("value",
-                                                          "overlap",
-                                                          "midpoint"),
-                        max.factor = 1.5,
-                        jitter.factor = 0.0001,
-                        max.gap = 1000L,
-                        mu = 0.1, sigma = 1.0, rho = 0.2, p = 0.5,
-                        eps = 0.001, max.iteration = 30, local.idr = TRUE) {
-    # TODO
 }
