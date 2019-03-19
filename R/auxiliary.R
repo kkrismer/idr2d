@@ -407,10 +407,12 @@ overlap1D <- function(rep1.df, rep2.df,
                     ambiguity.resolution.method = c("value", "overlap",
                                                     "midpoint"),
                     max.gap = 1000L) {
+    # argument handling
     ambiguity.resolution.method <- match.arg(ambiguity.resolution.method,
                                              choices = c("value",
                                                          "overlap",
                                                          "midpoint"))
+
     if (nrow(rep1.df) > 0 && nrow(rep2.df) > 0) {
         overlaps.df <- anchorOverlap(
             data.frame(chr = rep1.df[, 1],
@@ -564,6 +566,7 @@ overlap2D <- function(rep1.df, rep2.df,
                     ambiguity.resolution.method = c("value", "overlap",
                                                     "midpoint"),
                     max.gap = 1000L) {
+    # argument handling
     ambiguity.resolution.method <- match.arg(ambiguity.resolution.method,
                                              choices = c("value",
                                                          "overlap",

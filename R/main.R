@@ -134,7 +134,7 @@ establishBijection2D <- function(rep1.df, rep2.df,
 }
 
 #' @export
-establishBijection <- function(rep1.df, rep2.df, mode = "IDR2D",
+establishBijection <- function(rep1.df, rep2.df, mode = c("IDR1D", "IDR2D"),
                                  ambiguity.resolution.method = c("value",
                                                                  "overlap",
                                                                  "midpoint"),
@@ -145,10 +145,8 @@ establishBijection <- function(rep1.df, rep2.df, mode = "IDR2D",
     chr.a <- start.a <- end.a <- chr.b <- start.b <- end.b <- NULL
     value <- rep.value <- rank <- rep.rank <- idx <- rep.idx <- NULL
 
-    ambiguity.resolution.method <- match.arg(ambiguity.resolution.method,
-                                             choices = c("value",
-                                                         "overlap",
-                                                         "midpoint"))
+    # argument handling
+    mode <- match.arg(mode, choices = c("IDR1D", "IDR2D"))
 
     if (mode == "IDR1D") {
         columns <- c("chr", "start", "end", "value")
@@ -170,9 +168,9 @@ establishBijection <- function(rep1.df, rep2.df, mode = "IDR2D",
         rep1.df <- rep1.df[sample.int(nrow(rep1.df)), ]
         rep2.df <- rep2.df[sample.int(nrow(rep2.df)), ]
 
-        # sort by value column, ascending order
-        rep1.df <- dplyr::arrange(rep1.df, value)
-        rep2.df <- dplyr::arrange(rep2.df, value)
+        # sort by value column, descending order (higher values are better)
+        rep1.df <- dplyr::arrange(rep1.df, dplyr::desc(value))
+        rep2.df <- dplyr::arrange(rep2.df, dplyr::desc(value))
 
         # add idx column
         rep1.df$idx <- seq_len(nrow(rep1.df))
@@ -316,6 +314,7 @@ preprocess <- function(x, value.transformation = c("identity",
                                                    "log.additive.inverse"),
                        max.factor = 1.5,
                        jitter.factor = 0.0001) {
+    # argument handling
     value.transformation <- match.arg(value.transformation,
                                    choices = c("identity",
                                                "additive.inverse",
@@ -518,6 +517,9 @@ estimateIDR <- function(rep1.df, rep2.df, mode = "IDR2D",
     chr <- start <- end <- NULL
     chr.a <- start.a <- end.a <- chr.b <- start.b <- end.b <- NULL
     value <- rep.value <- rank <- rep.rank <- idx <- rep.idx <- idr <- NULL
+
+    # argument handling
+    mode <- match.arg(mode, choices = c("IDR1D", "IDR2D"))
 
     if (mode == "IDR1D") {
         columns <- c("chr", "start", "end", "value")
