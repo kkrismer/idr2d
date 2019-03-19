@@ -1,5 +1,5 @@
 ---
-title: "IDR2D: Irreproducible Discovery Rate for Genomic Interactions"
+title: "Using IDR2D for ChIP-Seq peaks"
 author: "Konstantin Krismer"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -21,8 +21,8 @@ and HiChIP [@pmid25128017].
 
 Load example data:
 ```{r, message = FALSE}
-rep1.df <- idr2d:::chiapet$rep1.df
-rep2.df <- idr2d:::chiapet$rep2.df
+rep1.df <- idr2d:::chipseq$rep1.df
+rep2.df <- idr2d:::chipseq$rep2.df
 ```
 
 ## Example data - replicate 1
@@ -33,26 +33,22 @@ header <- htmltools::withTags(table(
   class = 'display',
   thead(
     tr(
-      th(colspan = 3, "anchor A"),
-      th(colspan = 3, "anchor B"),
-      th(rowspan = 2, "FDR")
-    ),
-    tr(
-      lapply(rep(c("chr.", "start coordinate", "end coordinate"), 2), th)
+      th("chromosome"),
+      th("start coordinate"),
+      th("end coordinate"),
+      th("score")
     )
   )
 ))
 datatable(rep1.df, container = header, rownames = FALSE,
-              options = list(searching = FALSE)) %>%
-    formatRound("fdr", 3)
+              options = list(searching = FALSE))
 ```
 
 ## Example data - replicate 2
 
 ```{r, echo = FALSE, warning = FALSE, message = FALSE}
 datatable(rep2.df, container = header, rownames = FALSE,
-              options = list(searching = FALSE)) %>%
-    formatRound("fdr", 3)
+              options = list(searching = FALSE))
 ```
 
 
@@ -65,13 +61,35 @@ library(idr2d)
 
 Estimate IDR:
 ```{r}
-idr.results <- estimateIDR2D(rep1.df, rep2.df,
-                             value.transformation = "log.additive.inverse")
+idr.results <- estimateIDR1D(rep1.df, rep2.df, 
+                             value.transformation = "additive.inverse")
 rep1.idr.df <- idr.results$rep1.df
+rep2.idr.df <- idr.results$rep2.df
+
+
+rep1.idr.df <- dplyr::filter(rep1.idr.df, complete.cases(idr))
+rep2.idr.df <- dplyr::filter(rep2.idr.df, complete.cases(idr))
+
+rep1.idr.df$rep.value <- vapply(rep1.idr.df$rep.idx, function(rep2.idx) {
+    if (is.na(rep2.idx)) {
+        return(as.numeric(NA))
+    } else {
+        return(rep2.idr.df$value[which(rep2.df$idx == rep2.idx)])
+    }
+    
+}, FUN.VALUE = numeric(1))
+
+rep1.df <- dplyr::arrange(rep1.df, dplyr::desc(value))
+rep1.df$rank <- seq_len(nrow(rep1.df))
+rep1.df <- dplyr::arrange(rep1.df, dplyr::desc(rep.value))
+rep1.df$rep.rank <- seq_len(nrow(rep1.df))
+        
+
+rep1.idr.df$rep.score <- idr.results$rep2.df$score[rep1.idr.df$rep.idx]
 ```
 
 Important to note here is that the appropriate value transformation depends
-on the semantics of the *value* column (always the seventh column) in `rep1.df`
+on the semantics of the *value* column (always the fourth column) in `rep1.df`
 and `rep2.df`. This column is used to establish a ranking between interactions,
 with highly significant interactions on top of the list and least significant
 interactions (i.e., most likely noise) at the bottom of the list. The ranking
@@ -84,14 +102,15 @@ the `log.additive.inverse` transformation (`-log(x)`) is recommended.
 ## Results (`rep1.idr.df`)
 
 ```{r, echo = FALSE, warning = FALSE, message = FALSE}
-chr.a <- start.a <- end.a <- chr.b <- start.b <- end.b <- value <- idr <- NULL
 header <- htmltools::withTags(table(
   class = 'display',
   thead(
     tr(
-      th(colspan = 3, "anchor A"),
-      th(colspan = 3, "anchor B"),
-      th(rowspan = 2, "FDR"),
+      th("chromosome"),
+      th("start coordinate"),
+      th("end coordinate"),
+      th("score in R1"),
+      th("score in R2"),
       th(rowspan = 2, "IDR")
     ),
     tr(
@@ -99,13 +118,36 @@ header <- htmltools::withTags(table(
     )
   )
 ))
-datatable(dplyr::select(rep1.idr.df, chr.a, start.a, end.a,
-                                 chr.b, start.b, end.b,
-                                 value, idr), 
+datatable(rep1.idr.df, 
           rownames = FALSE,
           options = list(searching = FALSE),
           container = header) %>%
-    formatRound(c("value", "idr"), 3)
+    formatRound("idr", 3)
+```
+
+### IDR value distribution
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+complete.df <- dplyr::filter(rep1.idr.df, complete.cases(idr))
+ggplot2::ggplot(complete.df, ggplot2::aes(x = idr)) +
+    ggplot2::geom_density() +
+    ggplot2::scale_x_continuous(limits = c(0, 1.0)) +
+    ggplot2::theme_bw() +
+    ggplot2::theme(panel.border = ggplot2::element_blank()) +
+    ggplot2::ggtitle("IDR value distribution") +
+    ggplot2::xlab("IDR")
+```
+
+### rank
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+complete.df <- dplyr::filter(rep1.idr.df, complete.cases(idr))
+gg <- ggplot(rep1.df, aes(x = rank, y = rep.rank, color = idr)) +
+            geom_point() +
+            scale_color_gradientn(colours = rainbow(10)) + #scale_color_gradient2(midpoint = 0.5, low = "blue", mid = "green", high = "red") +
+            xlab("rank in replicate 1") +
+            ylab("rank in replicate 2") +
+            ggtitle(paste0(data.set, " - ", method, ": rank - IDR dependence"))
 ```
 
 # Additional information

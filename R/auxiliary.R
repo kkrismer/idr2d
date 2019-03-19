@@ -639,3 +639,91 @@ overlap2D <- function(rep1.df, rep2.df,
 
     return(pairs.df)
 }
+
+
+#' @title Removes Peaks on Non-standard Chromosomes
+#' @param x data frame of genomic peaks, with the following columns
+#' (position of columns matter, column names are irrelevant):
+#' \tabular{rl}{
+#'   column 1 (\code{chr}) \tab character; genomic location of peak -
+#'   chromosome (e.g., \code{"chr3"})\cr
+#'   column 2 \code{start}) \tab integer; genomic location of peak  -
+#'   start coordinate\cr
+#'   column 3 (\code{end}) \tab integer; genomic location of peak -
+#'   end coordinate\cr
+#'   column 4 (\code{value}) \tab numeric; p-value, FDR, or heuristic used to
+#'   rank the peaks
+#' }
+#' @importFrom GenomicRanges GRanges
+#' @importFrom IRanges IRanges
+#' @importFrom GenomeInfoDb keepStandardChromosomes
+#' @export
+removeNonstandardChromosomes1D <- function(x) {
+    x <- GenomicRanges::GRanges(x$chr,
+                                IRanges::IRanges(x$start, x$end),
+                                value = x$value)
+    x <- GenomeInfoDb::keepStandardChromosomes(x, pruning.mode = "coarse")
+    x.df <- as.data.frame(x)
+    x.df$width <- NULL
+    x.df$strand <- NULL
+    colnames(x.df) <- c("chr", "start", "end", "value")
+    return(x.df)
+}
+
+#' @title Removes Interactions on Non-standard Chromosomes
+#' @param x data frame of genomic interactions, with the following columns
+#' (position of columns matter, column names are irrelevant):
+#' \tabular{rl}{
+#'   column 1 (\code{chr.a}) \tab character; genomic location of anchor A -
+#'   chromosome (e.g., \code{"chr3"})\cr
+#'   column 2 \code{start.a}) \tab integer; genomic location of anchor A -
+#'   start coordinate\cr
+#'   column 3 (\code{end.a}) \tab integer; genomic location of anchor A -
+#'   end coordinate\cr
+#'   column 4 (\code{chr.b}) \tab character; genomic location of anchor B -
+#'   chromosome (e.g., \code{"chr3"})\cr
+#'   column 5 (\code{start.b}) \tab integer; genomic location of anchor B -
+#'   start coordinate\cr
+#'   column 6 (\code{end.c}) \tab integer; genomic location of anchor B -
+#'   end coordinate\cr
+#'   column 7 (\code{value}) \tab numeric; p-value, FDR, or heuristic used to
+#'   rank the interactions
+#' }
+#' @importFrom GenomicRanges GRanges
+#' @importFrom IRanges IRanges
+#' @importFrom GenomeInfoDb keepStandardChromosomes
+#' @importFrom dplyr inner_join
+#' @importFrom dplyr select
+#' @export
+removeNonstandardChromosomes2D <- function(x) {
+    # avoid CRAN warnings
+    chr.a <- start.a <- end.a <- chr.b <- start.b <- end.b <- value <- NULL
+
+    x$idx <- seq_len(nrow(x))
+    anchor.a <- GenomicRanges::GRanges(x$chr.a,
+                                       IRanges::IRanges(x$start.a, x$end.a),
+                                       value = x$value,
+                                       idx = x$idx)
+    anchor.a <- GenomeInfoDb::keepStandardChromosomes(anchor.a,
+                                                      pruning.mode = "coarse")
+    anchor.a.df <- as.data.frame(anchor.a)
+    anchor.a.df$width <- NULL
+    anchor.a.df$strand <- NULL
+    colnames(anchor.a.df) <- c("chr.a", "start.a", "end.a", "value", "idx")
+
+    anchor.b <- GenomicRanges::GRanges(x$chr.b,
+                                       IRanges::IRanges(x$start.b, x$end.b),
+                                       idx = x$idx)
+    anchor.b <- GenomeInfoDb::keepStandardChromosomes(anchor.b,
+                                                      pruning.mode = "coarse")
+    anchor.b.df <- as.data.frame(anchor.b)
+    anchor.b.df$width <- NULL
+    anchor.b.df$strand <- NULL
+    colnames(anchor.b.df) <- c("chr.b", "start.b", "end.b", "idx")
+
+    x.df <- dplyr::inner_join(anchor.a.df, anchor.b.df, by = "idx")
+    x.df <- dplyr::select(x.df, chr.a, start.a, end.a,
+                          chr.b, start.b, end.b, value)
+
+    return(x.df)
+}

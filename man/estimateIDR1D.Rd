@@ -7,9 +7,10 @@
 estimateIDR1D(rep1.df, rep2.df, value.transformation = c("identity",
   "additive.inverse", "multiplicative.inverse", "log",
   "log.additive.inverse"), ambiguity.resolution.method = c("value",
-  "overlap", "midpoint"), max.factor = 1.5, jitter.factor = 1e-04,
-  max.gap = 1000L, mu = 0.1, sigma = 1, rho = 0.2, p = 0.5,
-  eps = 0.001, max.iteration = 30, local.idr = TRUE)
+  "overlap", "midpoint"), remove.nonstandard.chromosomes = TRUE,
+  max.factor = 1.5, jitter.factor = 1e-04, max.gap = 1000L,
+  mu = 0.1, sigma = 1, rho = 0.2, p = 0.5, eps = 0.001,
+  max.iteration = 30, local.idr = TRUE)
 }
 \arguments{
 \item{rep1.df}{data frame of observations (i.e., genomic interactions) of
@@ -97,6 +98,10 @@ are resolved. Available methods:
   replicate 2 interaction anchor B
 }}
 
+\item{remove.nonstandard.chromosomes}{removes peaks and interactions containing
+genomic locations on non-standard chromosomes using
+\link[GenomeInfoDb]{keepStandardChromosomes} (default is TRUE)}
+
 \item{max.factor}{numeric; controls the replacement values for \code{Inf}
 and \code{-Inf}. \code{Inf} are replaced by \code{max(x) * max.factor} and
 \code{-Inf} are replaced by \code{min(x) / max.factor}.}
@@ -130,12 +135,21 @@ IDR estimation (defaults to 30)}
 List with two components (\code{rep1.df} and \code{rep1.df})
 containing the peaks from input data frames \code{rep1.df} and
 \code{rep2.df} with
-the following additional columns:
+the following columns:
 \tabular{rl}{
+  \code{"chr"} \tab character, TODO\cr
+  \code{"start"} \tab integer, TODO\cr
+  \code{"end"} \tab integer, TODO\cr
   \code{"idx"} \tab peak index in replicate 1\cr
   \code{"rep.idx"} \tab peak index of associated replicate peak
   in replicate 2. If no corresponding
-  peak was found, \code{idr} is set to \code{NA}.\cr
+  peak was found, \code{rep.idx} is set to \code{NA}.\cr
+  \code{"rank"} \tab TODO.\cr
+  \code{"rep.rank"} \tab TODO. If no corresponding
+  peak was found, \code{rep.rank} is set to \code{NA}.\cr
+  \code{"value"} \tab TODO.\cr
+  \code{"rep.value"} \tab TODO. If no corresponding
+  peak was found, \code{rep.value} is set to \code{NA}.\cr
   \code{idr} \tab IDR of the peak and the
   corresponding peak in the other replicate. If no corresponding
   peak was found, \code{idr} is set to \code{NA}.

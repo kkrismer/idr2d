@@ -13,10 +13,31 @@
 #'
 #' @inheritParams overlap1D
 #'
-#' @return Original data frames \code{rep1.df} and \code{rep2.df} with
-#' additional column \code{replicate.idx}, which specifies the index of the
-#' corresponding peak in the other replicate. If no corresponding
-#' peak was found, \code{replicate.idx} is set to \code{NA}.
+
+#' @return Data frames \code{rep1.df} and \code{rep2.df} with
+#' the following columns:
+#' \tabular{rl}{
+#'   1. \code{chr} \tab character; genomic location of peak -
+#'   chromosome (e.g., \code{"chr3"})\cr
+#'   2. \code{start} \tab integer; genomic location of peak -
+#'   start coordinate\cr
+#'   3. \code{end} \tab integer; genomic location of peak -
+#'   end coordinate\cr
+#'   4. \code{value} \tab numeric; p-value, FDR, or heuristic used to
+#'   rank the interactions\cr
+#'   5. \code{"rep.value"} \tab numeric; value of corresponding replicate
+#'   interaction. If no corresponding
+#' interaction was found, \code{rep.value} is set to \code{NA}.\cr
+#'   6. \code{"rank"} \tab integer; rank of the interaction, established by
+#'   value column, ascending order\cr
+#'   7. \code{"rep.rank"} \tab integer; rank of corresponding replicate
+#'   interaction. If no corresponding
+#' interaction was found, \code{rep.rank} is set to \code{NA}.\cr
+#'   8. \code{"idx"} \tab integer; interaction index, primary key\cr
+#'   9. \code{"rep.idx"} \tab integer; specifies the index of the
+#' corresponding interaction in the other replicate (foreign key). If no
+#' corresponding interaction was found, \code{rep.idx} is set to \code{NA}.
+#' }
 #'
 #' @examples
 #' rep1.df <- idr2d:::chipseq$rep1.df
@@ -38,51 +59,8 @@ establishBijection1D <- function(rep1.df, rep2.df,
                                                                  "overlap",
                                                                  "midpoint"),
                                  max.gap = 1000L) {
-    # avoid CRAN warnings
-    rep1.idx <- rep2.idx <- arv <- NULL
-
-    ambiguity.resolution.method <- match.arg(ambiguity.resolution.method,
-                                             choices = c("value",
-                                                         "overlap",
-                                                         "midpoint"))
-
-    if (nrow(rep1.df) > 0 && nrow(rep2.df) > 0) {
-        # shuffle to break preexisting order
-        rep1.df <- rep1.df[sample.int(nrow(rep1.df)), ]
-        rep2.df <- rep2.df[sample.int(nrow(rep2.df)), ]
-
-        # sort by value column
-        rep1.df <- dplyr::arrange(rep1.df, rep1.df[, 7])
-        rep2.df <- dplyr::arrange(rep2.df, rep2.df[, 7])
-
-        pairs.df <- overlap1D(rep1.df, rep2.df,
-                            ambiguity.resolution.method, max.gap)
-
-        top.pairs.df <- pairs.df %>% dplyr::group_by(rep1.idx) %>%
-            dplyr::slice(which.min(arv))
-        top.pairs.df <- top.pairs.df %>% dplyr::group_by(rep2.idx) %>%
-            dplyr::slice(which.min(arv))
-
-        # replicated interaction ID
-
-        rep1.df$replicate.idx <- NA
-        rep2.df$replicate.idx <- NA
-
-        if (nrow(top.pairs.df) != length(unique(top.pairs.df$rep1.idx)) &&
-            nrow(top.pairs.df) != length(unique(top.pairs.df$rep2.idx))) {
-            futile.logger::flog.warn("ambiguous interaction assignments")
-        }
-
-        rep1.df$replicate.idx[top.pairs.df$rep1.idx] <-
-            top.pairs.df$rep2.idx
-        rep2.df$replicate.idx[top.pairs.df$rep2.idx] <-
-            top.pairs.df$rep1.idx
-    } else {
-        rep1.df$replicate.idx <- integer(0)
-        rep2.df$replicate.idx <- integer(0)
-    }
-
-    return(list(rep1.df = rep1.df, rep2.df = rep2.df))
+    return(establishBijection(rep1.df, rep2.df, "IDR1D",
+                              ambiguity.resolution.method))
 }
 
 #' @title Finds One-to-One Correspondence between Interactions from Replicate 1
@@ -100,10 +78,36 @@ establishBijection1D <- function(rep1.df, rep2.df,
 #'
 #' @inheritParams overlap2D
 #'
-#' @return Original data frames \code{rep1.df} and \code{rep2.df} with
-#' additional column \code{replicate.idx}, which specifies the index of the
-#' corresponding interaction in the other replicate. If no corresponding
-#' interaction was found, \code{replicate.idx} is set to \code{NA}.
+#' @return Data frames \code{rep1.df} and \code{rep2.df} with
+#' the following columns:
+#' \tabular{rl}{
+#'   1. \code{chr.a} \tab character; genomic location of anchor A -
+#'   chromosome (e.g., \code{"chr3"})\cr
+#'   2. \code{start.a} \tab integer; genomic location of anchor A -
+#'   start coordinate\cr
+#'   3. \code{end.a} \tab integer; genomic location of anchor A -
+#'   end coordinate\cr
+#'   4. \code{chr.b} \tab character; genomic location of anchor B -
+#'   chromosome (e.g., \code{"chr3"})\cr
+#'   5. \code{start.b} \tab integer; genomic location of anchor B -
+#'   start coordinate\cr
+#'   6. \code{end.c} \tab integer; genomic location of anchor B -
+#'   end coordinate\cr
+#'   7. \code{value} \tab numeric; p-value, FDR, or heuristic used to
+#'   rank the interactions\cr
+#'   8. \code{"rep.value"} \tab numeric; value of corresponding replicate
+#'   interaction. If no corresponding
+#' interaction was found, \code{rep.value} is set to \code{NA}.\cr
+#'   9. \code{"rank"} \tab integer; rank of the interaction, established by
+#'   value column, ascending order\cr
+#'   10. \code{"rep.rank"} \tab integer; rank of corresponding replicate
+#'   interaction. If no corresponding
+#' interaction was found, \code{rep.rank} is set to \code{NA}.\cr
+#'   11. \code{"idx"} \tab integer; interaction index, primary key\cr
+#'   12. \code{"rep.idx"} \tab integer; specifies the index of the
+#' corresponding interaction in the other replicate (foreign key). If no
+#' corresponding interaction was found, \code{rep.idx} is set to \code{NA}.
+#' }
 #'
 #' @examples
 #' rep1.df <- idr2d:::chiapet$rep1.df
@@ -125,49 +129,130 @@ establishBijection2D <- function(rep1.df, rep2.df,
                                                                "overlap",
                                                                "midpoint"),
                                max.gap = 1000L) {
+    return(establishBijection(rep1.df, rep2.df, "IDR2D",
+                              ambiguity.resolution.method))
+}
+
+#' @export
+establishBijection <- function(rep1.df, rep2.df, mode = "IDR2D",
+                                 ambiguity.resolution.method = c("value",
+                                                                 "overlap",
+                                                                 "midpoint"),
+                                 max.gap = 1000L) {
     # avoid CRAN warnings
     rep1.idx <- rep2.idx <- arv <- NULL
+    chr <- start <- end <- NULL
+    chr.a <- start.a <- end.a <- chr.b <- start.b <- end.b <- NULL
+    value <- rep.value <- rank <- rep.rank <- idx <- rep.idx <- NULL
 
     ambiguity.resolution.method <- match.arg(ambiguity.resolution.method,
                                              choices = c("value",
                                                          "overlap",
                                                          "midpoint"))
 
+    if (mode == "IDR1D") {
+        columns <- c("chr", "start", "end", "value")
+    } else if (mode == "IDR2D") {
+        columns <- c("chr.a", "start.a", "end.a",
+                     "chr.b", "start.b", "end.b", "value")
+    } else {
+        stop("unknown mode")
+    }
+
+    # remove irrelevant columns, rename relevant columns
+    rep1.df <- rep1.df[, seq_len(length(columns))]
+    rep2.df <- rep2.df[, seq_len(length(columns))]
+    colnames(rep1.df) <- columns
+    colnames(rep2.df) <- columns
+
     if (nrow(rep1.df) > 0 && nrow(rep2.df) > 0) {
         # shuffle to break preexisting order
         rep1.df <- rep1.df[sample.int(nrow(rep1.df)), ]
         rep2.df <- rep2.df[sample.int(nrow(rep2.df)), ]
 
-        # sort by value column
-        rep1.df <- dplyr::arrange(rep1.df, rep1.df[, 7])
-        rep2.df <- dplyr::arrange(rep2.df, rep2.df[, 7])
+        # sort by value column, ascending order
+        rep1.df <- dplyr::arrange(rep1.df, value)
+        rep2.df <- dplyr::arrange(rep2.df, value)
 
-        pairs.df <- overlap2D(rep1.df, rep2.df,
-                            ambiguity.resolution.method, max.gap)
+        # add idx column
+        rep1.df$idx <- seq_len(nrow(rep1.df))
+        rep2.df$idx <- seq_len(nrow(rep2.df))
+
+        # add rank column
+        rep1.df$rank <- seq_len(nrow(rep1.df))
+        rep2.df$rank <- seq_len(nrow(rep2.df))
+
+
+        if (mode == "IDR1D") {
+            pairs.df <- overlap1D(rep1.df, rep2.df,
+                                  ambiguity.resolution.method, max.gap)
+        } else if (mode == "IDR2D") {
+            pairs.df <- overlap2D(rep1.df, rep2.df,
+                                  ambiguity.resolution.method, max.gap)
+        }
 
         top.pairs.df <- pairs.df %>% dplyr::group_by(rep1.idx) %>%
             dplyr::slice(which.min(arv))
         top.pairs.df <- top.pairs.df %>% dplyr::group_by(rep2.idx) %>%
             dplyr::slice(which.min(arv))
 
-        # replicated interaction ID
-
-        rep1.df$replicate.idx <- NA
-        rep2.df$replicate.idx <- NA
-
         if (nrow(top.pairs.df) != length(unique(top.pairs.df$rep1.idx)) &&
             nrow(top.pairs.df) != length(unique(top.pairs.df$rep2.idx))) {
             futile.logger::flog.warn("ambiguous interaction assignments")
         }
 
-        rep1.df$replicate.idx[top.pairs.df$rep1.idx] <-
-            top.pairs.df$rep2.idx
-        rep2.df$replicate.idx[top.pairs.df$rep2.idx] <-
-            top.pairs.df$rep1.idx
+        rep1.df$rep.idx <- as.integer(NA)
+        rep2.df$rep.idx <- as.integer(NA)
+
+        rep1.df$rep.idx[top.pairs.df$rep1.idx] <- top.pairs.df$rep2.idx
+        rep2.df$rep.idx[top.pairs.df$rep2.idx] <- top.pairs.df$rep1.idx
+
+        rep1.df$rep.rank <- as.integer(NA)
+        rep2.df$rep.rank <- as.integer(NA)
+
+        rep1.df$rep.rank[top.pairs.df$rep1.idx] <- rep2.df$rank[top.pairs.df$rep2.idx]
+        rep2.df$rep.rank[top.pairs.df$rep2.idx] <- rep1.df$rank[top.pairs.df$rep1.idx]
+
+        rep1.df$rep.value <- as.numeric(NA)
+        rep2.df$rep.value <- as.numeric(NA)
+
+        rep1.df$rep.value[top.pairs.df$rep1.idx] <- rep2.df$value[top.pairs.df$rep2.idx]
+        rep2.df$rep.value[top.pairs.df$rep2.idx] <- rep1.df$value[top.pairs.df$rep1.idx]
     } else {
-        rep1.df$replicate.idx <- integer(0)
-        rep2.df$replicate.idx <- integer(0)
+        rep1.df$idx <- integer(0)
+        rep2.df$idx <- integer(0)
+        rep1.df$rep.idx <- integer(0)
+        rep2.df$rep.idx <- integer(0)
+        rep1.df$rank <- integer(0)
+        rep2.df$rank <- integer(0)
+        rep1.df$rep.rank <- integer(0)
+        rep2.df$rep.rank <- integer(0)
+        rep1.df$rep.value <- numeric(0)
+        rep2.df$rep.value <- numeric(0)
     }
+
+    if (mode == "IDR1D") {
+        rep1.df <- dplyr::select(rep1.df, chr, start, end,
+                                 value, rep.value,
+                                 rank, rep.rank,
+                                 idx, rep.idx)
+        rep2.df <- dplyr::select(rep2.df, chr, start, end,
+                                 value, rep.value,
+                                 rank, rep.rank,
+                                 idx, rep.idx)
+    } else if (mode == "IDR2D") {
+        rep1.df <- dplyr::select(rep1.df, chr.a, start.a, end.a,
+                                 chr.b, start.b, end.b,
+                                 value, rep.value,
+                                 rank, rep.rank,
+                                 idx, rep.idx)
+        rep2.df <- dplyr::select(rep2.df, chr.a, start.a, end.a,
+                                 chr.b, start.b, end.b,
+                                 value, rep.value,
+                                 rank, rep.rank,
+                                 idx, rep.idx)
+    }
+
 
     return(list(rep1.df = rep1.df, rep2.df = rep2.df))
 }
@@ -275,6 +360,68 @@ preprocess <- function(x, value.transformation = c("identity",
     return(x)
 }
 
+#' @title Estimates IDR for Genomic Peak Data
+#'
+#' @description
+#' TODO
+#'
+#' @references
+#' Q. Li, J. B. Brown, H. Huang and P. J. Bickel. (2011) Measuring
+#' reproducibility of high-throughput experiments. Annals of Applied
+#' Statistics, Vol. 5, No. 3, 1752-1779.
+#'
+#' @inheritParams estimateIDR
+#'
+#' @return List with two components (\code{rep1.df} and \code{rep1.df})
+#' containing the peaks from input data frames \code{rep1.df} and
+#' \code{rep2.df} with
+#' the following columns:
+#' \tabular{rl}{
+#'   \code{"chr"} \tab character, TODO\cr
+#'   \code{"start"} \tab integer, TODO\cr
+#'   \code{"end"} \tab integer, TODO\cr
+#'   \code{"idx"} \tab peak index in replicate 1\cr
+#'   \code{"rep.idx"} \tab peak index of associated replicate peak
+#'   in replicate 2. If no corresponding
+#'   peak was found, \code{rep.idx} is set to \code{NA}.\cr
+#'   \code{"rank"} \tab TODO.\cr
+#'   \code{"rep.rank"} \tab TODO. If no corresponding
+#'   peak was found, \code{rep.rank} is set to \code{NA}.\cr
+#'   \code{"value"} \tab TODO.\cr
+#'   \code{"rep.value"} \tab TODO. If no corresponding
+#'   peak was found, \code{rep.value} is set to \code{NA}.\cr
+#'   \code{idr} \tab IDR of the peak and the
+#'   corresponding peak in the other replicate. If no corresponding
+#'   peak was found, \code{idr} is set to \code{NA}.
+#' }
+#'
+#' @examples
+#' # TODO
+#'
+#' @export
+estimateIDR1D <- function(rep1.df, rep2.df,
+                          value.transformation = c("identity",
+                                                   "additive.inverse",
+                                                   "multiplicative.inverse",
+                                                   "log",
+                                                   "log.additive.inverse"),
+                          ambiguity.resolution.method = c("value",
+                                                          "overlap",
+                                                          "midpoint"),
+                          remove.nonstandard.chromosomes = TRUE,
+                          max.factor = 1.5, jitter.factor = 0.0001,
+                          max.gap = 1000L,
+                          mu = 0.1, sigma = 1.0, rho = 0.2, p = 0.5,
+                          eps = 0.001, max.iteration = 30, local.idr = TRUE) {
+    return(estimateIDR(rep1.df, rep2.df, "IDR1D",
+                       value.transformation,
+                       ambiguity.resolution.method,
+                       remove.nonstandard.chromosomes,
+                       max.factor, jitter.factor, max.gap,
+                       mu, sigma, rho, p,
+                       eps, max.iteration, local.idr))
+}
+
 #' @title Estimates IDR for Genomic Interaction Data
 #'
 #' @description
@@ -287,12 +434,7 @@ preprocess <- function(x, value.transformation = c("identity",
 #' reproducibility of high-throughput experiments. Annals of Applied
 #' Statistics, Vol. 5, No. 3, 1752-1779.
 #'
-#' @param max.iteration integer; maximum number of iterations for
-#' IDR estimation (defaults to 30)
-#' @param local.idr TODO
-#' @inheritParams idr::est.IDR
-#' @inheritParams preprocess
-#' @inheritParams establishBijection2D
+#' @inheritParams estimateIDR
 #'
 #' @return List with two components (\code{rep1.df} and \code{rep1.df})
 #' containing the interactions from input data frames \code{rep1.df} and
@@ -319,85 +461,6 @@ preprocess <- function(x, value.transformation = c("identity",
 #' @importFrom stringr str_trim
 #' @export
 estimateIDR2D <- function(rep1.df, rep2.df,
-                        value.transformation = c("identity",
-                                                 "additive.inverse",
-                                                 "multiplicative.inverse",
-                                                 "log",
-                                                 "log.additive.inverse"),
-                        ambiguity.resolution.method = c("value",
-                                                        "overlap",
-                                                        "midpoint"),
-                        max.factor = 1.5,
-                        jitter.factor = 0.0001,
-                        max.gap = 1000L,
-                        mu = 0.1, sigma = 1.0, rho = 0.2, p = 0.5,
-                        eps = 0.001, max.iteration = 30, local.idr = TRUE) {
-    return(estimateIDR(rep1.df, rep2.df, "IDR2D",
-                       value.transformation,
-                       ambiguity.resolution.method,
-                       max.factor,
-                       jitter.factor,
-                       max.gap,
-                       mu, sigma, rho, p,
-                       eps, max.iteration, local.idr))
-}
-
-#' @title Estimates IDR for Genomic Peak Data
-#'
-#' @description
-#' TODO
-#'
-#' @references
-#' Q. Li, J. B. Brown, H. Huang and P. J. Bickel. (2011) Measuring
-#' reproducibility of high-throughput experiments. Annals of Applied
-#' Statistics, Vol. 5, No. 3, 1752-1779.
-#'
-#' @inheritParams estimateIDR2D
-#'
-#' @return List with two components (\code{rep1.df} and \code{rep1.df})
-#' containing the peaks from input data frames \code{rep1.df} and
-#' \code{rep2.df} with
-#' the following additional columns:
-#' \tabular{rl}{
-#'   \code{"idx"} \tab peak index in replicate 1\cr
-#'   \code{"rep.idx"} \tab peak index of associated replicate peak
-#'   in replicate 2. If no corresponding
-#'   peak was found, \code{idr} is set to \code{NA}.\cr
-#'   \code{idr} \tab IDR of the peak and the
-#'   corresponding peak in the other replicate. If no corresponding
-#'   peak was found, \code{idr} is set to \code{NA}.
-#' }
-#'
-#' @examples
-#' # TODO
-#'
-#' @export
-estimateIDR1D <- function(rep1.df, rep2.df,
-                        value.transformation = c("identity",
-                                                   "additive.inverse",
-                                                   "multiplicative.inverse",
-                                                   "log",
-                                                   "log.additive.inverse"),
-                        ambiguity.resolution.method = c("value",
-                                                          "overlap",
-                                                          "midpoint"),
-                        max.factor = 1.5,
-                        jitter.factor = 0.0001,
-                        max.gap = 1000L,
-                        mu = 0.1, sigma = 1.0, rho = 0.2, p = 0.5,
-                        eps = 0.001, max.iteration = 30, local.idr = TRUE) {
-    return(estimateIDR(rep1.df, rep2.df, "IDR1D",
-                       value.transformation,
-                       ambiguity.resolution.method,
-                       max.factor,
-                       jitter.factor,
-                       max.gap,
-                       mu, sigma, rho, p,
-                       eps, max.iteration, local.idr))
-}
-
-
-estimateIDR <- function(rep1.df, rep2.df, mode = "IDR2D",
                           value.transformation = c("identity",
                                                    "additive.inverse",
                                                    "multiplicative.inverse",
@@ -406,52 +469,104 @@ estimateIDR <- function(rep1.df, rep2.df, mode = "IDR2D",
                           ambiguity.resolution.method = c("value",
                                                           "overlap",
                                                           "midpoint"),
-                          max.factor = 1.5,
-                          jitter.factor = 0.0001,
+                          remove.nonstandard.chromosomes = TRUE,
+                          max.factor = 1.5, jitter.factor = 0.0001,
                           max.gap = 1000L,
                           mu = 0.1, sigma = 1.0, rho = 0.2, p = 0.5,
                           eps = 0.001, max.iteration = 30, local.idr = TRUE) {
+    return(estimateIDR(rep1.df, rep2.df, "IDR2D",
+                       value.transformation,
+                       ambiguity.resolution.method,
+                       remove.nonstandard.chromosomes,
+                       max.factor, jitter.factor,
+                       max.gap,
+                       mu, sigma, rho, p,
+                       eps, max.iteration, local.idr))
+}
+
+#' @title Estimates IDR for Genomic Peaks or Genomic Interactions
+#' @references
+#' Q. Li, J. B. Brown, H. Huang and P. J. Bickel. (2011) Measuring
+#' reproducibility of high-throughput experiments. Annals of Applied
+#' Statistics, Vol. 5, No. 3, 1752-1779.
+#'
+#' @param remove.nonstandard.chromosomes removes peaks and interactions containing
+#' genomic locations on non-standard chromosomes using
+#' \link[GenomeInfoDb]{keepStandardChromosomes} (default is TRUE)
+#' @param max.iteration integer; maximum number of iterations for
+#' IDR estimation (defaults to 30)
+#' @param local.idr TODO
+#' @inheritParams idr::est.IDR
+#' @inheritParams preprocess
+#' @inheritParams establishBijection2D
+estimateIDR <- function(rep1.df, rep2.df, mode = "IDR2D",
+                        value.transformation = c("identity",
+                                                 "additive.inverse",
+                                                 "multiplicative.inverse",
+                                                 "log",
+                                                 "log.additive.inverse"),
+                        ambiguity.resolution.method = c("value",
+                                                        "overlap",
+                                                        "midpoint"),
+                        remove.nonstandard.chromosomes = TRUE,
+                        max.factor = 1.5, jitter.factor = 0.0001,
+                        max.gap = 1000L,
+                        mu = 0.1, sigma = 1.0, rho = 0.2, p = 0.5,
+                        eps = 0.001, max.iteration = 30, local.idr = TRUE) {
     # avoid CRAN warnings
-    rep2.idx <- rep1.value <- rep2.value <- idr <- NULL
+    rep2.idx <- rep1.value <- rep2.value <- NULL
+    chr <- start <- end <- NULL
+    chr.a <- start.a <- end.a <- chr.b <- start.b <- end.b <- NULL
+    value <- rep.value <- rank <- rep.rank <- idx <- rep.idx <- idr <- NULL
 
     if (mode == "IDR1D") {
-        rep1.df[, 4] <- preprocess(rep1.df[, 4], value.transformation,
-                                   max.factor = max.factor,
-                                   jitter.factor = jitter.factor)
-
-        rep2.df[, 4] <- preprocess(rep2.df[, 4], value.transformation,
-                                   max.factor = max.factor,
-                                   jitter.factor = jitter.factor)
-
-        mapping <- establishBijection1D(rep1.df, rep2.df, ambiguity.resolution.method,
-                                        max.gap = max.gap)
+        columns <- c("chr", "start", "end", "value")
     } else if (mode == "IDR2D") {
-        rep1.df[, 7] <- preprocess(rep1.df[, 7], value.transformation,
-                                   max.factor = max.factor,
-                                   jitter.factor = jitter.factor)
-
-        rep2.df[, 7] <- preprocess(rep2.df[, 7], value.transformation,
-                                   max.factor = max.factor,
-                                   jitter.factor = jitter.factor)
-
-        mapping <- establishBijection2D(rep1.df, rep2.df, ambiguity.resolution.method,
-                                        max.gap = max.gap)
+        columns <- c("chr.a", "start.a", "end.a",
+                     "chr.b", "start.b", "end.b", "value")
     } else {
         stop("unknown mode")
     }
 
+    # remove irrelevant columns, rename relevant columns
+    rep1.df <- rep1.df[, seq_len(length(columns))]
+    rep2.df <- rep2.df[, seq_len(length(columns))]
+    colnames(rep1.df) <- columns
+    colnames(rep2.df) <- columns
+
+    if (remove.nonstandard.chromosomes) {
+        if (mode == "IDR1D") {
+            rep1.df <- removeNonstandardChromosomes1D(rep1.df)
+            rep2.df <- removeNonstandardChromosomes1D(rep2.df)
+        } else if (mode == "IDR2D") {
+            rep1.df <- removeNonstandardChromosomes2D(rep1.df)
+            rep2.df <- removeNonstandardChromosomes2D(rep2.df)
+        }
+    }
+
+    rep1.df$value <- preprocess(rep1.df$value,
+                                value.transformation,
+                                max.factor = max.factor,
+                                jitter.factor = jitter.factor)
+
+    rep2.df$value <- preprocess(rep2.df$value,
+                                value.transformation,
+                                max.factor = max.factor,
+                                jitter.factor = jitter.factor)
+
+    mapping <- establishBijection(rep1.df, rep2.df, mode,
+                                  ambiguity.resolution.method,
+                                  max.gap = max.gap)
 
     if (nrow(mapping$rep1.df) > 0 && nrow(mapping$rep2.df) > 0) {
         rep1.df <- mapping$rep1.df
         rep2.df <- mapping$rep2.df
         idx.df <- data.frame(
-            rep1.idx = seq_len(nrow(rep1.df)),
-            rep2.idx = rep1.df$replicate.idx,
-            rep1.value = rep1.df[, 7],
-            rep2.value = rep2.df[rep1.df$replicate.idx, 7]
+            rep1.idx = rep1.df$idx,
+            rep2.idx = rep1.df$rep.idx,
+            rep1.value = rep1.df$value,
+            rep2.value = rep1.df$rep.value
         )
-        rep1.df$replicate.idx <- NULL
-        rep2.df$replicate.idx <- NULL
 
         idx.df <- dplyr::filter(idx.df, !is.na(rep2.idx) & !is.infinite(rep2.idx))
 
@@ -481,57 +596,58 @@ estimateIDR <- function(rep1.df, rep2.df, mode = "IDR2D",
         }
 
         if (nrow(rep1.df) > 0) {
-            rep1.df$idx <- as.numeric(NA)
-            rep1.df$rep.idx <- as.numeric(NA)
             rep1.df$idr <- as.numeric(NA)
-            if (length(idx.df$idr) > 0) {
-                rep1.df$idx[idx.df$rep1.idx] <- idx.df$rep1.idx
-                rep1.df$rep.idx[idx.df$rep1.idx] <- idx.df$rep2.idx
+            if (nrow(idx.df) > 0) {
                 rep1.df$idr[idx.df$rep1.idx] <- idx.df$idr
                 rep1.df <- dplyr::arrange(rep1.df, idr)
             }
         } else {
-            rep1.df$idx <- numeric(0)
-            rep1.df$rep.idx <- numeric(0)
             rep1.df$idr <- numeric(0)
         }
 
         if (nrow(rep2.df) > 0) {
-            rep2.df$idx <- as.numeric(NA)
-            rep2.df$rep.idx <- as.numeric(NA)
             rep2.df$idr <- as.numeric(NA)
             if (length(idx.df$idr) > 0) {
-                rep2.df$idx[idx.df$rep2.idx] <- idx.df$rep2.idx
-                rep2.df$rep.idx[idx.df$rep2.idx] <- idx.df$rep1.idx
                 rep2.df$idr[idx.df$rep2.idx] <- idx.df$idr
                 rep2.df <- dplyr::arrange(rep2.df, idr)
             }
-
         } else {
-            rep2.df$idx <- numeric(0)
-            rep2.df$rep.idx <- numeric(0)
             rep2.df$idr <- numeric(0)
         }
     } else {
         if (nrow(rep1.df) > 0) {
-            rep1.df$idx <- as.numeric(NA)
-            rep1.df$rep.idx <- as.numeric(NA)
             rep1.df$idr <- as.numeric(NA)
         } else {
-            rep1.df$idx <- numeric(0)
-            rep1.df$rep.idx <- numeric(0)
             rep1.df$idr <- numeric(0)
         }
 
         if (nrow(rep2.df) > 0) {
-            rep2.df$idx <- as.numeric(NA)
-            rep2.df$rep.idx <- as.numeric(NA)
             rep2.df$idr <- as.numeric(NA)
         } else {
-            rep2.df$idx <- numeric(0)
-            rep2.df$rep.idx <- numeric(0)
             rep2.df$idr <- numeric(0)
         }
+    }
+
+    if (mode == "IDR1D") {
+        rep1.df <- dplyr::select(rep1.df, chr, start, end,
+                                 value, rep.value,
+                                 rank, rep.rank,
+                                 idx, rep.idx, idr)
+        rep2.df <- dplyr::select(rep2.df, chr, start, end,
+                                 value, rep.value,
+                                 rank, rep.rank,
+                                 idx, rep.idx, idr)
+    } else if (mode == "IDR2D") {
+        rep1.df <- dplyr::select(rep1.df, chr.a, start.a, end.a,
+                                 chr.b, start.b, end.b,
+                                 value, rep.value,
+                                 rank, rep.rank,
+                                 idx, rep.idx, idr)
+        rep2.df <- dplyr::select(rep2.df, chr.a, start.a, end.a,
+                                 chr.b, start.b, end.b,
+                                 value, rep.value,
+                                 rank, rep.rank,
+                                 idx, rep.idx, idr)
     }
 
     return(list(rep1.df = rep1.df, rep2.df = rep2.df))

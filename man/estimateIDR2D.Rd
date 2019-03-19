@@ -7,9 +7,10 @@
 estimateIDR2D(rep1.df, rep2.df, value.transformation = c("identity",
   "additive.inverse", "multiplicative.inverse", "log",
   "log.additive.inverse"), ambiguity.resolution.method = c("value",
-  "overlap", "midpoint"), max.factor = 1.5, jitter.factor = 1e-04,
-  max.gap = 1000L, mu = 0.1, sigma = 1, rho = 0.2, p = 0.5,
-  eps = 0.001, max.iteration = 30, local.idr = TRUE)
+  "overlap", "midpoint"), remove.nonstandard.chromosomes = TRUE,
+  max.factor = 1.5, jitter.factor = 1e-04, max.gap = 1000L,
+  mu = 0.1, sigma = 1, rho = 0.2, p = 0.5, eps = 0.001,
+  max.iteration = 30, local.idr = TRUE)
 }
 \arguments{
 \item{rep1.df}{data frame of observations (i.e., genomic interactions) of
@@ -96,6 +97,10 @@ are resolved. Available methods:
   replicate 1 interaction anchor B to midpoint of
   replicate 2 interaction anchor B
 }}
+
+\item{remove.nonstandard.chromosomes}{removes peaks and interactions containing
+genomic locations on non-standard chromosomes using
+\link[GenomeInfoDb]{keepStandardChromosomes} (default is TRUE)}
 
 \item{max.factor}{numeric; controls the replacement values for \code{Inf}
 and \code{-Inf}. \code{Inf} are replaced by \code{max(x) * max.factor} and

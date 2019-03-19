@@ -80,10 +80,30 @@ anchors for
 them to be considered as overlapping (defaults to \code{1000L})}
 }
 \value{
-Original data frames \code{rep1.df} and \code{rep2.df} with
-additional column \code{replicate.idx}, which specifies the index of the
-corresponding peak in the other replicate. If no corresponding
-peak was found, \code{replicate.idx} is set to \code{NA}.
+Data frames \code{rep1.df} and \code{rep2.df} with
+the following columns:
+\tabular{rl}{
+  1. \code{chr} \tab character; genomic location of peak -
+  chromosome (e.g., \code{"chr3"})\cr
+  2. \code{start} \tab integer; genomic location of peak -
+  start coordinate\cr
+  3. \code{end} \tab integer; genomic location of peak -
+  end coordinate\cr
+  4. \code{value} \tab numeric; p-value, FDR, or heuristic used to
+  rank the interactions\cr
+  5. \code{"rep.value"} \tab numeric; value of corresponding replicate
+  interaction. If no corresponding
+interaction was found, \code{rep.value} is set to \code{NA}.\cr
+  6. \code{"rank"} \tab integer; rank of the interaction, established by
+  value column, ascending order\cr
+  7. \code{"rep.rank"} \tab integer; rank of corresponding replicate
+  interaction. If no corresponding
+interaction was found, \code{rep.rank} is set to \code{NA}.\cr
+  8. \code{"idx"} \tab integer; interaction index, primary key\cr
+  9. \code{"rep.idx"} \tab integer; specifies the index of the
+corresponding interaction in the other replicate (foreign key). If no
+corresponding interaction was found, \code{rep.idx} is set to \code{NA}.
+}
 }
 \description{
 This method establishes a bijective assignment between peaks from
