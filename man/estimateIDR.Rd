@@ -4,7 +4,7 @@
 \alias{estimateIDR}
 \title{Estimates IDR for Genomic Peaks or Genomic Interactions}
 \usage{
-estimateIDR(rep1.df, rep2.df, mode = "IDR2D",
+estimateIDR(rep1.df, rep2.df, analysis.type = "IDR2D",
   value.transformation = c("identity", "additive.inverse",
   "multiplicative.inverse", "log", "log.additive.inverse"),
   ambiguity.resolution.method = c("value", "overlap", "midpoint"),
@@ -101,7 +101,7 @@ are resolved. Available methods:
 
 \item{remove.nonstandard.chromosomes}{removes peaks and interactions containing
 genomic locations on non-standard chromosomes using
-\link[GenomeInfoDb]{keepStandardChromosomes} (default is TRUE)}
+\code{\link[GenomeInfoDb:seqlevels-wrappers]{keepStandardChromosomes}} (default is TRUE)}
 
 \item{max.factor}{numeric; controls the replacement values for \code{Inf}
 and \code{-Inf}. \code{Inf} are replaced by \code{max(x) * max.factor} and
