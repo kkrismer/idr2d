@@ -300,7 +300,7 @@ calculateRelativeOverlap2D <- function(int1.anchor.a.start, int1.anchor.a.end,
                (anchor.a.combined.length + anchor.b.combined.length))
 }
 
-#' @title Establish m:n mapping between interactions from replicate 1 and 2
+#' @title Establish m:n Mapping Between Peaks from Replicate 1 and 2
 #'
 #' @description
 #' This method returns all overlapping interactions between two replicates.
@@ -311,40 +311,28 @@ calculateRelativeOverlap2D <- function(int1.anchor.a.start, int1.anchor.a.end,
 #' pairs with lower ARVs have priority over interaction pairs with higher ARVs
 #' when the bijective mapping is established.
 #'
-#' @param rep1.df data frame of observations (i.e., genomic interactions) of
+#' @param rep1.df data frame of observations (i.e., genomic peaks) of
 #' replicate 1, with at least the following columns (position of columns
 #' matter, column names are irrelevant):
 #' \tabular{rl}{
-#'   column 1 (\code{chrA}) \tab character; genomic location of anchor A -
+#'   column 1 (\code{chr}) \tab character; genomic location of peak -
 #'   chromosome (e.g., \code{"chr3"})\cr
-#'   column 2 \code{startA}) \tab integer; genomic location of anchor A -
+#'   column 2 \code{start}) \tab integer; genomic location of peak -
 #'   start coordinate\cr
-#'   column 3 (\code{endA}) \tab integer; genomic location of anchor A -
-#'   end coordinate\cr
-#'   column 4 (\code{chrB}) \tab character; genomic location of anchor B -
-#'   chromosome (e.g., \code{"chr3"})\cr
-#'   column 5 (\code{startB}) \tab integer; genomic location of anchor B -
-#'   start coordinate\cr
-#'   column 6 (\code{endB}) \tab integer; genomic location of anchor B -
+#'   column 3 (\code{end}) \tab integer; genomic location of peak -
 #'   end coordinate\cr
 #'   column 7 (\code{value}) \tab numeric; p-value, FDR, or heuristic used to
 #'   rank the interactions
 #' }
-#' @param rep2.df data frame of observations (i.e., genomic interactions) of
+#' @param rep2.df data frame of observations (i.e., genomic peaks) of
 #' replicate 2, with the following columns (position of columns
 #' matter, column names are irrelevant):
 #' \tabular{rl}{
-#'   column 1 (\code{chrA}) \tab character; genomic location of anchor A -
+#'   column 1 (\code{chr}) \tab character; genomic location of peak -
 #'   chromosome (e.g., \code{"chr3"})\cr
-#'   column 2 \code{startA}) \tab integer; genomic location of anchor A -
+#'   column 2 \code{start}) \tab integer; genomic location of peak -
 #'   start coordinate\cr
-#'   column 3 (\code{endA}) \tab integer; genomic location of anchor A -
-#'   end coordinate\cr
-#'   column 4 (\code{chrB}) \tab character; genomic location of anchor B -
-#'   chromosome (e.g., \code{"chr3"})\cr
-#'   column 5 (\code{startB}) \tab integer; genomic location of anchor B -
-#'   start coordinate\cr
-#'   column 6 (\code{endB}) \tab integer; genomic location of anchor B -
+#'   column 3 (\code{end}) \tab integer; genomic location of peak -
 #'   end coordinate\cr
 #'   column 7 (\code{value}) \tab numeric; p-value, FDR, or heuristic used to
 #'   rank the interactions

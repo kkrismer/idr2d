@@ -13,41 +13,29 @@ estimateIDR1D(rep1.df, rep2.df, value.transformation = c("identity",
   max.iteration = 30, local.idr = TRUE)
 }
 \arguments{
-\item{rep1.df}{data frame of observations (i.e., genomic interactions) of
+\item{rep1.df}{data frame of observations (i.e., genomic peaks) of
 replicate 1, with at least the following columns (position of columns
 matter, column names are irrelevant):
 \tabular{rl}{
-  column 1 (\code{chrA}) \tab character; genomic location of anchor A -
+  column 1 (\code{chr}) \tab character; genomic location of peak -
   chromosome (e.g., \code{"chr3"})\cr
-  column 2 \code{startA}) \tab integer; genomic location of anchor A -
+  column 2 \code{start}) \tab integer; genomic location of peak -
   start coordinate\cr
-  column 3 (\code{endA}) \tab integer; genomic location of anchor A -
-  end coordinate\cr
-  column 4 (\code{chrB}) \tab character; genomic location of anchor B -
-  chromosome (e.g., \code{"chr3"})\cr
-  column 5 (\code{startB}) \tab integer; genomic location of anchor B -
-  start coordinate\cr
-  column 6 (\code{endB}) \tab integer; genomic location of anchor B -
+  column 3 (\code{end}) \tab integer; genomic location of peak -
   end coordinate\cr
   column 7 (\code{value}) \tab numeric; p-value, FDR, or heuristic used to
   rank the interactions
 }}
 
-\item{rep2.df}{data frame of observations (i.e., genomic interactions) of
+\item{rep2.df}{data frame of observations (i.e., genomic peaks) of
 replicate 2, with the following columns (position of columns
 matter, column names are irrelevant):
 \tabular{rl}{
-  column 1 (\code{chrA}) \tab character; genomic location of anchor A -
+  column 1 (\code{chr}) \tab character; genomic location of peak -
   chromosome (e.g., \code{"chr3"})\cr
-  column 2 \code{startA}) \tab integer; genomic location of anchor A -
+  column 2 \code{start}) \tab integer; genomic location of peak -
   start coordinate\cr
-  column 3 (\code{endA}) \tab integer; genomic location of anchor A -
-  end coordinate\cr
-  column 4 (\code{chrB}) \tab character; genomic location of anchor B -
-  chromosome (e.g., \code{"chr3"})\cr
-  column 5 (\code{startB}) \tab integer; genomic location of anchor B -
-  start coordinate\cr
-  column 6 (\code{endB}) \tab integer; genomic location of anchor B -
+  column 3 (\code{end}) \tab integer; genomic location of peak -
   end coordinate\cr
   column 7 (\code{value}) \tab numeric; p-value, FDR, or heuristic used to
   rank the interactions
@@ -98,10 +86,6 @@ are resolved. Available methods:
   replicate 2 interaction anchor B
 }}
 
-\item{remove.nonstandard.chromosomes}{removes peaks and interactions containing
-genomic locations on non-standard chromosomes using
-\code{\link[GenomeInfoDb:seqlevels-wrappers]{keepStandardChromosomes}} (default is TRUE)}
-
 \item{max.factor}{numeric; controls the replacement values for \code{Inf}
 and \code{-Inf}. \code{Inf} are replaced by \code{max(x) * max.factor} and
 \code{-Inf} are replaced by \code{min(x) / max.factor}.}
@@ -125,11 +109,6 @@ them to be considered as overlapping (defaults to \code{1000L})}
 
 \item{eps}{ Stopping criterion. Iterations stop when the increment of
     log-likelihood is < eps*log-likelihood, Default=0.001.}
-
-\item{max.iteration}{integer; maximum number of iterations for
-IDR estimation (defaults to 30)}
-
-\item{local.idr}{TODO}
 }
 \value{
 List with two components (\code{rep1.df} and \code{rep1.df})

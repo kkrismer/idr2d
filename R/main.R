@@ -13,7 +13,6 @@
 #'
 #' @inheritParams overlap1D
 #'
-
 #' @return Data frames \code{rep1.df} and \code{rep2.df} with
 #' the following columns:
 #' \tabular{rl}{
@@ -370,7 +369,9 @@ preprocess <- function(x, value.transformation = c("identity",
 #' reproducibility of high-throughput experiments. Annals of Applied
 #' Statistics, Vol. 5, No. 3, 1752-1779.
 #'
-#' @inheritParams estimateIDR
+#' @inheritParams idr::est.IDR
+#' @inheritParams preprocess
+#' @inheritParams establishBijection1D
 #'
 #' @return List with two components (\code{rep1.df} and \code{rep1.df})
 #' containing the peaks from input data frames \code{rep1.df} and
