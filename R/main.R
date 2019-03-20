@@ -134,8 +134,9 @@ establishBijection2D <- function(rep1.df, rep2.df,
 }
 
 #' @export
-establishBijection <- function(rep1.df, rep2.df, mode = c("IDR1D", "IDR2D"),
-                                 ambiguity.resolution.method = c("value",
+establishBijection <- function(rep1.df, rep2.df,
+                               analysis.type = c("IDR1D", "IDR2D"),
+                               ambiguity.resolution.method = c("value",
                                                                  "overlap",
                                                                  "midpoint"),
                                  max.gap = 1000L) {
@@ -146,15 +147,15 @@ establishBijection <- function(rep1.df, rep2.df, mode = c("IDR1D", "IDR2D"),
     value <- rep.value <- rank <- rep.rank <- idx <- rep.idx <- NULL
 
     # argument handling
-    mode <- match.arg(mode, choices = c("IDR1D", "IDR2D"))
+    analysis.type <- match.arg(analysis.type, choices = c("IDR1D", "IDR2D"))
 
-    if (mode == "IDR1D") {
+    if (analysis.type == "IDR1D") {
         columns <- c("chr", "start", "end", "value")
-    } else if (mode == "IDR2D") {
+    } else if (analysis.type == "IDR2D") {
         columns <- c("chr.a", "start.a", "end.a",
                      "chr.b", "start.b", "end.b", "value")
     } else {
-        stop("unknown mode")
+        stop("unknown analysis type")
     }
 
     # remove irrelevant columns, rename relevant columns
@@ -181,10 +182,10 @@ establishBijection <- function(rep1.df, rep2.df, mode = c("IDR1D", "IDR2D"),
         rep2.df$rank <- seq_len(nrow(rep2.df))
 
 
-        if (mode == "IDR1D") {
+        if (analysis.type == "IDR1D") {
             pairs.df <- overlap1D(rep1.df, rep2.df,
                                   ambiguity.resolution.method, max.gap)
-        } else if (mode == "IDR2D") {
+        } else if (analysis.type == "IDR2D") {
             pairs.df <- overlap2D(rep1.df, rep2.df,
                                   ambiguity.resolution.method, max.gap)
         }
@@ -229,7 +230,7 @@ establishBijection <- function(rep1.df, rep2.df, mode = c("IDR1D", "IDR2D"),
         rep2.df$rep.value <- numeric(0)
     }
 
-    if (mode == "IDR1D") {
+    if (analysis.type == "IDR1D") {
         rep1.df <- dplyr::select(rep1.df, chr, start, end,
                                  value, rep.value,
                                  rank, rep.rank,
@@ -238,7 +239,7 @@ establishBijection <- function(rep1.df, rep2.df, mode = c("IDR1D", "IDR2D"),
                                  value, rep.value,
                                  rank, rep.rank,
                                  idx, rep.idx)
-    } else if (mode == "IDR2D") {
+    } else if (analysis.type == "IDR2D") {
         rep1.df <- dplyr::select(rep1.df, chr.a, start.a, end.a,
                                  chr.b, start.b, end.b,
                                  value, rep.value,
@@ -491,14 +492,15 @@ estimateIDR2D <- function(rep1.df, rep2.df,
 #'
 #' @param remove.nonstandard.chromosomes removes peaks and interactions containing
 #' genomic locations on non-standard chromosomes using
-#' \link[GenomeInfoDb]{keepStandardChromosomes} (default is TRUE)
+#' \code{\link[GenomeInfoDb:seqlevels-wrappers]{keepStandardChromosomes}} (default is TRUE)
 #' @param max.iteration integer; maximum number of iterations for
 #' IDR estimation (defaults to 30)
 #' @param local.idr TODO
 #' @inheritParams idr::est.IDR
 #' @inheritParams preprocess
 #' @inheritParams establishBijection2D
-estimateIDR <- function(rep1.df, rep2.df, mode = "IDR2D",
+#' @export
+estimateIDR <- function(rep1.df, rep2.df, analysis.type = "IDR2D",
                         value.transformation = c("identity",
                                                  "additive.inverse",
                                                  "multiplicative.inverse",
@@ -519,15 +521,15 @@ estimateIDR <- function(rep1.df, rep2.df, mode = "IDR2D",
     value <- rep.value <- rank <- rep.rank <- idx <- rep.idx <- idr <- NULL
 
     # argument handling
-    mode <- match.arg(mode, choices = c("IDR1D", "IDR2D"))
+    analysis.type <- match.arg(analysis.type, choices = c("IDR1D", "IDR2D"))
 
-    if (mode == "IDR1D") {
+    if (analysis.type == "IDR1D") {
         columns <- c("chr", "start", "end", "value")
-    } else if (mode == "IDR2D") {
+    } else if (analysis.type == "IDR2D") {
         columns <- c("chr.a", "start.a", "end.a",
                      "chr.b", "start.b", "end.b", "value")
     } else {
-        stop("unknown mode")
+        stop("unknown analysis type")
     }
 
     # remove irrelevant columns, rename relevant columns
@@ -537,10 +539,10 @@ estimateIDR <- function(rep1.df, rep2.df, mode = "IDR2D",
     colnames(rep2.df) <- columns
 
     if (remove.nonstandard.chromosomes) {
-        if (mode == "IDR1D") {
+        if (analysis.type == "IDR1D") {
             rep1.df <- removeNonstandardChromosomes1D(rep1.df)
             rep2.df <- removeNonstandardChromosomes1D(rep2.df)
-        } else if (mode == "IDR2D") {
+        } else if (analysis.type == "IDR2D") {
             rep1.df <- removeNonstandardChromosomes2D(rep1.df)
             rep2.df <- removeNonstandardChromosomes2D(rep2.df)
         }
@@ -556,7 +558,7 @@ estimateIDR <- function(rep1.df, rep2.df, mode = "IDR2D",
                                 max.factor = max.factor,
                                 jitter.factor = jitter.factor)
 
-    mapping <- establishBijection(rep1.df, rep2.df, mode,
+    mapping <- establishBijection(rep1.df, rep2.df, analysis.type,
                                   ambiguity.resolution.method,
                                   max.gap = max.gap)
 
@@ -630,7 +632,7 @@ estimateIDR <- function(rep1.df, rep2.df, mode = "IDR2D",
         }
     }
 
-    if (mode == "IDR1D") {
+    if (analysis.type == "IDR1D") {
         rep1.df <- dplyr::select(rep1.df, chr, start, end,
                                  value, rep.value,
                                  rank, rep.rank,
@@ -639,7 +641,7 @@ estimateIDR <- function(rep1.df, rep2.df, mode = "IDR2D",
                                  value, rep.value,
                                  rank, rep.rank,
                                  idx, rep.idx, idr)
-    } else if (mode == "IDR2D") {
+    } else if (analysis.type == "IDR2D") {
         rep1.df <- dplyr::select(rep1.df, chr.a, start.a, end.a,
                                  chr.b, start.b, end.b,
                                  value, rep.value,
