@@ -138,7 +138,7 @@ establishBijection <- function(rep1.df, rep2.df,
                                ambiguity.resolution.method = c("value",
                                                                  "overlap",
                                                                  "midpoint"),
-                                 max.gap = 1000L) {
+                               max.gap = 1000L) {
     # avoid CRAN warnings
     rep1.idx <- rep2.idx <- arv <- NULL
     chr <- start <- end <- NULL
@@ -179,7 +179,6 @@ establishBijection <- function(rep1.df, rep2.df,
         # add rank column
         rep1.df$rank <- seq_len(nrow(rep1.df))
         rep2.df$rank <- seq_len(nrow(rep2.df))
-
 
         if (analysis.type == "IDR1D") {
             pairs.df <- overlap1D(rep1.df, rep2.df,
@@ -250,7 +249,6 @@ establishBijection <- function(rep1.df, rep2.df,
                                  rank, rep.rank,
                                  idx, rep.idx)
     }
-
 
     return(list(rep1.df = rep1.df, rep2.df = rep2.df))
 }
