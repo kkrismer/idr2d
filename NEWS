@@ -1,3 +1,16 @@
+CHANGES IN VERSION 0.99.2
+-------------------------
+    o added consistent ticks and limits to IDR plot functions
+    o updated function documentation
+
+CHANGES IN VERSION 0.99.1
+-------------------------
+    o added reference to Li et al. paper
+    o added diagnostics plots
+    o changed rank order
+    o added IDR1D functionality
+    o fixed local / global IDR issue
+
 CHANGES IN VERSION 0.99.0
 -------------------------
     o initial release
