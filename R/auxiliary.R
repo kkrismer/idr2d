@@ -24,7 +24,8 @@
 #' }
 #' @param max.gap integer; maximum gap in nucleotides allowed between two
 #' anchors for
-#' them to be considered as overlapping (defaults to \code{1000L})
+#' them to be considered as overlapping
+#' (defaults to zero, no gap between anchors)
 #'
 #' @return A data frame where each row is an overlapping anchor pair.
 #' There are two columns:
@@ -52,7 +53,7 @@
 #' @importFrom stringr str_sort
 #' @importFrom GenomicRanges findOverlaps
 #' @export
-anchorOverlap <- function(rep1.anchor, rep2.anchor, max.gap = 1000L) {
+anchorOverlap <- function(rep1.anchor, rep2.anchor, max.gap = 0L) {
     rep1.ranges <- GenomicRanges::makeGRangesFromDataFrame(rep1.anchor)
     rep2.ranges <- GenomicRanges::makeGRangesFromDataFrame(rep2.anchor)
 
@@ -392,14 +393,15 @@ calculateRelativeOverlap2D <- function(int1.anchor.a.start, int1.anchor.a.end,
 #'
 #' @export
 overlap1D <- function(rep1.df, rep2.df,
-                    ambiguity.resolution.method = c("value", "overlap",
-                                                    "midpoint"),
-                    max.gap = 1000L) {
+                    ambiguity.resolution.method = c("overlap",
+                                                    "midpoint",
+                                                    "value"),
+                    max.gap = 0L) {
     # argument handling
     ambiguity.resolution.method <- match.arg(ambiguity.resolution.method,
-                                             choices = c("value",
-                                                         "overlap",
-                                                         "midpoint"))
+                                             choices = c("overlap",
+                                                         "midpoint",
+                                                         "value"))
 
     if (nrow(rep1.df) > 0 && nrow(rep2.df) > 0) {
         overlaps.df <- anchorOverlap(
@@ -462,17 +464,17 @@ overlap1D <- function(rep1.df, rep2.df,
 #' replicate 1, with at least the following columns (position of columns
 #' matter, column names are irrelevant):
 #' \tabular{rl}{
-#'   column 1 (\code{chrA}) \tab character; genomic location of anchor A -
+#'   column 1 (\code{chr.a}) \tab character; genomic location of anchor A -
 #'   chromosome (e.g., \code{"chr3"})\cr
-#'   column 2 \code{startA}) \tab integer; genomic location of anchor A -
+#'   column 2 \code{start.a}) \tab integer; genomic location of anchor A -
 #'   start coordinate\cr
-#'   column 3 (\code{endA}) \tab integer; genomic location of anchor A -
+#'   column 3 (\code{end.a}) \tab integer; genomic location of anchor A -
 #'   end coordinate\cr
-#'   column 4 (\code{chrB}) \tab character; genomic location of anchor B -
+#'   column 4 (\code{chr.b}) \tab character; genomic location of anchor B -
 #'   chromosome (e.g., \code{"chr3"})\cr
-#'   column 5 (\code{startB}) \tab integer; genomic location of anchor B -
+#'   column 5 (\code{start.b}) \tab integer; genomic location of anchor B -
 #'   start coordinate\cr
-#'   column 6 (\code{endB}) \tab integer; genomic location of anchor B -
+#'   column 6 (\code{end.b}) \tab integer; genomic location of anchor B -
 #'   end coordinate\cr
 #'   column 7 (\code{value}) \tab numeric; p-value, FDR, or heuristic used to
 #'   rank the interactions
@@ -481,17 +483,17 @@ overlap1D <- function(rep1.df, rep2.df,
 #' replicate 2, with the following columns (position of columns
 #' matter, column names are irrelevant):
 #' \tabular{rl}{
-#'   column 1 (\code{chrA}) \tab character; genomic location of anchor A -
+#'   column 1 (\code{chr.a}) \tab character; genomic location of anchor A -
 #'   chromosome (e.g., \code{"chr3"})\cr
-#'   column 2 \code{startA}) \tab integer; genomic location of anchor A -
+#'   column 2 \code{start.a}) \tab integer; genomic location of anchor A -
 #'   start coordinate\cr
-#'   column 3 (\code{endA}) \tab integer; genomic location of anchor A -
+#'   column 3 (\code{end.a}) \tab integer; genomic location of anchor A -
 #'   end coordinate\cr
-#'   column 4 (\code{chrB}) \tab character; genomic location of anchor B -
+#'   column 4 (\code{chr.b}) \tab character; genomic location of anchor B -
 #'   chromosome (e.g., \code{"chr3"})\cr
-#'   column 5 (\code{startB}) \tab integer; genomic location of anchor B -
+#'   column 5 (\code{start.b}) \tab integer; genomic location of anchor B -
 #'   start coordinate\cr
-#'   column 6 (\code{endB}) \tab integer; genomic location of anchor B -
+#'   column 6 (\code{end.b}) \tab integer; genomic location of anchor B -
 #'   end coordinate\cr
 #'   column 7 (\code{value}) \tab numeric; p-value, FDR, or heuristic used to
 #'   rank the interactions
@@ -551,14 +553,15 @@ overlap1D <- function(rep1.df, rep2.df,
 #'
 #' @export
 overlap2D <- function(rep1.df, rep2.df,
-                    ambiguity.resolution.method = c("value", "overlap",
-                                                    "midpoint"),
-                    max.gap = 1000L) {
+                    ambiguity.resolution.method = c("overlap",
+                                                    "midpoint",
+                                                    "value"),
+                    max.gap = 0L) {
     # argument handling
     ambiguity.resolution.method <- match.arg(ambiguity.resolution.method,
-                                             choices = c("value",
-                                                         "overlap",
-                                                         "midpoint"))
+                                             choices = c("overlap",
+                                                         "midpoint",
+                                                         "value"))
     if (nrow(rep1.df) > 0 && nrow(rep2.df) > 0) {
         overlaps.anchorsA.df <- anchorOverlap(
             data.frame(chr = rep1.df[, 1],
@@ -675,7 +678,7 @@ removeNonstandardChromosomes1D <- function(x) {
 #'   chromosome (e.g., \code{"chr3"})\cr
 #'   column 5 (\code{start.b}) \tab integer; genomic location of anchor B -
 #'   start coordinate\cr
-#'   column 6 (\code{end.c}) \tab integer; genomic location of anchor B -
+#'   column 6 (\code{end.b}) \tab integer; genomic location of anchor B -
 #'   end coordinate\cr
 #'   column 7 (\code{value}) \tab numeric; p-value, FDR, or heuristic used to
 #'   rank the interactions

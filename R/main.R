@@ -54,10 +54,10 @@
 #' @importFrom magrittr "%>%"
 #' @export
 establishBijection1D <- function(rep1.df, rep2.df,
-                                 ambiguity.resolution.method = c("value",
-                                                                 "overlap",
-                                                                 "midpoint"),
-                                 max.gap = 1000L) {
+                                 ambiguity.resolution.method = c("overlap",
+                                                                 "midpoint",
+                                                                 "value"),
+                                 max.gap = 0L) {
     return(establishBijection(rep1.df, rep2.df, "IDR1D",
                               ambiguity.resolution.method))
 }
@@ -124,10 +124,10 @@ establishBijection1D <- function(rep1.df, rep2.df,
 #' @importFrom magrittr "%>%"
 #' @export
 establishBijection2D <- function(rep1.df, rep2.df,
-                               ambiguity.resolution.method = c("value",
-                                                               "overlap",
-                                                               "midpoint"),
-                               max.gap = 1000L) {
+                               ambiguity.resolution.method = c("overlap",
+                                                               "midpoint",
+                                                               "value"),
+                               max.gap = 0L) {
     return(establishBijection(rep1.df, rep2.df, "IDR2D",
                               ambiguity.resolution.method))
 }
@@ -135,10 +135,10 @@ establishBijection2D <- function(rep1.df, rep2.df,
 #' @export
 establishBijection <- function(rep1.df, rep2.df,
                                analysis.type = c("IDR1D", "IDR2D"),
-                               ambiguity.resolution.method = c("value",
-                                                                 "overlap",
-                                                                 "midpoint"),
-                               max.gap = 1000L) {
+                               ambiguity.resolution.method = c("overlap",
+                                                               "midpoint",
+                                                               "value"),
+                               max.gap = 0L) {
     # avoid CRAN warnings
     rep1.idx <- rep2.idx <- arv <- NULL
     chr <- start <- end <- NULL
@@ -404,12 +404,12 @@ estimateIDR1D <- function(rep1.df, rep2.df,
                                                    "multiplicative.inverse",
                                                    "log",
                                                    "log.additive.inverse"),
-                          ambiguity.resolution.method = c("value",
-                                                          "overlap",
-                                                          "midpoint"),
+                          ambiguity.resolution.method = c("overlap",
+                                                          "midpoint",
+                                                          "value"),
                           remove.nonstandard.chromosomes = TRUE,
                           max.factor = 1.5, jitter.factor = 0.0001,
-                          max.gap = 1000L,
+                          max.gap = 0L,
                           mu = 0.1, sigma = 1.0, rho = 0.2, p = 0.5,
                           eps = 0.001, max.iteration = 30, local.idr = TRUE) {
     return(estimateIDR(rep1.df, rep2.df, "IDR1D",
@@ -465,12 +465,12 @@ estimateIDR2D <- function(rep1.df, rep2.df,
                                                    "multiplicative.inverse",
                                                    "log",
                                                    "log.additive.inverse"),
-                          ambiguity.resolution.method = c("value",
-                                                          "overlap",
-                                                          "midpoint"),
+                          ambiguity.resolution.method = c("overlap",
+                                                          "midpoint",
+                                                          "value"),
                           remove.nonstandard.chromosomes = TRUE,
                           max.factor = 1.5, jitter.factor = 0.0001,
-                          max.gap = 1000L,
+                          max.gap = 0L,
                           mu = 0.1, sigma = 1.0, rho = 0.2, p = 0.5,
                           eps = 0.001, max.iteration = 30, local.idr = TRUE) {
     return(estimateIDR(rep1.df, rep2.df, "IDR2D",
@@ -505,12 +505,12 @@ estimateIDR <- function(rep1.df, rep2.df, analysis.type = "IDR2D",
                                                  "multiplicative.inverse",
                                                  "log",
                                                  "log.additive.inverse"),
-                        ambiguity.resolution.method = c("value",
-                                                        "overlap",
-                                                        "midpoint"),
+                        ambiguity.resolution.method = c("overlap",
+                                                        "midpoint",
+                                                        "value"),
                         remove.nonstandard.chromosomes = TRUE,
                         max.factor = 1.5, jitter.factor = 0.0001,
-                        max.gap = 1000L,
+                        max.gap = 0L,
                         mu = 0.1, sigma = 1.0, rho = 0.2, p = 0.5,
                         eps = 0.001, max.iteration = 30, local.idr = TRUE) {
     # avoid CRAN warnings
