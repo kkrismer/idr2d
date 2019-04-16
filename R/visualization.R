@@ -28,7 +28,8 @@ rankIDRScatterplot <- function(df, remove.na = TRUE,
                                xlab = "rank in replicate 1",
                                ylab = "rank in replicate 2",
                                title = "rank - IDR dependence",
-                               color.gradient = c("rainbow", "default")) {
+                               color.gradient = c("rainbow", "default"),
+                               max.points.shown = 2500) {
     # avoid CRAN warnings
     rank <- rep.rank <- idr <- NULL
 
@@ -38,6 +39,10 @@ rankIDRScatterplot <- function(df, remove.na = TRUE,
 
     if (remove.na) {
         df <- dplyr::filter(df, complete.cases(idr))
+    }
+
+    if (nrow(df) > max.points.shown) {
+        df <- df[sample.int(nrow(df), max.points.shown), ]
     }
 
     g <- ggplot2::ggplot(df, ggplot2::aes(x = rank,
@@ -64,7 +69,8 @@ valueIDRScatterplot <- function(df, remove.na = TRUE, remove.outliers = TRUE,
                                xlab = "transformed value in replicate 1",
                                ylab = "transformed value in replicate 2",
                                title = "value - IDR dependence",
-                               color.gradient = c("rainbow", "default")) {
+                               color.gradient = c("rainbow", "default"),
+                               max.points.shown = 2500) {
     # avoid CRAN warnings
     value <- rep.value <- idr <- NULL
 
@@ -132,6 +138,10 @@ valueIDRScatterplot <- function(df, remove.na = TRUE, remove.outliers = TRUE,
         if (truncated.data.range < 0.7 * data.range) {
             df <- truncated.df
         }
+    }
+
+    if (nrow(df) > max.points.shown) {
+        df <- df[sample.int(nrow(df), max.points.shown), ]
     }
 
     g <- ggplot2::ggplot(df, ggplot2::aes(x = value,
