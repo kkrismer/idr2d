@@ -4,8 +4,8 @@
 \alias{overlap1D}
 \title{Establish m:n Mapping Between Peaks from Replicate 1 and 2}
 \usage{
-overlap1D(rep1.df, rep2.df, ambiguity.resolution.method = c("value",
-  "overlap", "midpoint"), max.gap = 1000L)
+overlap1D(rep1.df, rep2.df, ambiguity.resolution.method = c("overlap",
+  "midpoint", "value"), max.gap = 0L)
 }
 \arguments{
 \item{rep1.df}{data frame of observations (i.e., genomic peaks) of
@@ -63,7 +63,8 @@ are resolved. Available methods:
 
 \item{max.gap}{integer; maximum gap in nucleotides allowed between two
 anchors for
-them to be considered as overlapping (defaults to \code{1000L})}
+them to be considered as overlapping
+(defaults to zero, no gap between anchors)}
 }
 \value{
 data frame with the following columns:

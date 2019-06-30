@@ -7,9 +7,9 @@
 estimateIDR(rep1.df, rep2.df, analysis.type = "IDR2D",
   value.transformation = c("identity", "additive.inverse",
   "multiplicative.inverse", "log", "log.additive.inverse"),
-  ambiguity.resolution.method = c("value", "overlap", "midpoint"),
+  ambiguity.resolution.method = c("overlap", "midpoint", "value"),
   remove.nonstandard.chromosomes = TRUE, max.factor = 1.5,
-  jitter.factor = 1e-04, max.gap = 1000L, mu = 0.1, sigma = 1,
+  jitter.factor = 1e-04, max.gap = 0L, mu = 0.1, sigma = 1,
   rho = 0.2, p = 0.5, eps = 0.001, max.iteration = 30,
   local.idr = TRUE)
 }
@@ -18,17 +18,17 @@ estimateIDR(rep1.df, rep2.df, analysis.type = "IDR2D",
 replicate 1, with at least the following columns (position of columns
 matter, column names are irrelevant):
 \tabular{rl}{
-  column 1 (\code{chrA}) \tab character; genomic location of anchor A -
+  column 1 (\code{chr.a}) \tab character; genomic location of anchor A -
   chromosome (e.g., \code{"chr3"})\cr
-  column 2 \code{startA}) \tab integer; genomic location of anchor A -
+  column 2 \code{start.a}) \tab integer; genomic location of anchor A -
   start coordinate\cr
-  column 3 (\code{endA}) \tab integer; genomic location of anchor A -
+  column 3 (\code{end.a}) \tab integer; genomic location of anchor A -
   end coordinate\cr
-  column 4 (\code{chrB}) \tab character; genomic location of anchor B -
+  column 4 (\code{chr.b}) \tab character; genomic location of anchor B -
   chromosome (e.g., \code{"chr3"})\cr
-  column 5 (\code{startB}) \tab integer; genomic location of anchor B -
+  column 5 (\code{start.b}) \tab integer; genomic location of anchor B -
   start coordinate\cr
-  column 6 (\code{endB}) \tab integer; genomic location of anchor B -
+  column 6 (\code{end.b}) \tab integer; genomic location of anchor B -
   end coordinate\cr
   column 7 (\code{value}) \tab numeric; p-value, FDR, or heuristic used to
   rank the interactions
@@ -38,17 +38,17 @@ matter, column names are irrelevant):
 replicate 2, with the following columns (position of columns
 matter, column names are irrelevant):
 \tabular{rl}{
-  column 1 (\code{chrA}) \tab character; genomic location of anchor A -
+  column 1 (\code{chr.a}) \tab character; genomic location of anchor A -
   chromosome (e.g., \code{"chr3"})\cr
-  column 2 \code{startA}) \tab integer; genomic location of anchor A -
+  column 2 \code{start.a}) \tab integer; genomic location of anchor A -
   start coordinate\cr
-  column 3 (\code{endA}) \tab integer; genomic location of anchor A -
+  column 3 (\code{end.a}) \tab integer; genomic location of anchor A -
   end coordinate\cr
-  column 4 (\code{chrB}) \tab character; genomic location of anchor B -
+  column 4 (\code{chr.b}) \tab character; genomic location of anchor B -
   chromosome (e.g., \code{"chr3"})\cr
-  column 5 (\code{startB}) \tab integer; genomic location of anchor B -
+  column 5 (\code{start.b}) \tab integer; genomic location of anchor B -
   start coordinate\cr
-  column 6 (\code{endB}) \tab integer; genomic location of anchor B -
+  column 6 (\code{end.b}) \tab integer; genomic location of anchor B -
   end coordinate\cr
   column 7 (\code{value}) \tab numeric; p-value, FDR, or heuristic used to
   rank the interactions
@@ -112,7 +112,8 @@ is added to \code{x}. This is done to break ties in \code{x}.}
 
 \item{max.gap}{integer; maximum gap in nucleotides allowed between two
 anchors for
-them to be considered as overlapping (defaults to \code{1000L})}
+them to be considered as overlapping
+(defaults to zero, no gap between anchors)}
 
 \item{mu}{ a starting value for the mean of the reproducible component.}
 

@@ -6,11 +6,11 @@
 \usage{
 estimateIDR1D(rep1.df, rep2.df, value.transformation = c("identity",
   "additive.inverse", "multiplicative.inverse", "log",
-  "log.additive.inverse"), ambiguity.resolution.method = c("value",
-  "overlap", "midpoint"), remove.nonstandard.chromosomes = TRUE,
-  max.factor = 1.5, jitter.factor = 1e-04, max.gap = 1000L,
-  mu = 0.1, sigma = 1, rho = 0.2, p = 0.5, eps = 0.001,
-  max.iteration = 30, local.idr = TRUE)
+  "log.additive.inverse"), ambiguity.resolution.method = c("overlap",
+  "midpoint", "value"), remove.nonstandard.chromosomes = TRUE,
+  max.factor = 1.5, jitter.factor = 1e-04, max.gap = 0L, mu = 0.1,
+  sigma = 1, rho = 0.2, p = 0.5, eps = 0.001, max.iteration = 30,
+  local.idr = TRUE)
 }
 \arguments{
 \item{rep1.df}{data frame of observations (i.e., genomic peaks) of
@@ -95,7 +95,8 @@ is added to \code{x}. This is done to break ties in \code{x}.}
 
 \item{max.gap}{integer; maximum gap in nucleotides allowed between two
 anchors for
-them to be considered as overlapping (defaults to \code{1000L})}
+them to be considered as overlapping
+(defaults to zero, no gap between anchors)}
 
 \item{mu}{ a starting value for the mean of the reproducible component.}
 

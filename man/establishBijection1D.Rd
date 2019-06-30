@@ -6,8 +6,8 @@
 and 2}
 \usage{
 establishBijection1D(rep1.df, rep2.df,
-  ambiguity.resolution.method = c("value", "overlap", "midpoint"),
-  max.gap = 1000L)
+  ambiguity.resolution.method = c("overlap", "midpoint", "value"),
+  max.gap = 0L)
 }
 \arguments{
 \item{rep1.df}{data frame of observations (i.e., genomic peaks) of
@@ -65,7 +65,8 @@ are resolved. Available methods:
 
 \item{max.gap}{integer; maximum gap in nucleotides allowed between two
 anchors for
-them to be considered as overlapping (defaults to \code{1000L})}
+them to be considered as overlapping
+(defaults to zero, no gap between anchors)}
 }
 \value{
 Data frames \code{rep1.df} and \code{rep2.df} with

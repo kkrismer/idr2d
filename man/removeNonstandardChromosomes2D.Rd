@@ -20,7 +20,7 @@ removeNonstandardChromosomes2D(x)
   chromosome (e.g., \code{"chr3"})\cr
   column 5 (\code{start.b}) \tab integer; genomic location of anchor B -
   start coordinate\cr
-  column 6 (\code{end.c}) \tab integer; genomic location of anchor B -
+  column 6 (\code{end.b}) \tab integer; genomic location of anchor B -
   end coordinate\cr
   column 7 (\code{value}) \tab numeric; p-value, FDR, or heuristic used to
   rank the interactions
