@@ -66,10 +66,17 @@ is added to \code{x}. This is done to break ties in \code{x}.}
 \item{max.iteration}{integer; maximum number of iterations for
 IDR estimation (defaults to 30)}
 
-\item{local.idr}{TODO}
+\item{local.idr}{see \code{\link[idr:est.IDR]{est.IDR}}}
 }
 \description{
 Estimates IDR for Genomic Peaks or Genomic Interactions
+}
+\examples{
+idr.results <- estimateIDR(idr2d:::chiapet$rep1.df,
+                           idr2d:::chiapet$rep2.df,
+                           analysis.type = "IDR2D",
+                           value.transformation = "log.additive.inverse")
+
 }
 \references{
 Q. Li, J. B. Brown, H. Huang and P. J. Bickel. (2011) Measuring

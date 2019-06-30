@@ -406,7 +406,9 @@ preprocess <- function(x, value.transformation = c("identity",
 #' }
 #'
 #' @examples
-#' # TODO
+#' idr.results <- estimateIDR1D(idr2d:::chipseq$rep1.df,
+#'                              idr2d:::chipseq$rep2.df,
+#'                              value.transformation = "log")
 #'
 #' @export
 estimateIDR1D <- function(rep1.df, rep2.df,
@@ -485,8 +487,8 @@ estimateIDR1D <- function(rep1.df, rep2.df,
 #'
 #' @examples
 #' idr.results <- estimateIDR2D(idr2d:::chiapet$rep1.df,
-#'                            idr2d:::chiapet$rep2.df,
-#'                            value.transformation = "log.additive.inverse")
+#'                              idr2d:::chiapet$rep2.df,
+#'                              value.transformation = "log.additive.inverse")
 #'
 #' @export
 estimateIDR2D <- function(rep1.df, rep2.df,
@@ -526,11 +528,17 @@ estimateIDR2D <- function(rep1.df, rep2.df,
 #' (default is TRUE)
 #' @param max.iteration integer; maximum number of iterations for
 #' IDR estimation (defaults to 30)
-#' @param local.idr TODO
+#' @param local.idr see \code{\link[idr:est.IDR]{est.IDR}}
 #'
 #' @inheritParams idr::est.IDR
 #' @inheritParams preprocess
 #' @inheritParams establishBijection
+#'
+#' @examples
+#' idr.results <- estimateIDR(idr2d:::chiapet$rep1.df,
+#'                            idr2d:::chiapet$rep2.df,
+#'                            analysis.type = "IDR2D",
+#'                            value.transformation = "log.additive.inverse")
 #'
 #' @importFrom dplyr arrange
 #' @importFrom dplyr select

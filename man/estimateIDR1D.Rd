@@ -62,7 +62,7 @@ is added to \code{x}. This is done to break ties in \code{x}.}
 \item{max.iteration}{integer; maximum number of iterations for
 IDR estimation (defaults to 30)}
 
-\item{local.idr}{TODO}
+\item{local.idr}{see \code{\link[idr:est.IDR]{est.IDR}}}
 }
 \value{
 List with two components (\code{rep1.df} and \code{rep1.df})
@@ -99,7 +99,9 @@ the following columns:
 Estimates IDR for Genomic Peak Data
 }
 \examples{
-# TODO
+idr.results <- estimateIDR1D(idr2d:::chipseq$rep1.df,
+                             idr2d:::chipseq$rep2.df,
+                             value.transformation = "log")
 
 }
 \references{
