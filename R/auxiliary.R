@@ -108,9 +108,9 @@ anchorOverlap <- function(rep1.anchor, rep2.anchor, max.gap = 0L) {
 #' @export
 calculateMidpointDistance1D <- function(peak1.start, peak1.end,
                                         peak2.start, peak2.end) {
-      midpoint.peak1 <- abs(peak1.start + (peak1.end - peak1.start) / 2)
-      midpoint.peak2 <- abs(peak2.start + (peak2.end - peak2.start) / 2)
-      return(as.integer(abs(midpoint.peak1 - midpoint.peak2)))
+    midpoint.peak1 <- abs(peak1.start + (peak1.end - peak1.start) / 2)
+    midpoint.peak2 <- abs(peak2.start + (peak2.end - peak2.start) / 2)
+    return(as.integer(abs(midpoint.peak1 - midpoint.peak2)))
 }
 
 #' @title Distance between Anchor Midpoints of two Interactions
@@ -158,9 +158,9 @@ calculateMidpointDistance1D <- function(peak1.start, peak1.end,
 #'
 #' @export
 calculateMidpointDistance2D <- function(int1.anchor.a.start, int1.anchor.a.end,
-                                      int1.anchor.b.start, int1.anchor.b.end,
-                                      int2.anchor.a.start, int2.anchor.a.end,
-                                      int2.anchor.b.start, int2.anchor.b.end) {
+                                        int1.anchor.b.start, int1.anchor.b.end,
+                                        int2.anchor.a.start, int2.anchor.a.end,
+                                        int2.anchor.b.start, int2.anchor.b.end) {
     midpoint.int1.anchor.a <- abs(int1.anchor.a.start +
                                       (int1.anchor.a.end - int1.anchor.a.start) / 2)
     midpoint.int1.anchor.b <- abs(int1.anchor.b.start +
@@ -284,9 +284,9 @@ calculateRelativeOverlap1D <- function(peak1.start, peak1.end,
 #'                          c(260, 260, 280, 350))
 #' @export
 calculateRelativeOverlap2D <- function(int1.anchor.a.start, int1.anchor.a.end,
-                                     int1.anchor.b.start, int1.anchor.b.end,
-                                     int2.anchor.a.start, int2.anchor.a.end,
-                                     int2.anchor.b.start, int2.anchor.b.end) {
+                                       int1.anchor.b.start, int1.anchor.b.end,
+                                       int2.anchor.a.start, int2.anchor.a.end,
+                                       int2.anchor.b.start, int2.anchor.b.end) {
     anchor.a.overlap <- pmin(int1.anchor.a.end, int2.anchor.a.end) -
         pmax(int1.anchor.a.start, int2.anchor.a.start)
     anchor.b.overlap <- pmin(int1.anchor.b.end, int2.anchor.b.end) -
@@ -393,10 +393,10 @@ calculateRelativeOverlap2D <- function(int1.anchor.a.start, int1.anchor.a.end,
 #'
 #' @export
 overlap1D <- function(rep1.df, rep2.df,
-                    ambiguity.resolution.method = c("overlap",
-                                                    "midpoint",
-                                                    "value"),
-                    max.gap = 0L) {
+                      ambiguity.resolution.method = c("overlap",
+                                                      "midpoint",
+                                                      "value"),
+                      max.gap = 0L) {
     # argument handling
     ambiguity.resolution.method <- match.arg(ambiguity.resolution.method,
                                              choices = c("overlap",
@@ -553,10 +553,10 @@ overlap1D <- function(rep1.df, rep2.df,
 #'
 #' @export
 overlap2D <- function(rep1.df, rep2.df,
-                    ambiguity.resolution.method = c("overlap",
-                                                    "midpoint",
-                                                    "value"),
-                    max.gap = 0L) {
+                      ambiguity.resolution.method = c("overlap",
+                                                      "midpoint",
+                                                      "value"),
+                      max.gap = 0L) {
     # argument handling
     ambiguity.resolution.method <- match.arg(ambiguity.resolution.method,
                                              choices = c("overlap",

@@ -47,11 +47,6 @@
 #'
 #' mapping <- establishBijection1D(rep1.df, rep2.df)
 #'
-#' @importFrom dplyr arrange
-#' @importFrom dplyr group_by
-#' @importFrom dplyr slice
-#' @importFrom futile.logger flog.warn
-#' @importFrom magrittr "%>%"
 #' @export
 establishBijection1D <- function(rep1.df, rep2.df,
                                  ambiguity.resolution.method = c("overlap",
@@ -117,21 +112,23 @@ establishBijection1D <- function(rep1.df, rep2.df,
 #'
 #' mapping <- establishBijection2D(rep1.df, rep2.df)
 #'
-#' @importFrom dplyr arrange
-#' @importFrom dplyr group_by
-#' @importFrom dplyr slice
-#' @importFrom futile.logger flog.warn
-#' @importFrom magrittr "%>%"
 #' @export
 establishBijection2D <- function(rep1.df, rep2.df,
-                               ambiguity.resolution.method = c("overlap",
-                                                               "midpoint",
-                                                               "value"),
-                               max.gap = 0L) {
+                                 ambiguity.resolution.method = c("overlap",
+                                                                 "midpoint",
+                                                                 "value"),
+                                 max.gap = 0L) {
     return(establishBijection(rep1.df, rep2.df, "IDR2D",
                               ambiguity.resolution.method))
 }
 
+#' @importFrom dplyr arrange
+#' @importFrom dplyr desc
+#' @importFrom dplyr group_by
+#' @importFrom dplyr slice
+#' @importFrom dplyr select
+#' @importFrom futile.logger flog.warn
+#' @importFrom magrittr "%>%"
 #' @export
 establishBijection <- function(rep1.df, rep2.df,
                                analysis.type = c("IDR1D", "IDR2D"),
@@ -303,7 +300,8 @@ establishBijection <- function(rep1.df, rep2.df,
 #' rep1.df <- idr2d:::chiapet$rep1.df
 #' rep1.df$fdr <- preprocess(rep1.df$fdr, "log.additive.inverse")
 #'
-#' @importFrom idr est.IDR
+#' @importFrom futile.logger flog.warn
+#' @importFrom stringr str_trim
 #' @export
 preprocess <- function(x, value.transformation = c("identity",
                                                    "additive.inverse",
@@ -314,11 +312,11 @@ preprocess <- function(x, value.transformation = c("identity",
                        jitter.factor = 0.0001) {
     # argument handling
     value.transformation <- match.arg(value.transformation,
-                                   choices = c("identity",
-                                               "additive.inverse",
-                                               "multiplicative.inverse",
-                                               "log",
-                                               "log.additive.inverse"))
+                                      choices = c("identity",
+                                                  "additive.inverse",
+                                                  "multiplicative.inverse",
+                                                  "log",
+                                                  "log.additive.inverse"))
 
     # replace Inf with real values
     max.value <- max(x[x != Inf], na.rm = TRUE)
@@ -454,10 +452,6 @@ estimateIDR1D <- function(rep1.df, rep2.df,
 #'                            idr2d:::chiapet$rep2.df,
 #'                            value.transformation = "log.additive.inverse")
 #'
-#' @importFrom dplyr arrange
-#' @importFrom dplyr filter
-#' @importFrom futile.logger flog.warn
-#' @importFrom stringr str_trim
 #' @export
 estimateIDR2D <- function(rep1.df, rep2.df,
                           value.transformation = c("identity",
@@ -498,6 +492,12 @@ estimateIDR2D <- function(rep1.df, rep2.df,
 #' @inheritParams idr::est.IDR
 #' @inheritParams preprocess
 #' @inheritParams establishBijection2D
+#' @importFrom dplyr arrange
+#' @importFrom dplyr select
+#' @importFrom dplyr filter
+#' @importFrom futile.logger flog.warn
+#' @importFrom stringr str_trim
+#' @importFrom idr est.IDR
 #' @export
 estimateIDR <- function(rep1.df, rep2.df, analysis.type = "IDR2D",
                         value.transformation = c("identity",

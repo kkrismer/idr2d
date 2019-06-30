@@ -1,14 +1,24 @@
 
 #' @export
+#' @importFrom stats complete.cases
+#' @importFrom dplyr filter
+#' @importFrom ggplot2 ggplot
+#' @importFrom ggplot2 aes
+#' @importFrom ggplot2 geom_density
+#' @importFrom ggplot2 scale_x_continuous
+#' @importFrom ggplot2 theme_bw
+#' @importFrom ggplot2 theme
+#' @importFrom ggplot2 element_blank
+#' @importFrom ggplot2 labs
 IDRDistributionHistogram <- function(df, remove.na = TRUE,
-                               xlab = "IDR",
-                               ylab = "density",
-                               title = "IDR value distribution") {
+                                     xlab = "IDR",
+                                     ylab = "density",
+                                     title = "IDR value distribution") {
     # avoid CRAN warnings
-    rank <- rep.rank <- idr <- NULL
+    idr <- NULL
 
     if (remove.na) {
-        df <- dplyr::filter(df, complete.cases(idr))
+        df <- dplyr::filter(df, stats::complete.cases(idr))
     }
 
     g <- ggplot2::ggplot(df, ggplot2::aes(x = idr)) +
@@ -16,13 +26,22 @@ IDRDistributionHistogram <- function(df, remove.na = TRUE,
         ggplot2::scale_x_continuous(limits = c(0, 1.0)) +
         ggplot2::theme_bw() +
         ggplot2::theme(panel.border = ggplot2::element_blank()) +
-        ggplot2::xlab(xlab) +
-        ggplot2::ylab(ylab) +
-        ggplot2::ggtitle(title)
+        ggplot2::labs(x = xlab, y = ylab, title = title)
 
     return(g)
 }
 
+#' @importFrom dplyr filter
+#' @importFrom stats complete.cases
+#' @importFrom ggplot2 ggplot
+#' @importFrom ggplot2 aes
+#' @importFrom ggplot2 geom_point
+#' @importFrom ggplot2 theme_bw
+#' @importFrom ggplot2 theme
+#' @importFrom ggplot2 element_blank
+#' @importFrom ggplot2 labs
+#' @importFrom ggplot2 scale_color_gradientn
+#' @importFrom grDevices rainbow
 #' @export
 rankIDRScatterplot <- function(df, remove.na = TRUE,
                                xlab = "rank in replicate 1",
@@ -38,7 +57,7 @@ rankIDRScatterplot <- function(df, remove.na = TRUE,
                                 choices = c("rainbow", "default"))
 
     if (remove.na) {
-        df <- dplyr::filter(df, complete.cases(idr))
+        df <- dplyr::filter(df, stats::complete.cases(idr))
     }
 
     if (nrow(df) > max.points.shown) {
@@ -51,10 +70,7 @@ rankIDRScatterplot <- function(df, remove.na = TRUE,
         ggplot2::geom_point() +
         ggplot2::theme_bw() +
         ggplot2::theme(panel.border = ggplot2::element_blank()) +
-        ggplot2::xlab(xlab) +
-        ggplot2::ylab(ylab) +
-        ggplot2::labs(color = "IDR") +
-        ggplot2::ggtitle(title)
+        ggplot2::labs(x = xlab, y = ylab, color = "IDR", title = title)
 
     if (color.gradient == "rainbow") {
         g <- g + ggplot2::scale_color_gradientn(colours = grDevices::rainbow(10),
@@ -64,13 +80,24 @@ rankIDRScatterplot <- function(df, remove.na = TRUE,
     return(g)
 }
 
+#' @importFrom dplyr filter
+#' @importFrom stats complete.cases
+#' @importFrom ggplot2 ggplot
+#' @importFrom ggplot2 aes
+#' @importFrom ggplot2 geom_point
+#' @importFrom ggplot2 theme_bw
+#' @importFrom ggplot2 theme
+#' @importFrom ggplot2 element_blank
+#' @importFrom ggplot2 labs
+#' @importFrom ggplot2 scale_color_gradientn
+#' @importFrom grDevices rainbow
 #' @export
 valueIDRScatterplot <- function(df, remove.na = TRUE, remove.outliers = TRUE,
-                               xlab = "transformed value in replicate 1",
-                               ylab = "transformed value in replicate 2",
-                               title = "value - IDR dependence",
-                               color.gradient = c("rainbow", "default"),
-                               max.points.shown = 2500) {
+                                xlab = "transformed value in replicate 1",
+                                ylab = "transformed value in replicate 2",
+                                title = "value - IDR dependence",
+                                color.gradient = c("rainbow", "default"),
+                                max.points.shown = 2500) {
     # avoid CRAN warnings
     value <- rep.value <- idr <- NULL
 
@@ -79,7 +106,7 @@ valueIDRScatterplot <- function(df, remove.na = TRUE, remove.outliers = TRUE,
                                 choices = c("rainbow", "default"))
 
     if (remove.na) {
-        df <- dplyr::filter(df, complete.cases(idr))
+        df <- dplyr::filter(df, stats::complete.cases(idr))
     }
 
     if (remove.outliers) {
@@ -150,10 +177,7 @@ valueIDRScatterplot <- function(df, remove.na = TRUE, remove.outliers = TRUE,
         ggplot2::geom_point() +
         ggplot2::theme_bw() +
         ggplot2::theme(panel.border = ggplot2::element_blank()) +
-        ggplot2::xlab(xlab) +
-        ggplot2::ylab(ylab) +
-        ggplot2::labs(color = "IDR") +
-        ggplot2::ggtitle(title)
+        ggplot2::labs(x = xlab, y = ylab, color = "IDR", title = title)
 
     if (color.gradient == "rainbow") {
         g <- g + ggplot2::scale_color_gradientn(colours = grDevices::rainbow(10),
