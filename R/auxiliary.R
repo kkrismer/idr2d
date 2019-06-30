@@ -5,33 +5,35 @@
 #' Identifies all overlapping anchor pairs (m:n mapping).
 #'
 #' @param rep1.anchor data frame with the following columns:
-#' \tabular{rl}{
-#'   \code{chr} \tab character; genomic location of anchor in replicate 1 -
-#'   chromosome (e.g., \code{"chr3"})\cr
-#'   \code{start} \tab integer; genomic location of anchor in replicate 1 -
-#'   start coordinate\cr
-#'   \code{end} \tab integer; genomic location of anchor in replicate 1 -
-#'   end coordinate
+#' \tabular{rll}{
+#'   column 1: \tab \code{chr} \tab character; genomic location of anchor in
+#'   replicate 1 - chromosome (e.g., \code{"chr3"})\cr
+#'   column 2: \tab \code{start} \tab integer; genomic location of anchor in
+#'   replicate 1 - start coordinate\cr
+#'   column 3: \tab \code{end} \tab integer; genomic location of anchor in
+#'   replicate 1 - end coordinate
 #' }
 #' @param rep2.anchor data frame with the following columns:
-#' \tabular{rl}{
-#'   \code{chr} \tab character; genomic location of anchor in replicate 2 -
-#'   chromosome (e.g., \code{"chr3"})\cr
-#'   \code{start} \tab integer; genomic location of anchor in replicate 2 -
-#'   start coordinate\cr
-#'   \code{end} \tab integer; genomic location of anchor in replicate 2 -
-#'   end coordinate
+#' \tabular{rll}{
+#'   column 1: \tab \code{chr} \tab character; genomic location of anchor in
+#'   replicate 2 - chromosome (e.g., \code{"chr3"})\cr
+#'   column 2: \tab \code{start} \tab integer; genomic location of anchor in
+#'   replicate 2 - start coordinate\cr
+#'   column 3: \tab \code{end} \tab integer; genomic location of anchor in
+#'   replicate 2 - end coordinate
 #' }
 #' @param max.gap integer; maximum gap in nucleotides allowed between two
 #' anchors for
 #' them to be considered as overlapping
 #' (defaults to zero, no gap between anchors)
 #'
-#' @return A data frame where each row is an overlapping anchor pair.
-#' There are two columns:
-#' \tabular{rl}{
-#'   \code{"rep1.idx"} \tab anchor index in data frame \code{rep1.anchor} \cr
-#'   \code{"rep2.idx"} \tab anchor index in data frame \code{rep2.anchor}
+#' @return A data frame containing overlapping
+#'  anchor pairs with the following columns:
+#' \tabular{rll}{
+#'   column 1: \tab \code{rep1.idx} \tab anchor index in data frame
+#'   \code{rep1.anchor} \cr
+#'   column 2: \tab \code{rep2.idx} \tab anchor index in data frame
+#'   \code{rep2.anchor}
 #' }
 #'
 #' @examples
@@ -157,18 +159,26 @@ calculateMidpointDistance1D <- function(peak1.start, peak1.end,
 #'                           c(260, 270, 240, 260))
 #'
 #' @export
-calculateMidpointDistance2D <- function(int1.anchor.a.start, int1.anchor.a.end,
-                                        int1.anchor.b.start, int1.anchor.b.end,
-                                        int2.anchor.a.start, int2.anchor.a.end,
-                                        int2.anchor.b.start, int2.anchor.b.end) {
+calculateMidpointDistance2D <- function(int1.anchor.a.start,
+                                        int1.anchor.a.end,
+                                        int1.anchor.b.start,
+                                        int1.anchor.b.end,
+                                        int2.anchor.a.start,
+                                        int2.anchor.a.end,
+                                        int2.anchor.b.start,
+                                        int2.anchor.b.end) {
     midpoint.int1.anchor.a <- abs(int1.anchor.a.start +
-                                      (int1.anchor.a.end - int1.anchor.a.start) / 2)
+                                      (int1.anchor.a.end -
+                                           int1.anchor.a.start) / 2)
     midpoint.int1.anchor.b <- abs(int1.anchor.b.start +
-                                      (int1.anchor.b.end - int1.anchor.b.start) / 2)
+                                      (int1.anchor.b.end -
+                                           int1.anchor.b.start) / 2)
     midpoint.int2.anchor.a <- abs(int2.anchor.a.start +
-                                      (int2.anchor.a.end - int2.anchor.a.start) / 2)
+                                      (int2.anchor.a.end -
+                                           int2.anchor.a.start) / 2)
     midpoint.int2.anchor.b <- abs(int2.anchor.b.start +
-                                      (int2.anchor.b.end - int2.anchor.b.start) / 2)
+                                      (int2.anchor.b.end -
+                                           int2.anchor.b.start) / 2)
     return(as.integer(abs(midpoint.int1.anchor.a - midpoint.int2.anchor.a) +
                           abs(midpoint.int1.anchor.b - midpoint.int2.anchor.b)))
 }
@@ -315,28 +325,28 @@ calculateRelativeOverlap2D <- function(int1.anchor.a.start, int1.anchor.a.end,
 #' @param rep1.df data frame of observations (i.e., genomic peaks) of
 #' replicate 1, with at least the following columns (position of columns
 #' matter, column names are irrelevant):
-#' \tabular{rl}{
-#'   column 1 (\code{chr}) \tab character; genomic location of peak -
+#' \tabular{rll}{
+#'   column 1:  \tab \code{chr} \tab character; genomic location of peak -
 #'   chromosome (e.g., \code{"chr3"})\cr
-#'   column 2 \code{start}) \tab integer; genomic location of peak -
+#'   column 2:  \tab \code{start} \tab integer; genomic location of peak -
 #'   start coordinate\cr
-#'   column 3 (\code{end}) \tab integer; genomic location of peak -
+#'   column 3:  \tab \code{end} \tab integer; genomic location of peak -
 #'   end coordinate\cr
-#'   column 7 (\code{value}) \tab numeric; p-value, FDR, or heuristic used to
-#'   rank the interactions
+#'   column 4:  \tab \code{value} \tab numeric; p-value, FDR, or heuristic used
+#'   to rank the interactions
 #' }
 #' @param rep2.df data frame of observations (i.e., genomic peaks) of
 #' replicate 2, with the following columns (position of columns
 #' matter, column names are irrelevant):
-#' \tabular{rl}{
-#'   column 1 (\code{chr}) \tab character; genomic location of peak -
+#' \tabular{rll}{
+#'   column 1:  \tab \code{chr} \tab character; genomic location of peak -
 #'   chromosome (e.g., \code{"chr3"})\cr
-#'   column 2 \code{start}) \tab integer; genomic location of peak -
+#'   column 2:  \tab \code{start} \tab integer; genomic location of peak -
 #'   start coordinate\cr
-#'   column 3 (\code{end}) \tab integer; genomic location of peak -
+#'   column 3:  \tab \code{end} \tab integer; genomic location of peak -
 #'   end coordinate\cr
-#'   column 7 (\code{value}) \tab numeric; p-value, FDR, or heuristic used to
-#'   rank the interactions
+#'   column 4:  \tab \code{value} \tab numeric; p-value, FDR, or heuristic used
+#'   to rank the interactions
 #' }
 #' @param ambiguity.resolution.method defines how ambiguous assignments
 #' (when one interaction in replicate 1 overlaps with multiple interactions in
@@ -365,13 +375,14 @@ calculateRelativeOverlap2D <- function(int1.anchor.a.start, int1.anchor.a.end,
 #' @inheritParams anchorOverlap
 #'
 #' @return data frame with the following columns:
-#' \tabular{rl}{
-#'   \code{rep1.idx} \tab index of interaction in replicate 1 (i.e., row
-#'   index in \code{rep1.df})\cr
-#'   \code{rep2.idx} \tab index of interaction in replicate 2 (i.e., row
-#'   index in \code{rep2.df})\cr
-#'   \code{arv} \tab ambiguity resolution value used turn m:n mapping into 1:1
-#'   mapping. Interaction pairs with lower \code{arv} are prioritized.
+#' \tabular{rll}{
+#'   column 1:  \tab \code{rep1.idx} \tab index of interaction in replicate 1
+#'   (i.e., row index in \code{rep1.df})\cr
+#'   column 2:  \tab \code{rep2.idx} \tab index of interaction in replicate 2
+#'   (i.e., row index in \code{rep2.df})\cr
+#'   column 3:  \tab \code{arv} \tab ambiguity resolution value used turn
+#'   m:n mapping into 1:1 mapping. Interaction pairs with lower \code{arv}
+#'   are prioritized.
 #' }
 #'
 #' @examples
@@ -463,40 +474,40 @@ overlap1D <- function(rep1.df, rep2.df,
 #' @param rep1.df data frame of observations (i.e., genomic interactions) of
 #' replicate 1, with at least the following columns (position of columns
 #' matter, column names are irrelevant):
-#' \tabular{rl}{
-#'   column 1 (\code{chr.a}) \tab character; genomic location of anchor A -
+#' \tabular{rll}{
+#'   column 1: \tab \code{chr.a} \tab character; genomic location of anchor A -
 #'   chromosome (e.g., \code{"chr3"})\cr
-#'   column 2 \code{start.a}) \tab integer; genomic location of anchor A -
+#'   column 2: \tab \code{start.a} \tab integer; genomic location of anchor A -
 #'   start coordinate\cr
-#'   column 3 (\code{end.a}) \tab integer; genomic location of anchor A -
+#'   column 3: \tab \code{end.a} \tab integer; genomic location of anchor A -
 #'   end coordinate\cr
-#'   column 4 (\code{chr.b}) \tab character; genomic location of anchor B -
+#'   column 4: \tab \code{chr.b} \tab character; genomic location of anchor B -
 #'   chromosome (e.g., \code{"chr3"})\cr
-#'   column 5 (\code{start.b}) \tab integer; genomic location of anchor B -
+#'   column 5: \tab \code{start.b} \tab integer; genomic location of anchor B -
 #'   start coordinate\cr
-#'   column 6 (\code{end.b}) \tab integer; genomic location of anchor B -
+#'   column 6: \tab \code{end.b} \tab integer; genomic location of anchor B -
 #'   end coordinate\cr
-#'   column 7 (\code{value}) \tab numeric; p-value, FDR, or heuristic used to
-#'   rank the interactions
+#'   column 7: \tab \code{value} \tab numeric; p-value, FDR, or heuristic
+#'   used to rank the interactions
 #' }
 #' @param rep2.df data frame of observations (i.e., genomic interactions) of
 #' replicate 2, with the following columns (position of columns
 #' matter, column names are irrelevant):
-#' \tabular{rl}{
-#'   column 1 (\code{chr.a}) \tab character; genomic location of anchor A -
+#' \tabular{rll}{
+#'   column 1: \tab \code{chr.a} \tab character; genomic location of anchor A -
 #'   chromosome (e.g., \code{"chr3"})\cr
-#'   column 2 \code{start.a}) \tab integer; genomic location of anchor A -
+#'   column 2: \tab \code{start.a} \tab integer; genomic location of anchor A -
 #'   start coordinate\cr
-#'   column 3 (\code{end.a}) \tab integer; genomic location of anchor A -
+#'   column 3: \tab \code{end.a} \tab integer; genomic location of anchor A -
 #'   end coordinate\cr
-#'   column 4 (\code{chr.b}) \tab character; genomic location of anchor B -
+#'   column 4: \tab \code{chr.b} \tab character; genomic location of anchor B -
 #'   chromosome (e.g., \code{"chr3"})\cr
-#'   column 5 (\code{start.b}) \tab integer; genomic location of anchor B -
+#'   column 5: \tab \code{start.b} \tab integer; genomic location of anchor B -
 #'   start coordinate\cr
-#'   column 6 (\code{end.b}) \tab integer; genomic location of anchor B -
+#'   column 6: \tab \code{end.b} \tab integer; genomic location of anchor B -
 #'   end coordinate\cr
-#'   column 7 (\code{value}) \tab numeric; p-value, FDR, or heuristic used to
-#'   rank the interactions
+#'   column 7: \tab \code{value} \tab numeric; p-value, FDR, or heuristic used
+#'   to rank the interactions
 #' }
 #' @param ambiguity.resolution.method defines how ambiguous assignments
 #' (when one interaction in replicate 1 overlaps with multiple interactions in
@@ -525,13 +536,14 @@ overlap1D <- function(rep1.df, rep2.df,
 #' @inheritParams anchorOverlap
 #'
 #' @return data frame with the following columns:
-#' \tabular{rl}{
-#'   \code{rep1.idx} \tab index of interaction in replicate 1 (i.e., row
-#'   index in \code{rep1.df})\cr
-#'   \code{rep2.idx} \tab index of interaction in replicate 2 (i.e., row
-#'   index in \code{rep2.df})\cr
-#'   \code{arv} \tab ambiguity resolution value used turn m:n mapping into 1:1
-#'   mapping. Interaction pairs with lower \code{arv} are prioritized.
+#' \tabular{rll}{
+#'   column 1: \tab \code{rep1.idx} \tab index of interaction in replicate 1
+#'   (i.e., row index in \code{rep1.df})\cr
+#'   column 2: \tab \code{rep2.idx} \tab index of interaction in replicate 2
+#'   (i.e., row index in \code{rep2.df})\cr
+#'   column 3: \tab \code{arv} \tab ambiguity resolution value used turn
+#'   m:n mapping into 1:1 mapping. Interaction pairs with lower \code{arv}
+#'   are prioritized.
 #' }
 #'
 #' @examples
@@ -638,15 +650,15 @@ overlap2D <- function(rep1.df, rep2.df,
 #' @title Removes Peaks on Non-standard Chromosomes
 #' @param x data frame of genomic peaks, with the following columns
 #' (position of columns matter, column names are irrelevant):
-#' \tabular{rl}{
-#'   column 1 (\code{chr}) \tab character; genomic location of peak -
+#' \tabular{rll}{
+#'   column 1: \tab \code{chr} \tab character; genomic location of peak -
 #'   chromosome (e.g., \code{"chr3"})\cr
-#'   column 2 \code{start}) \tab integer; genomic location of peak  -
+#'   column 2: \tab \code{start} \tab integer; genomic location of peak  -
 #'   start coordinate\cr
-#'   column 3 (\code{end}) \tab integer; genomic location of peak -
+#'   column 3: \tab \code{end} \tab integer; genomic location of peak -
 #'   end coordinate\cr
-#'   column 4 (\code{value}) \tab numeric; p-value, FDR, or heuristic used to
-#'   rank the peaks
+#'   column 4: \tab \code{value} \tab numeric; p-value, FDR, or heuristic used
+#'   to rank the peaks
 #' }
 #' @importFrom GenomicRanges GRanges
 #' @importFrom IRanges IRanges
@@ -667,21 +679,21 @@ removeNonstandardChromosomes1D <- function(x) {
 #' @title Removes Interactions on Non-standard Chromosomes
 #' @param x data frame of genomic interactions, with the following columns
 #' (position of columns matter, column names are irrelevant):
-#' \tabular{rl}{
-#'   column 1 (\code{chr.a}) \tab character; genomic location of anchor A -
+#' \tabular{rll}{
+#'   column 1: \tab \code{chr.a} \tab character; genomic location of anchor A -
 #'   chromosome (e.g., \code{"chr3"})\cr
-#'   column 2 \code{start.a}) \tab integer; genomic location of anchor A -
+#'   column 2: \tab \code{start.a} \tab integer; genomic location of anchor A -
 #'   start coordinate\cr
-#'   column 3 (\code{end.a}) \tab integer; genomic location of anchor A -
+#'   column 3: \tab \code{end.a} \tab integer; genomic location of anchor A -
 #'   end coordinate\cr
-#'   column 4 (\code{chr.b}) \tab character; genomic location of anchor B -
+#'   column 4: \tab \code{chr.b} \tab character; genomic location of anchor B -
 #'   chromosome (e.g., \code{"chr3"})\cr
-#'   column 5 (\code{start.b}) \tab integer; genomic location of anchor B -
+#'   column 5: \tab \code{start.b} \tab integer; genomic location of anchor B -
 #'   start coordinate\cr
-#'   column 6 (\code{end.b}) \tab integer; genomic location of anchor B -
+#'   column 6: \tab \code{end.b} \tab integer; genomic location of anchor B -
 #'   end coordinate\cr
-#'   column 7 (\code{value}) \tab numeric; p-value, FDR, or heuristic used to
-#'   rank the interactions
+#'   column 7: \tab \code{value} \tab numeric; p-value, FDR, or heuristic used
+#'   to rank the interactions
 #' }
 #' @importFrom GenomicRanges GRanges
 #' @importFrom IRanges IRanges

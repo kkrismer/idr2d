@@ -9,15 +9,15 @@ removeNonstandardChromosomes1D(x)
 \arguments{
 \item{x}{data frame of genomic peaks, with the following columns
 (position of columns matter, column names are irrelevant):
-\tabular{rl}{
-  column 1 (\code{chr}) \tab character; genomic location of peak -
+\tabular{rll}{
+  column 1: \tab \code{chr} \tab character; genomic location of peak -
   chromosome (e.g., \code{"chr3"})\cr
-  column 2 \code{start}) \tab integer; genomic location of peak  -
+  column 2: \tab \code{start} \tab integer; genomic location of peak  -
   start coordinate\cr
-  column 3 (\code{end}) \tab integer; genomic location of peak -
+  column 3: \tab \code{end} \tab integer; genomic location of peak -
   end coordinate\cr
-  column 4 (\code{value}) \tab numeric; p-value, FDR, or heuristic used to
-  rank the peaks
+  column 4: \tab \code{value} \tab numeric; p-value, FDR, or heuristic used
+  to rank the peaks
 }}
 }
 \description{

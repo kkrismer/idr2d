@@ -11,29 +11,29 @@ overlap1D(rep1.df, rep2.df, ambiguity.resolution.method = c("overlap",
 \item{rep1.df}{data frame of observations (i.e., genomic peaks) of
 replicate 1, with at least the following columns (position of columns
 matter, column names are irrelevant):
-\tabular{rl}{
-  column 1 (\code{chr}) \tab character; genomic location of peak -
+\tabular{rll}{
+  column 1:  \tab \code{chr} \tab character; genomic location of peak -
   chromosome (e.g., \code{"chr3"})\cr
-  column 2 \code{start}) \tab integer; genomic location of peak -
+  column 2:  \tab \code{start} \tab integer; genomic location of peak -
   start coordinate\cr
-  column 3 (\code{end}) \tab integer; genomic location of peak -
+  column 3:  \tab \code{end} \tab integer; genomic location of peak -
   end coordinate\cr
-  column 7 (\code{value}) \tab numeric; p-value, FDR, or heuristic used to
-  rank the interactions
+  column 4:  \tab \code{value} \tab numeric; p-value, FDR, or heuristic used
+  to rank the interactions
 }}
 
 \item{rep2.df}{data frame of observations (i.e., genomic peaks) of
 replicate 2, with the following columns (position of columns
 matter, column names are irrelevant):
-\tabular{rl}{
-  column 1 (\code{chr}) \tab character; genomic location of peak -
+\tabular{rll}{
+  column 1:  \tab \code{chr} \tab character; genomic location of peak -
   chromosome (e.g., \code{"chr3"})\cr
-  column 2 \code{start}) \tab integer; genomic location of peak -
+  column 2:  \tab \code{start} \tab integer; genomic location of peak -
   start coordinate\cr
-  column 3 (\code{end}) \tab integer; genomic location of peak -
+  column 3:  \tab \code{end} \tab integer; genomic location of peak -
   end coordinate\cr
-  column 7 (\code{value}) \tab numeric; p-value, FDR, or heuristic used to
-  rank the interactions
+  column 4:  \tab \code{value} \tab numeric; p-value, FDR, or heuristic used
+  to rank the interactions
 }}
 
 \item{ambiguity.resolution.method}{defines how ambiguous assignments
@@ -68,13 +68,14 @@ them to be considered as overlapping
 }
 \value{
 data frame with the following columns:
-\tabular{rl}{
-  \code{rep1.idx} \tab index of interaction in replicate 1 (i.e., row
-  index in \code{rep1.df})\cr
-  \code{rep2.idx} \tab index of interaction in replicate 2 (i.e., row
-  index in \code{rep2.df})\cr
-  \code{arv} \tab ambiguity resolution value used turn m:n mapping into 1:1
-  mapping. Interaction pairs with lower \code{arv} are prioritized.
+\tabular{rll}{
+  column 1:  \tab \code{rep1.idx} \tab index of interaction in replicate 1
+  (i.e., row index in \code{rep1.df})\cr
+  column 2:  \tab \code{rep2.idx} \tab index of interaction in replicate 2
+  (i.e., row index in \code{rep2.df})\cr
+  column 3:  \tab \code{arv} \tab ambiguity resolution value used turn
+  m:n mapping into 1:1 mapping. Interaction pairs with lower \code{arv}
+  are prioritized.
 }
 }
 \description{

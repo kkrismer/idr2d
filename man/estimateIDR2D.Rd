@@ -13,46 +13,6 @@ estimateIDR2D(rep1.df, rep2.df, value.transformation = c("identity",
   local.idr = TRUE)
 }
 \arguments{
-\item{rep1.df}{data frame of observations (i.e., genomic interactions) of
-replicate 1, with at least the following columns (position of columns
-matter, column names are irrelevant):
-\tabular{rl}{
-  column 1 (\code{chr.a}) \tab character; genomic location of anchor A -
-  chromosome (e.g., \code{"chr3"})\cr
-  column 2 \code{start.a}) \tab integer; genomic location of anchor A -
-  start coordinate\cr
-  column 3 (\code{end.a}) \tab integer; genomic location of anchor A -
-  end coordinate\cr
-  column 4 (\code{chr.b}) \tab character; genomic location of anchor B -
-  chromosome (e.g., \code{"chr3"})\cr
-  column 5 (\code{start.b}) \tab integer; genomic location of anchor B -
-  start coordinate\cr
-  column 6 (\code{end.b}) \tab integer; genomic location of anchor B -
-  end coordinate\cr
-  column 7 (\code{value}) \tab numeric; p-value, FDR, or heuristic used to
-  rank the interactions
-}}
-
-\item{rep2.df}{data frame of observations (i.e., genomic interactions) of
-replicate 2, with the following columns (position of columns
-matter, column names are irrelevant):
-\tabular{rl}{
-  column 1 (\code{chr.a}) \tab character; genomic location of anchor A -
-  chromosome (e.g., \code{"chr3"})\cr
-  column 2 \code{start.a}) \tab integer; genomic location of anchor A -
-  start coordinate\cr
-  column 3 (\code{end.a}) \tab integer; genomic location of anchor A -
-  end coordinate\cr
-  column 4 (\code{chr.b}) \tab character; genomic location of anchor B -
-  chromosome (e.g., \code{"chr3"})\cr
-  column 5 (\code{start.b}) \tab integer; genomic location of anchor B -
-  start coordinate\cr
-  column 6 (\code{end.b}) \tab integer; genomic location of anchor B -
-  end coordinate\cr
-  column 7 (\code{value}) \tab numeric; p-value, FDR, or heuristic used to
-  rank the interactions
-}}
-
 \item{value.transformation}{the values in \code{x} have to be transformed in
 a way such that when ordered in descending order, more significant
 interactions end up on top of the list. If the values in \code{x} are
@@ -73,34 +33,11 @@ either \code{"ascending"} (more significant
 interactions have lower value in \code{value} column) or \code{"descending"}
 (more significant interactions have higher value in \code{value} column)}
 
-\item{ambiguity.resolution.method}{defines how ambiguous assignments
-(when one interaction in replicate 1 overlaps with multiple interactions in
-replicate 2 or vice versa)
-are resolved. Available methods:
-\tabular{rl}{
-  \code{"value"} \tab interactions are prioritized by ascending or descending
-  \code{value} column (see \code{sorting.direction}), e.g., if two
-  interactions in replicate 1 overlap with one interaction in replicate 2,
-  the interaction from replicate 1 is chosen which has a lower (if
-  \code{sorting.direction} is \code{"ascending"}) or higher (if
-  \code{"descending"}) value \cr
-  \code{"overlap"} \tab the interaction pair is chosen which has the highest
-  relative overlap, i.e., overlap in nucleotides of replicate 1 interaction
-  anchor A and replicate 2 interaction anchor A,
-  plus replicate 1 interaction anchor B and replicate 2 interaction anchor B,
-  normalized by their lengths\cr
-  \code{"midpoint"} \tab the interaction pair is chosen which has the
-  smallest
-  distance between their anchor midpoints, i.e., distance from midpoint of
-  replicate 1 interaction anchor A to midpoint of
-  replicate 2 interaction anchor A, plus distance from midpoint of
-  replicate 1 interaction anchor B to midpoint of
-  replicate 2 interaction anchor B
-}}
-
-\item{remove.nonstandard.chromosomes}{removes peaks and interactions containing
+\item{remove.nonstandard.chromosomes}{removes peaks and interactions
+containing
 genomic locations on non-standard chromosomes using
-\code{\link[GenomeInfoDb:seqlevels-wrappers]{keepStandardChromosomes}} (default is TRUE)}
+\code{\link[GenomeInfoDb:seqlevels-wrappers]{keepStandardChromosomes}}
+(default is TRUE)}
 
 \item{max.factor}{numeric; controls the replacement values for \code{Inf}
 and \code{-Inf}. \code{Inf} are replaced by \code{max(x) * max.factor} and
@@ -108,11 +45,6 @@ and \code{-Inf}. \code{Inf} are replaced by \code{max(x) * max.factor} and
 
 \item{jitter.factor}{numeric; controls the magnitude of the noise that
 is added to \code{x}. This is done to break ties in \code{x}.}
-
-\item{max.gap}{integer; maximum gap in nucleotides allowed between two
-anchors for
-them to be considered as overlapping
-(defaults to zero, no gap between anchors)}
 
 \item{mu}{ a starting value for the mean of the reproducible component.}
 
@@ -137,11 +69,34 @@ List with two components (\code{rep1.df} and \code{rep1.df})
 containing the interactions from input data frames \code{rep1.df} and
 \code{rep2.df} with
 the following additional columns:
-\tabular{rl}{
-  \code{"idx"} \tab interaction index in replicate 1\cr
-  \code{"rep.idx"} \tab interaction index of associated replicate interaction
-  in replicate 2. If no corresponding
-  interaction was found, \code{idr} is set to \code{NA}.\cr
+\tabular{rll}{
+  column 1: \tab \code{chr.a} \tab character; genomic location of anchor A -
+  chromosome (e.g., \code{"chr3"})\cr
+  column 2: \tab \code{start.a} \tab integer; genomic location of anchor A -
+  start coordinate\cr
+  column 3: \tab \code{end.a} \tab integer; genomic location of anchor A -
+  end coordinate\cr
+  column 4: \tab \code{chr.b} \tab character; genomic location of anchor B -
+  chromosome (e.g., \code{"chr3"})\cr
+  column 5: \tab \code{start.b} \tab integer; genomic location of anchor B -
+  start coordinate\cr
+  column 6: \tab \code{end.b} \tab integer; genomic location of anchor B -
+  end coordinate\cr
+  column 7: \tab \code{value} \tab numeric; p-value, FDR, or heuristic used
+  to rank the interactions\cr
+  column 8: \tab \code{"rep.value"} \tab numeric; value of corresponding
+  replicate interaction. If no corresponding interaction was found,
+  \code{rep.value} is set to \code{NA}.\cr
+  column 9: \tab \code{"rank"} \tab integer; rank of the interaction,
+  established by value column, ascending order\cr
+  column 10: \tab \code{"rep.rank"} \tab integer; rank of corresponding
+  replicate interaction. If no corresponding interaction was found,
+  \code{rep.rank} is set to \code{NA}.\cr
+  column 11: \tab \code{"idx"} \tab integer; interaction index,
+  primary key\cr
+  column 12: \tab \code{"rep.idx"} \tab integer; specifies the index of the
+  corresponding interaction in the other replicate (foreign key). If no
+  corresponding interaction was found, \code{rep.idx} is set to \code{NA}.\cr
   \code{idr} \tab IDR of the interaction and the
   corresponding interaction in the other replicate. If no corresponding
   interaction was found, \code{idr} is set to \code{NA}.

@@ -75,7 +75,8 @@ rankIDRScatterplot <- function(df, remove.na = TRUE,
     if (color.gradient == "rainbow") {
         g <- g + ggplot2::scale_color_gradientn(colours = grDevices::rainbow(10),
                                                 limits = c(0, 1.0),
-                                                breaks = c(0.0, 0.25, 0.5, 0.75, 1.0))
+                                                breaks = c(0.0, 0.25, 0.5,
+                                                           0.75, 1.0))
     }
     return(g)
 }
@@ -118,7 +119,8 @@ valueIDRScatterplot <- function(df, remove.na = TRUE, remove.outliers = TRUE,
             truncated.df <- dplyr::filter(df, value < max(df$value) * 1.01)
         }
 
-        truncated.data.range <- range(truncated.df$value)[2] - range(truncated.df$value)[1]
+        truncated.data.range <- range(truncated.df$value)[2] -
+            range(truncated.df$value)[1]
 
         if (truncated.data.range < 0.7 * data.range) {
             df <- truncated.df
@@ -132,7 +134,8 @@ valueIDRScatterplot <- function(df, remove.na = TRUE, remove.outliers = TRUE,
             truncated.df <- dplyr::filter(df, value > min(df$value) * 0.99)
         }
 
-        truncated.data.range <- range(truncated.df$value)[2] - range(truncated.df$value)[1]
+        truncated.data.range <- range(truncated.df$value)[2] -
+            range(truncated.df$value)[1]
 
         if (truncated.data.range < 0.7 * data.range) {
             df <- truncated.df
@@ -141,12 +144,14 @@ valueIDRScatterplot <- function(df, remove.na = TRUE, remove.outliers = TRUE,
         # remove outliers on upper tail (rep.value)
         data.range <- range(df$rep.value)[2] - range(df$rep.value)[1]
         if (max(df$rep.value) > 0) {
-            truncated.df <- dplyr::filter(df, rep.value < max(df$rep.value) * 0.99)
+            truncated.df <- dplyr::filter(df, rep.value < max(df$rep.value) *
+                                              0.99)
         } else {
             truncated.df <- dplyr::filter(df, rep.value < max(rep.value) * 1.01)
         }
 
-        truncated.data.range <- range(truncated.df$rep.value)[2] - range(truncated.df$rep.value)[1]
+        truncated.data.range <- range(truncated.df$rep.value)[2] -
+            range(truncated.df$rep.value)[1]
 
         if (truncated.data.range < 0.7 * data.range) {
             df <- truncated.df
@@ -155,12 +160,15 @@ valueIDRScatterplot <- function(df, remove.na = TRUE, remove.outliers = TRUE,
         # remove outliers on lower tail (rep.value)
         data.range <- range(df$rep.value)[2] - range(df$rep.value)[1]
         if (min(df$rep.value) > 0) {
-            truncated.df <- dplyr::filter(df, rep.value > min(df$rep.value) * 1.01)
+            truncated.df <- dplyr::filter(df, rep.value > min(df$rep.value) *
+                                              1.01)
         } else {
-            truncated.df <- dplyr::filter(df, rep.value > min(df$rep.value) * 0.99)
+            truncated.df <- dplyr::filter(df, rep.value > min(df$rep.value) *
+                                              0.99)
         }
 
-        truncated.data.range <- range(truncated.df$rep.value)[2] - range(truncated.df$rep.value)[1]
+        truncated.data.range <- range(truncated.df$rep.value)[2] -
+            range(truncated.df$rep.value)[1]
 
         if (truncated.data.range < 0.7 * data.range) {
             df <- truncated.df
@@ -182,7 +190,8 @@ valueIDRScatterplot <- function(df, remove.na = TRUE, remove.outliers = TRUE,
     if (color.gradient == "rainbow") {
         g <- g + ggplot2::scale_color_gradientn(colours = grDevices::rainbow(10),
                                                 limits = c(0, 1.0),
-                                                breaks = c(0.0, 0.25, 0.5, 0.75, 1.0))
+                                                breaks = c(0.0, 0.25, 0.5,
+                                                           0.75, 1.0))
     }
     return(g)
 }

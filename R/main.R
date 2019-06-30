@@ -15,27 +15,27 @@
 #'
 #' @return Data frames \code{rep1.df} and \code{rep2.df} with
 #' the following columns:
-#' \tabular{rl}{
-#'   1. \code{chr} \tab character; genomic location of peak -
+#' \tabular{rll}{
+#'   column 1: \tab \code{chr} \tab character; genomic location of peak -
 #'   chromosome (e.g., \code{"chr3"})\cr
-#'   2. \code{start} \tab integer; genomic location of peak -
+#'   column 2: \tab \code{start} \tab integer; genomic location of peak  -
 #'   start coordinate\cr
-#'   3. \code{end} \tab integer; genomic location of peak -
+#'   column 3: \tab \code{end} \tab integer; genomic location of peak -
 #'   end coordinate\cr
-#'   4. \code{value} \tab numeric; p-value, FDR, or heuristic used to
-#'   rank the interactions\cr
-#'   5. \code{"rep.value"} \tab numeric; value of corresponding replicate
-#'   interaction. If no corresponding
-#' interaction was found, \code{rep.value} is set to \code{NA}.\cr
-#'   6. \code{"rank"} \tab integer; rank of the interaction, established by
+#'   column 4: \tab \code{value} \tab numeric; p-value, FDR, or heuristic used
+#'   to rank the peaks\cr
+#'   column 5: \tab \code{rep.value} \tab numeric; value of corresponding
+#'   replicate peak If no corresponding peak was found, \code{rep.value} is set
+#'   to \code{NA}.\cr
+#'   column 6: \tab \code{rank} \tab integer; rank of the peak, established by
 #'   value column, ascending order\cr
-#'   7. \code{"rep.rank"} \tab integer; rank of corresponding replicate
-#'   interaction. If no corresponding
-#' interaction was found, \code{rep.rank} is set to \code{NA}.\cr
-#'   8. \code{"idx"} \tab integer; interaction index, primary key\cr
-#'   9. \code{"rep.idx"} \tab integer; specifies the index of the
-#' corresponding interaction in the other replicate (foreign key). If no
-#' corresponding interaction was found, \code{rep.idx} is set to \code{NA}.
+#'   column 7: \tab \code{rep.rank} \tab integer; rank of corresponding
+#'   replicate peak. If no corresponding peak was found, \code{rep.rank} is
+#'   set to \code{NA}.\cr
+#'   column 8: \tab \code{idx} \tab integer; peak index, primary key\cr
+#'   column 9: \tab \code{rep.idx} \tab integer; specifies the index of the
+#'   corresponding peak in the other replicate (foreign key). If no
+#'   corresponding peak was found, \code{rep.idx} is set to \code{NA}.
 #' }
 #'
 #' @examples
@@ -74,33 +74,34 @@ establishBijection1D <- function(rep1.df, rep2.df,
 #'
 #' @return Data frames \code{rep1.df} and \code{rep2.df} with
 #' the following columns:
-#' \tabular{rl}{
-#'   1. \code{chr.a} \tab character; genomic location of anchor A -
+#' \tabular{rll}{
+#'   column 1: \tab \code{chr.a} \tab character; genomic location of anchor A -
 #'   chromosome (e.g., \code{"chr3"})\cr
-#'   2. \code{start.a} \tab integer; genomic location of anchor A -
+#'   column 2: \tab \code{start.a} \tab integer; genomic location of anchor A -
 #'   start coordinate\cr
-#'   3. \code{end.a} \tab integer; genomic location of anchor A -
+#'   column 3: \tab \code{end.a} \tab integer; genomic location of anchor A -
 #'   end coordinate\cr
-#'   4. \code{chr.b} \tab character; genomic location of anchor B -
+#'   column 4: \tab \code{chr.b} \tab character; genomic location of anchor B -
 #'   chromosome (e.g., \code{"chr3"})\cr
-#'   5. \code{start.b} \tab integer; genomic location of anchor B -
+#'   column 5: \tab \code{start.b} \tab integer; genomic location of anchor B -
 #'   start coordinate\cr
-#'   6. \code{end.c} \tab integer; genomic location of anchor B -
+#'   column 6: \tab \code{end.b} \tab integer; genomic location of anchor B -
 #'   end coordinate\cr
-#'   7. \code{value} \tab numeric; p-value, FDR, or heuristic used to
-#'   rank the interactions\cr
-#'   8. \code{"rep.value"} \tab numeric; value of corresponding replicate
-#'   interaction. If no corresponding
-#' interaction was found, \code{rep.value} is set to \code{NA}.\cr
-#'   9. \code{"rank"} \tab integer; rank of the interaction, established by
-#'   value column, ascending order\cr
-#'   10. \code{"rep.rank"} \tab integer; rank of corresponding replicate
-#'   interaction. If no corresponding
-#' interaction was found, \code{rep.rank} is set to \code{NA}.\cr
-#'   11. \code{"idx"} \tab integer; interaction index, primary key\cr
-#'   12. \code{"rep.idx"} \tab integer; specifies the index of the
-#' corresponding interaction in the other replicate (foreign key). If no
-#' corresponding interaction was found, \code{rep.idx} is set to \code{NA}.
+#'   column 7: \tab \code{value} \tab numeric; p-value, FDR, or heuristic used
+#'   to rank the interactions\cr
+#'   column 8: \tab \code{"rep.value"} \tab numeric; value of corresponding
+#'   replicate interaction. If no corresponding interaction was found,
+#'   \code{rep.value} is set to \code{NA}.\cr
+#'   column 9: \tab \code{"rank"} \tab integer; rank of the interaction,
+#'   established by value column, ascending order\cr
+#'   column 10: \tab \code{"rep.rank"} \tab integer; rank of corresponding
+#'   replicate interaction. If no corresponding interaction was found,
+#'   \code{rep.rank} is set to \code{NA}.\cr
+#'   column 11: \tab \code{"idx"} \tab integer; interaction index,
+#'   primary key\cr
+#'   column 12: \tab \code{"rep.idx"} \tab integer; specifies the index of the
+#'   corresponding interaction in the other replicate (foreign key). If no
+#'   corresponding interaction was found, \code{rep.idx} is set to \code{NA}.
 #' }
 #'
 #' @examples
@@ -122,6 +123,12 @@ establishBijection2D <- function(rep1.df, rep2.df,
                               ambiguity.resolution.method))
 }
 
+#' @title Finds One-to-One Correspondence between Peaks or interactions
+#' from Replicate 1 and 2
+#'
+#' @param analysis.type "IDR2D" for genomic interaction data sets,
+#' "IDR1D" for genomic peak data sets
+#'
 #' @importFrom dplyr arrange
 #' @importFrom dplyr desc
 #' @importFrom dplyr group_by
@@ -204,14 +211,18 @@ establishBijection <- function(rep1.df, rep2.df,
         rep1.df$rep.rank <- as.integer(NA)
         rep2.df$rep.rank <- as.integer(NA)
 
-        rep1.df$rep.rank[top.pairs.df$rep1.idx] <- rep2.df$rank[top.pairs.df$rep2.idx]
-        rep2.df$rep.rank[top.pairs.df$rep2.idx] <- rep1.df$rank[top.pairs.df$rep1.idx]
+        rep1.df$rep.rank[top.pairs.df$rep1.idx] <-
+            rep2.df$rank[top.pairs.df$rep2.idx]
+        rep2.df$rep.rank[top.pairs.df$rep2.idx] <-
+            rep1.df$rank[top.pairs.df$rep1.idx]
 
         rep1.df$rep.value <- as.numeric(NA)
         rep2.df$rep.value <- as.numeric(NA)
 
-        rep1.df$rep.value[top.pairs.df$rep1.idx] <- rep2.df$value[top.pairs.df$rep2.idx]
-        rep2.df$rep.value[top.pairs.df$rep2.idx] <- rep1.df$value[top.pairs.df$rep1.idx]
+        rep1.df$rep.value[top.pairs.df$rep1.idx] <-
+            rep2.df$value[top.pairs.df$rep2.idx]
+        rep2.df$rep.value[top.pairs.df$rep2.idx] <-
+            rep1.df$value[top.pairs.df$rep1.idx]
     } else {
         rep1.df$idx <- integer(0)
         rep2.df$idx <- integer(0)
@@ -357,37 +368,39 @@ preprocess <- function(x, value.transformation = c("identity",
 
 #' @title Estimates IDR for Genomic Peak Data
 #'
-#' @description
-#' TODO
-#'
 #' @references
 #' Q. Li, J. B. Brown, H. Huang and P. J. Bickel. (2011) Measuring
 #' reproducibility of high-throughput experiments. Annals of Applied
 #' Statistics, Vol. 5, No. 3, 1752-1779.
 #'
-#' @inheritParams idr::est.IDR
-#' @inheritParams preprocess
-#' @inheritParams establishBijection1D
+#' @inheritParams estimateIDR
 #'
 #' @return List with two components (\code{rep1.df} and \code{rep1.df})
 #' containing the peaks from input data frames \code{rep1.df} and
 #' \code{rep2.df} with
 #' the following columns:
-#' \tabular{rl}{
-#'   \code{"chr"} \tab character, TODO\cr
-#'   \code{"start"} \tab integer, TODO\cr
-#'   \code{"end"} \tab integer, TODO\cr
-#'   \code{"idx"} \tab peak index in replicate 1\cr
-#'   \code{"rep.idx"} \tab peak index of associated replicate peak
-#'   in replicate 2. If no corresponding
-#'   peak was found, \code{rep.idx} is set to \code{NA}.\cr
-#'   \code{"rank"} \tab TODO.\cr
-#'   \code{"rep.rank"} \tab TODO. If no corresponding
-#'   peak was found, \code{rep.rank} is set to \code{NA}.\cr
-#'   \code{"value"} \tab TODO.\cr
-#'   \code{"rep.value"} \tab TODO. If no corresponding
-#'   peak was found, \code{rep.value} is set to \code{NA}.\cr
-#'   \code{idr} \tab IDR of the peak and the
+#' \tabular{rll}{
+#'   column 1: \tab \code{chr} \tab character; genomic location of peak -
+#'   chromosome (e.g., \code{"chr3"})\cr
+#'   column 2: \tab \code{start} \tab integer; genomic location of peak  -
+#'   start coordinate\cr
+#'   column 3: \tab \code{end} \tab integer; genomic location of peak -
+#'   end coordinate\cr
+#'   column 4: \tab \code{value} \tab numeric; p-value, FDR, or heuristic used
+#'   to rank the peaks\cr
+#'   column 5: \tab \code{rep.value} \tab numeric; value of corresponding
+#'   replicate peak If no corresponding peak was found, \code{rep.value} is set
+#'   to \code{NA}.\cr
+#'   column 6: \tab \code{rank} \tab integer; rank of the peak, established by
+#'   value column, ascending order\cr
+#'   column 7: \tab \code{rep.rank} \tab integer; rank of corresponding
+#'   replicate peak. If no corresponding peak was found, \code{rep.rank} is
+#'   set to \code{NA}.\cr
+#'   column 8: \tab \code{idx} \tab integer; peak index, primary key\cr
+#'   column 9: \tab \code{rep.idx} \tab integer; specifies the index of the
+#'   corresponding peak in the other replicate (foreign key). If no
+#'   corresponding peak was found, \code{rep.idx} is set to \code{NA}.\cr
+#'   column 10: \tab \code{idr} \tab IDR of the peak and the
 #'   corresponding peak in the other replicate. If no corresponding
 #'   peak was found, \code{idr} is set to \code{NA}.
 #' }
@@ -437,11 +450,34 @@ estimateIDR1D <- function(rep1.df, rep2.df,
 #' containing the interactions from input data frames \code{rep1.df} and
 #' \code{rep2.df} with
 #' the following additional columns:
-#' \tabular{rl}{
-#'   \code{"idx"} \tab interaction index in replicate 1\cr
-#'   \code{"rep.idx"} \tab interaction index of associated replicate interaction
-#'   in replicate 2. If no corresponding
-#'   interaction was found, \code{idr} is set to \code{NA}.\cr
+#' \tabular{rll}{
+#'   column 1: \tab \code{chr.a} \tab character; genomic location of anchor A -
+#'   chromosome (e.g., \code{"chr3"})\cr
+#'   column 2: \tab \code{start.a} \tab integer; genomic location of anchor A -
+#'   start coordinate\cr
+#'   column 3: \tab \code{end.a} \tab integer; genomic location of anchor A -
+#'   end coordinate\cr
+#'   column 4: \tab \code{chr.b} \tab character; genomic location of anchor B -
+#'   chromosome (e.g., \code{"chr3"})\cr
+#'   column 5: \tab \code{start.b} \tab integer; genomic location of anchor B -
+#'   start coordinate\cr
+#'   column 6: \tab \code{end.b} \tab integer; genomic location of anchor B -
+#'   end coordinate\cr
+#'   column 7: \tab \code{value} \tab numeric; p-value, FDR, or heuristic used
+#'   to rank the interactions\cr
+#'   column 8: \tab \code{"rep.value"} \tab numeric; value of corresponding
+#'   replicate interaction. If no corresponding interaction was found,
+#'   \code{rep.value} is set to \code{NA}.\cr
+#'   column 9: \tab \code{"rank"} \tab integer; rank of the interaction,
+#'   established by value column, ascending order\cr
+#'   column 10: \tab \code{"rep.rank"} \tab integer; rank of corresponding
+#'   replicate interaction. If no corresponding interaction was found,
+#'   \code{rep.rank} is set to \code{NA}.\cr
+#'   column 11: \tab \code{"idx"} \tab integer; interaction index,
+#'   primary key\cr
+#'   column 12: \tab \code{"rep.idx"} \tab integer; specifies the index of the
+#'   corresponding interaction in the other replicate (foreign key). If no
+#'   corresponding interaction was found, \code{rep.idx} is set to \code{NA}.\cr
 #'   \code{idr} \tab IDR of the interaction and the
 #'   corresponding interaction in the other replicate. If no corresponding
 #'   interaction was found, \code{idr} is set to \code{NA}.
@@ -483,15 +519,19 @@ estimateIDR2D <- function(rep1.df, rep2.df,
 #' reproducibility of high-throughput experiments. Annals of Applied
 #' Statistics, Vol. 5, No. 3, 1752-1779.
 #'
-#' @param remove.nonstandard.chromosomes removes peaks and interactions containing
+#' @param remove.nonstandard.chromosomes removes peaks and interactions
+#' containing
 #' genomic locations on non-standard chromosomes using
-#' \code{\link[GenomeInfoDb:seqlevels-wrappers]{keepStandardChromosomes}} (default is TRUE)
+#' \code{\link[GenomeInfoDb:seqlevels-wrappers]{keepStandardChromosomes}}
+#' (default is TRUE)
 #' @param max.iteration integer; maximum number of iterations for
 #' IDR estimation (defaults to 30)
 #' @param local.idr TODO
+#'
 #' @inheritParams idr::est.IDR
 #' @inheritParams preprocess
-#' @inheritParams establishBijection2D
+#' @inheritParams establishBijection
+#'
 #' @importFrom dplyr arrange
 #' @importFrom dplyr select
 #' @importFrom dplyr filter
@@ -571,10 +611,13 @@ estimateIDR <- function(rep1.df, rep2.df, analysis.type = "IDR2D",
             rep2.value = rep1.df$rep.value
         )
 
-        idx.df <- dplyr::filter(idx.df, !is.na(rep2.idx) & !is.infinite(rep2.idx))
+        idx.df <- dplyr::filter(idx.df,
+                                !is.na(rep2.idx) & !is.infinite(rep2.idx))
 
         if (nrow(idx.df) > 0) {
-            idr.matrix <- as.matrix(dplyr::select(idx.df, rep1.value, rep2.value))
+            idr.matrix <- as.matrix(dplyr::select(idx.df,
+                                                  rep1.value,
+                                                  rep2.value))
 
             if (length(unique(idr.matrix[, 1])) < 10 ||
                 length(unique(idr.matrix[, 2])) < 10) {

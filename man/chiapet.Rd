@@ -6,20 +6,21 @@
 \title{Example Genomic Interaction Data Set}
 \format{A list with two components, the data frames \code{rep1.df} and
 \code{rep2.df}, which have the following seven columns:
-\tabular{rl}{
-  \code{chrA} \tab genomic location of anchor A - chromosome (e.g.,
-  \code{"chr3"})\cr
-  \code{startA} \tab genomic location of anchor A -
-  start coordinate \cr
-  \code{endA} \tab genomic location of anchor A -
-  end coordinate\cr
-  \code{chrB} \tab genomic location of anchor B -
+\tabular{rll}{
+  column 1: \tab \code{chr.a} \tab character; genomic location of anchor A -
   chromosome (e.g., \code{"chr3"})\cr
-  \code{startB} \tab genomic location of anchor B -
+  column 2: \tab \code{start.a} \tab integer; genomic location of anchor A -
   start coordinate\cr
-  \code{endB} \tab genomic location of anchor B -
+  column 3: \tab \code{end.a} \tab integer; genomic location of anchor A -
   end coordinate\cr
-  \code{fdr} False Discovery Rate - significance of interaction\tab
+  column 4: \tab \code{chr.b} \tab character; genomic location of anchor B -
+  chromosome (e.g., \code{"chr3"})\cr
+  column 5: \tab \code{start.b} \tab integer; genomic location of anchor B -
+  start coordinate\cr
+  column 6: \tab \code{end.b} \tab integer; genomic location of anchor B -
+  end coordinate\cr
+  column 7: \tab \code{fdr} \tab numeric; False Discovery Rate -
+  significance of interaction
 }}
 \usage{
 chiapet

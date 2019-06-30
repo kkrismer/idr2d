@@ -13,29 +13,29 @@ establishBijection1D(rep1.df, rep2.df,
 \item{rep1.df}{data frame of observations (i.e., genomic peaks) of
 replicate 1, with at least the following columns (position of columns
 matter, column names are irrelevant):
-\tabular{rl}{
-  column 1 (\code{chr}) \tab character; genomic location of peak -
+\tabular{rll}{
+  column 1:  \tab \code{chr} \tab character; genomic location of peak -
   chromosome (e.g., \code{"chr3"})\cr
-  column 2 \code{start}) \tab integer; genomic location of peak -
+  column 2:  \tab \code{start} \tab integer; genomic location of peak -
   start coordinate\cr
-  column 3 (\code{end}) \tab integer; genomic location of peak -
+  column 3:  \tab \code{end} \tab integer; genomic location of peak -
   end coordinate\cr
-  column 7 (\code{value}) \tab numeric; p-value, FDR, or heuristic used to
-  rank the interactions
+  column 4:  \tab \code{value} \tab numeric; p-value, FDR, or heuristic used
+  to rank the interactions
 }}
 
 \item{rep2.df}{data frame of observations (i.e., genomic peaks) of
 replicate 2, with the following columns (position of columns
 matter, column names are irrelevant):
-\tabular{rl}{
-  column 1 (\code{chr}) \tab character; genomic location of peak -
+\tabular{rll}{
+  column 1:  \tab \code{chr} \tab character; genomic location of peak -
   chromosome (e.g., \code{"chr3"})\cr
-  column 2 \code{start}) \tab integer; genomic location of peak -
+  column 2:  \tab \code{start} \tab integer; genomic location of peak -
   start coordinate\cr
-  column 3 (\code{end}) \tab integer; genomic location of peak -
+  column 3:  \tab \code{end} \tab integer; genomic location of peak -
   end coordinate\cr
-  column 7 (\code{value}) \tab numeric; p-value, FDR, or heuristic used to
-  rank the interactions
+  column 4:  \tab \code{value} \tab numeric; p-value, FDR, or heuristic used
+  to rank the interactions
 }}
 
 \item{ambiguity.resolution.method}{defines how ambiguous assignments
@@ -71,27 +71,27 @@ them to be considered as overlapping
 \value{
 Data frames \code{rep1.df} and \code{rep2.df} with
 the following columns:
-\tabular{rl}{
-  1. \code{chr} \tab character; genomic location of peak -
+\tabular{rll}{
+  column 1: \tab \code{chr} \tab character; genomic location of peak -
   chromosome (e.g., \code{"chr3"})\cr
-  2. \code{start} \tab integer; genomic location of peak -
+  column 2: \tab \code{start} \tab integer; genomic location of peak  -
   start coordinate\cr
-  3. \code{end} \tab integer; genomic location of peak -
+  column 3: \tab \code{end} \tab integer; genomic location of peak -
   end coordinate\cr
-  4. \code{value} \tab numeric; p-value, FDR, or heuristic used to
-  rank the interactions\cr
-  5. \code{"rep.value"} \tab numeric; value of corresponding replicate
-  interaction. If no corresponding
-interaction was found, \code{rep.value} is set to \code{NA}.\cr
-  6. \code{"rank"} \tab integer; rank of the interaction, established by
+  column 4: \tab \code{value} \tab numeric; p-value, FDR, or heuristic used
+  to rank the peaks\cr
+  column 5: \tab \code{rep.value} \tab numeric; value of corresponding
+  replicate peak If no corresponding peak was found, \code{rep.value} is set
+  to \code{NA}.\cr
+  column 6: \tab \code{rank} \tab integer; rank of the peak, established by
   value column, ascending order\cr
-  7. \code{"rep.rank"} \tab integer; rank of corresponding replicate
-  interaction. If no corresponding
-interaction was found, \code{rep.rank} is set to \code{NA}.\cr
-  8. \code{"idx"} \tab integer; interaction index, primary key\cr
-  9. \code{"rep.idx"} \tab integer; specifies the index of the
-corresponding interaction in the other replicate (foreign key). If no
-corresponding interaction was found, \code{rep.idx} is set to \code{NA}.
+  column 7: \tab \code{rep.rank} \tab integer; rank of corresponding
+  replicate peak. If no corresponding peak was found, \code{rep.rank} is
+  set to \code{NA}.\cr
+  column 8: \tab \code{idx} \tab integer; peak index, primary key\cr
+  column 9: \tab \code{rep.idx} \tab integer; specifies the index of the
+  corresponding peak in the other replicate (foreign key). If no
+  corresponding peak was found, \code{rep.idx} is set to \code{NA}.
 }
 }
 \description{

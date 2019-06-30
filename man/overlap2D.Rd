@@ -11,41 +11,41 @@ overlap2D(rep1.df, rep2.df, ambiguity.resolution.method = c("overlap",
 \item{rep1.df}{data frame of observations (i.e., genomic interactions) of
 replicate 1, with at least the following columns (position of columns
 matter, column names are irrelevant):
-\tabular{rl}{
-  column 1 (\code{chr.a}) \tab character; genomic location of anchor A -
+\tabular{rll}{
+  column 1: \tab \code{chr.a} \tab character; genomic location of anchor A -
   chromosome (e.g., \code{"chr3"})\cr
-  column 2 \code{start.a}) \tab integer; genomic location of anchor A -
+  column 2: \tab \code{start.a} \tab integer; genomic location of anchor A -
   start coordinate\cr
-  column 3 (\code{end.a}) \tab integer; genomic location of anchor A -
+  column 3: \tab \code{end.a} \tab integer; genomic location of anchor A -
   end coordinate\cr
-  column 4 (\code{chr.b}) \tab character; genomic location of anchor B -
+  column 4: \tab \code{chr.b} \tab character; genomic location of anchor B -
   chromosome (e.g., \code{"chr3"})\cr
-  column 5 (\code{start.b}) \tab integer; genomic location of anchor B -
+  column 5: \tab \code{start.b} \tab integer; genomic location of anchor B -
   start coordinate\cr
-  column 6 (\code{end.b}) \tab integer; genomic location of anchor B -
+  column 6: \tab \code{end.b} \tab integer; genomic location of anchor B -
   end coordinate\cr
-  column 7 (\code{value}) \tab numeric; p-value, FDR, or heuristic used to
-  rank the interactions
+  column 7: \tab \code{value} \tab numeric; p-value, FDR, or heuristic
+  used to rank the interactions
 }}
 
 \item{rep2.df}{data frame of observations (i.e., genomic interactions) of
 replicate 2, with the following columns (position of columns
 matter, column names are irrelevant):
-\tabular{rl}{
-  column 1 (\code{chr.a}) \tab character; genomic location of anchor A -
+\tabular{rll}{
+  column 1: \tab \code{chr.a} \tab character; genomic location of anchor A -
   chromosome (e.g., \code{"chr3"})\cr
-  column 2 \code{start.a}) \tab integer; genomic location of anchor A -
+  column 2: \tab \code{start.a} \tab integer; genomic location of anchor A -
   start coordinate\cr
-  column 3 (\code{end.a}) \tab integer; genomic location of anchor A -
+  column 3: \tab \code{end.a} \tab integer; genomic location of anchor A -
   end coordinate\cr
-  column 4 (\code{chr.b}) \tab character; genomic location of anchor B -
+  column 4: \tab \code{chr.b} \tab character; genomic location of anchor B -
   chromosome (e.g., \code{"chr3"})\cr
-  column 5 (\code{start.b}) \tab integer; genomic location of anchor B -
+  column 5: \tab \code{start.b} \tab integer; genomic location of anchor B -
   start coordinate\cr
-  column 6 (\code{end.b}) \tab integer; genomic location of anchor B -
+  column 6: \tab \code{end.b} \tab integer; genomic location of anchor B -
   end coordinate\cr
-  column 7 (\code{value}) \tab numeric; p-value, FDR, or heuristic used to
-  rank the interactions
+  column 7: \tab \code{value} \tab numeric; p-value, FDR, or heuristic used
+  to rank the interactions
 }}
 
 \item{ambiguity.resolution.method}{defines how ambiguous assignments
@@ -80,13 +80,14 @@ them to be considered as overlapping
 }
 \value{
 data frame with the following columns:
-\tabular{rl}{
-  \code{rep1.idx} \tab index of interaction in replicate 1 (i.e., row
-  index in \code{rep1.df})\cr
-  \code{rep2.idx} \tab index of interaction in replicate 2 (i.e., row
-  index in \code{rep2.df})\cr
-  \code{arv} \tab ambiguity resolution value used turn m:n mapping into 1:1
-  mapping. Interaction pairs with lower \code{arv} are prioritized.
+\tabular{rll}{
+  column 1: \tab \code{rep1.idx} \tab index of interaction in replicate 1
+  (i.e., row index in \code{rep1.df})\cr
+  column 2: \tab \code{rep2.idx} \tab index of interaction in replicate 2
+  (i.e., row index in \code{rep2.df})\cr
+  column 3: \tab \code{arv} \tab ambiguity resolution value used turn
+  m:n mapping into 1:1 mapping. Interaction pairs with lower \code{arv}
+  are prioritized.
 }
 }
 \description{

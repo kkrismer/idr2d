@@ -9,21 +9,21 @@ removeNonstandardChromosomes2D(x)
 \arguments{
 \item{x}{data frame of genomic interactions, with the following columns
 (position of columns matter, column names are irrelevant):
-\tabular{rl}{
-  column 1 (\code{chr.a}) \tab character; genomic location of anchor A -
+\tabular{rll}{
+  column 1: \tab \code{chr.a} \tab character; genomic location of anchor A -
   chromosome (e.g., \code{"chr3"})\cr
-  column 2 \code{start.a}) \tab integer; genomic location of anchor A -
+  column 2: \tab \code{start.a} \tab integer; genomic location of anchor A -
   start coordinate\cr
-  column 3 (\code{end.a}) \tab integer; genomic location of anchor A -
+  column 3: \tab \code{end.a} \tab integer; genomic location of anchor A -
   end coordinate\cr
-  column 4 (\code{chr.b}) \tab character; genomic location of anchor B -
+  column 4: \tab \code{chr.b} \tab character; genomic location of anchor B -
   chromosome (e.g., \code{"chr3"})\cr
-  column 5 (\code{start.b}) \tab integer; genomic location of anchor B -
+  column 5: \tab \code{start.b} \tab integer; genomic location of anchor B -
   start coordinate\cr
-  column 6 (\code{end.b}) \tab integer; genomic location of anchor B -
+  column 6: \tab \code{end.b} \tab integer; genomic location of anchor B -
   end coordinate\cr
-  column 7 (\code{value}) \tab numeric; p-value, FDR, or heuristic used to
-  rank the interactions
+  column 7: \tab \code{value} \tab numeric; p-value, FDR, or heuristic used
+  to rank the interactions
 }}
 }
 \description{

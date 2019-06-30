@@ -8,23 +8,23 @@ anchorOverlap(rep1.anchor, rep2.anchor, max.gap = 0L)
 }
 \arguments{
 \item{rep1.anchor}{data frame with the following columns:
-\tabular{rl}{
-  \code{chr} \tab character; genomic location of anchor in replicate 1 -
-  chromosome (e.g., \code{"chr3"})\cr
-  \code{start} \tab integer; genomic location of anchor in replicate 1 -
-  start coordinate\cr
-  \code{end} \tab integer; genomic location of anchor in replicate 1 -
-  end coordinate
+\tabular{rll}{
+  column 1: \tab \code{chr} \tab character; genomic location of anchor in
+  replicate 1 - chromosome (e.g., \code{"chr3"})\cr
+  column 2: \tab \code{start} \tab integer; genomic location of anchor in
+  replicate 1 - start coordinate\cr
+  column 3: \tab \code{end} \tab integer; genomic location of anchor in
+  replicate 1 - end coordinate
 }}
 
 \item{rep2.anchor}{data frame with the following columns:
-\tabular{rl}{
-  \code{chr} \tab character; genomic location of anchor in replicate 2 -
-  chromosome (e.g., \code{"chr3"})\cr
-  \code{start} \tab integer; genomic location of anchor in replicate 2 -
-  start coordinate\cr
-  \code{end} \tab integer; genomic location of anchor in replicate 2 -
-  end coordinate
+\tabular{rll}{
+  column 1: \tab \code{chr} \tab character; genomic location of anchor in
+  replicate 2 - chromosome (e.g., \code{"chr3"})\cr
+  column 2: \tab \code{start} \tab integer; genomic location of anchor in
+  replicate 2 - start coordinate\cr
+  column 3: \tab \code{end} \tab integer; genomic location of anchor in
+  replicate 2 - end coordinate
 }}
 
 \item{max.gap}{integer; maximum gap in nucleotides allowed between two
@@ -33,11 +33,13 @@ them to be considered as overlapping
 (defaults to zero, no gap between anchors)}
 }
 \value{
-A data frame where each row is an overlapping anchor pair.
-There are two columns:
-\tabular{rl}{
-  \code{"rep1.idx"} \tab anchor index in data frame \code{rep1.anchor} \cr
-  \code{"rep2.idx"} \tab anchor index in data frame \code{rep2.anchor}
+A data frame containing overlapping
+ anchor pairs with the following columns:
+\tabular{rll}{
+  column 1: \tab \code{rep1.idx} \tab anchor index in data frame
+  \code{rep1.anchor} \cr
+  column 2: \tab \code{rep2.idx} \tab anchor index in data frame
+  \code{rep2.anchor}
 }
 }
 \description{

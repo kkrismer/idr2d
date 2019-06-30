@@ -13,41 +13,41 @@ establishBijection2D(rep1.df, rep2.df,
 \item{rep1.df}{data frame of observations (i.e., genomic interactions) of
 replicate 1, with at least the following columns (position of columns
 matter, column names are irrelevant):
-\tabular{rl}{
-  column 1 (\code{chr.a}) \tab character; genomic location of anchor A -
+\tabular{rll}{
+  column 1: \tab \code{chr.a} \tab character; genomic location of anchor A -
   chromosome (e.g., \code{"chr3"})\cr
-  column 2 \code{start.a}) \tab integer; genomic location of anchor A -
+  column 2: \tab \code{start.a} \tab integer; genomic location of anchor A -
   start coordinate\cr
-  column 3 (\code{end.a}) \tab integer; genomic location of anchor A -
+  column 3: \tab \code{end.a} \tab integer; genomic location of anchor A -
   end coordinate\cr
-  column 4 (\code{chr.b}) \tab character; genomic location of anchor B -
+  column 4: \tab \code{chr.b} \tab character; genomic location of anchor B -
   chromosome (e.g., \code{"chr3"})\cr
-  column 5 (\code{start.b}) \tab integer; genomic location of anchor B -
+  column 5: \tab \code{start.b} \tab integer; genomic location of anchor B -
   start coordinate\cr
-  column 6 (\code{end.b}) \tab integer; genomic location of anchor B -
+  column 6: \tab \code{end.b} \tab integer; genomic location of anchor B -
   end coordinate\cr
-  column 7 (\code{value}) \tab numeric; p-value, FDR, or heuristic used to
-  rank the interactions
+  column 7: \tab \code{value} \tab numeric; p-value, FDR, or heuristic
+  used to rank the interactions
 }}
 
 \item{rep2.df}{data frame of observations (i.e., genomic interactions) of
 replicate 2, with the following columns (position of columns
 matter, column names are irrelevant):
-\tabular{rl}{
-  column 1 (\code{chr.a}) \tab character; genomic location of anchor A -
+\tabular{rll}{
+  column 1: \tab \code{chr.a} \tab character; genomic location of anchor A -
   chromosome (e.g., \code{"chr3"})\cr
-  column 2 \code{start.a}) \tab integer; genomic location of anchor A -
+  column 2: \tab \code{start.a} \tab integer; genomic location of anchor A -
   start coordinate\cr
-  column 3 (\code{end.a}) \tab integer; genomic location of anchor A -
+  column 3: \tab \code{end.a} \tab integer; genomic location of anchor A -
   end coordinate\cr
-  column 4 (\code{chr.b}) \tab character; genomic location of anchor B -
+  column 4: \tab \code{chr.b} \tab character; genomic location of anchor B -
   chromosome (e.g., \code{"chr3"})\cr
-  column 5 (\code{start.b}) \tab integer; genomic location of anchor B -
+  column 5: \tab \code{start.b} \tab integer; genomic location of anchor B -
   start coordinate\cr
-  column 6 (\code{end.b}) \tab integer; genomic location of anchor B -
+  column 6: \tab \code{end.b} \tab integer; genomic location of anchor B -
   end coordinate\cr
-  column 7 (\code{value}) \tab numeric; p-value, FDR, or heuristic used to
-  rank the interactions
+  column 7: \tab \code{value} \tab numeric; p-value, FDR, or heuristic used
+  to rank the interactions
 }}
 
 \item{ambiguity.resolution.method}{defines how ambiguous assignments
@@ -83,33 +83,34 @@ them to be considered as overlapping
 \value{
 Data frames \code{rep1.df} and \code{rep2.df} with
 the following columns:
-\tabular{rl}{
-  1. \code{chr.a} \tab character; genomic location of anchor A -
+\tabular{rll}{
+  column 1: \tab \code{chr.a} \tab character; genomic location of anchor A -
   chromosome (e.g., \code{"chr3"})\cr
-  2. \code{start.a} \tab integer; genomic location of anchor A -
+  column 2: \tab \code{start.a} \tab integer; genomic location of anchor A -
   start coordinate\cr
-  3. \code{end.a} \tab integer; genomic location of anchor A -
+  column 3: \tab \code{end.a} \tab integer; genomic location of anchor A -
   end coordinate\cr
-  4. \code{chr.b} \tab character; genomic location of anchor B -
+  column 4: \tab \code{chr.b} \tab character; genomic location of anchor B -
   chromosome (e.g., \code{"chr3"})\cr
-  5. \code{start.b} \tab integer; genomic location of anchor B -
+  column 5: \tab \code{start.b} \tab integer; genomic location of anchor B -
   start coordinate\cr
-  6. \code{end.c} \tab integer; genomic location of anchor B -
+  column 6: \tab \code{end.b} \tab integer; genomic location of anchor B -
   end coordinate\cr
-  7. \code{value} \tab numeric; p-value, FDR, or heuristic used to
-  rank the interactions\cr
-  8. \code{"rep.value"} \tab numeric; value of corresponding replicate
-  interaction. If no corresponding
-interaction was found, \code{rep.value} is set to \code{NA}.\cr
-  9. \code{"rank"} \tab integer; rank of the interaction, established by
-  value column, ascending order\cr
-  10. \code{"rep.rank"} \tab integer; rank of corresponding replicate
-  interaction. If no corresponding
-interaction was found, \code{rep.rank} is set to \code{NA}.\cr
-  11. \code{"idx"} \tab integer; interaction index, primary key\cr
-  12. \code{"rep.idx"} \tab integer; specifies the index of the
-corresponding interaction in the other replicate (foreign key). If no
-corresponding interaction was found, \code{rep.idx} is set to \code{NA}.
+  column 7: \tab \code{value} \tab numeric; p-value, FDR, or heuristic used
+  to rank the interactions\cr
+  column 8: \tab \code{"rep.value"} \tab numeric; value of corresponding
+  replicate interaction. If no corresponding interaction was found,
+  \code{rep.value} is set to \code{NA}.\cr
+  column 9: \tab \code{"rank"} \tab integer; rank of the interaction,
+  established by value column, ascending order\cr
+  column 10: \tab \code{"rep.rank"} \tab integer; rank of corresponding
+  replicate interaction. If no corresponding interaction was found,
+  \code{rep.rank} is set to \code{NA}.\cr
+  column 11: \tab \code{"idx"} \tab integer; interaction index,
+  primary key\cr
+  column 12: \tab \code{"rep.idx"} \tab integer; specifies the index of the
+  corresponding interaction in the other replicate (foreign key). If no
+  corresponding interaction was found, \code{rep.idx} is set to \code{NA}.
 }
 }
 \description{
