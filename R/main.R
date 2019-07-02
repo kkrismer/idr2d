@@ -25,7 +25,7 @@
 #'   column 4: \tab \code{value} \tab numeric; p-value, FDR, or heuristic used
 #'   to rank the peaks\cr
 #'   column 5: \tab \code{rep.value} \tab numeric; value of corresponding
-#'   replicate peak If no corresponding peak was found, \code{rep.value} is set
+#'   replicate peak. If no corresponding peak was found, \code{rep.value} is set
 #'   to \code{NA}.\cr
 #'   column 6: \tab \code{rank} \tab integer; rank of the peak, established by
 #'   value column, ascending order\cr
@@ -40,10 +40,10 @@
 #'
 #' @examples
 #' rep1.df <- idr2d:::chipseq$rep1.df
-#' rep1.df$fdr <- preprocess(rep1.df$fdr, "log.additive.inverse")
+#' rep1.df$value <- preprocess(rep1.df$value, "log.additive.inverse")
 #'
 #' rep2.df <- idr2d:::chipseq$rep2.df
-#' rep2.df$fdr <- preprocess(rep2.df$fdr, "log.additive.inverse")
+#' rep2.df$value <- preprocess(rep2.df$value, "log.additive.inverse")
 #'
 #' mapping <- establishBijection1D(rep1.df, rep2.df)
 #'
@@ -126,8 +126,21 @@ establishBijection2D <- function(rep1.df, rep2.df,
 #' @title Finds One-to-One Correspondence between Peaks or interactions
 #' from Replicate 1 and 2
 #'
+#'@param rep1.df data frame of observations (i.e., genomic peaks or genomic
+#' interactions) of
+#' replicate 1. If \code{analysis.type} is IDR1D, the columns of \code{rep1.df}
+#' are described in \code{\link{establishBijection1D}}, otherwise in
+#' \code{\link{establishBijection2D}}
+#' @param rep2.df data frame of observations (i.e., genomic peaks or genomic
+#' interactions) of replicate 2. Same columns as \code{rep1.df}.
 #' @param analysis.type "IDR2D" for genomic interaction data sets,
 #' "IDR1D" for genomic peak data sets
+#' @param ambiguity.resolution.method defines how ambiguous assignments
+#' (when one interaction or peak in replicate 1 overlaps with
+#' multiple interactions or peaks in replicate 2 or vice versa)
+#' are resolved. For available methods, see \code{\link{overlap1D}} and
+#' \code{\link{overlap2D}}, respectively.
+#' @inheritParams anchorOverlap
 #'
 #' @importFrom dplyr arrange
 #' @importFrom dplyr desc
@@ -373,7 +386,17 @@ preprocess <- function(x, value.transformation = c("identity",
 #' reproducibility of high-throughput experiments. Annals of Applied
 #' Statistics, Vol. 5, No. 3, 1752-1779.
 #'
-#' @inheritParams estimateIDR
+#' @param remove.nonstandard.chromosomes removes peaks containing
+#' genomic locations on non-standard chromosomes using
+#' \code{\link[GenomeInfoDb:seqlevels-wrappers]{keepStandardChromosomes}}
+#' (default is TRUE)
+#' @param max.iteration integer; maximum number of iterations for
+#' IDR estimation (defaults to 30)
+#' @param local.idr see \code{\link[idr:est.IDR]{est.IDR}}
+#'
+#' @inheritParams establishBijection1D
+#' @inheritParams idr::est.IDR
+#' @inheritParams preprocess
 #'
 #' @return List with two components (\code{rep1.df} and \code{rep1.df})
 #' containing the peaks from input data frames \code{rep1.df} and
@@ -389,7 +412,7 @@ preprocess <- function(x, value.transformation = c("identity",
 #'   column 4: \tab \code{value} \tab numeric; p-value, FDR, or heuristic used
 #'   to rank the peaks\cr
 #'   column 5: \tab \code{rep.value} \tab numeric; value of corresponding
-#'   replicate peak If no corresponding peak was found, \code{rep.value} is set
+#'   replicate peak. If no corresponding peak was found, \code{rep.value} is set
 #'   to \code{NA}.\cr
 #'   column 6: \tab \code{rank} \tab integer; rank of the peak, established by
 #'   value column, ascending order\cr
@@ -446,7 +469,18 @@ estimateIDR1D <- function(rep1.df, rep2.df,
 #' reproducibility of high-throughput experiments. Annals of Applied
 #' Statistics, Vol. 5, No. 3, 1752-1779.
 #'
-#' @inheritParams estimateIDR
+#' @param remove.nonstandard.chromosomes removes interactions
+#' containing
+#' genomic locations on non-standard chromosomes using
+#' \code{\link[GenomeInfoDb:seqlevels-wrappers]{keepStandardChromosomes}}
+#' (default is TRUE)
+#' @param max.iteration integer; maximum number of iterations for
+#' IDR estimation (defaults to 30)
+#' @param local.idr see \code{\link[idr:est.IDR]{est.IDR}}
+#'
+#' @inheritParams establishBijection2D
+#' @inheritParams idr::est.IDR
+#' @inheritParams preprocess
 #'
 #' @return List with two components (\code{rep1.df} and \code{rep1.df})
 #' containing the interactions from input data frames \code{rep1.df} and

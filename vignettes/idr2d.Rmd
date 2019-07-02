@@ -138,7 +138,7 @@ the website at https://idr2d.mit.edu.
 For a more detailed discussion on IDR2D, please have a look at 
 this preprint on bioRxiv:
 
-**IDR2D: Irreproducible discovery rate for genomic interactions**  
+**IDR2D identifies reproducible genomic interactions**  
 Konstantin Krismer, Yuchun Guo, and David K. Gifford
 bioRxiv XX; doi: https://doi.org/XX
 

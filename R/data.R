@@ -22,3 +22,21 @@
 #'   significance of interaction
 #' }
 "chiapet"
+
+#' Example Genomic Peak Data Set
+#'
+#' This object contains genomic peaks from two replicate ChIP-seq experiments.
+#'
+#' @format A list with two components, the data frames \code{rep1.df} and
+#' \code{rep2.df}, which have the following four columns:
+#' \tabular{rll}{
+#'   column 1: \tab \code{chr} \tab character; genomic location of peak -
+#'   chromosome (e.g., \code{"chr3"})\cr
+#'   column 2: \tab \code{start} \tab integer; genomic location of peak  -
+#'   start coordinate\cr
+#'   column 3: \tab \code{end} \tab integer; genomic location of peak -
+#'   end coordinate\cr
+#'   column 4: \tab \code{value} \tab numeric; heuristic used
+#'   to rank the peaks\cr
+#' }
+"chipseq"

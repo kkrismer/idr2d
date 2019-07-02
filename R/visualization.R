@@ -1,5 +1,29 @@
 
-#' @export
+#' @title Create histogram of IDR values
+#'
+#' @description
+#' Creates diagnostic plots to visualize the results of \code{estimateIDR}.
+#'
+#'
+#' @param df part of output of \code{estimateIDR}, a data frame with at
+#' least the following named columns:
+#' \tabular{rl}{
+#'   \code{idr} \tab IDR of the peak and the
+#'   corresponding peak in the other replicate.
+#' }
+#' @param remove.na logical; should NA values be removed?
+#' @param xlab character; x axis label
+#' @param ylab character; y axis label
+#' @param title character; plot title
+#'
+#' @return ggplot2 object; IDR distribution histogram
+#'
+#' @examples
+#' idr.results <- estimateIDR1D(idr2d:::chipseq$rep1.df,
+#'                              idr2d:::chipseq$rep2.df,
+#'                              value.transformation = "log")
+#' IDRDistributionHistogram(idr.results$rep1.df)
+#'
 #' @importFrom stats complete.cases
 #' @importFrom dplyr filter
 #' @importFrom ggplot2 ggplot
@@ -10,6 +34,7 @@
 #' @importFrom ggplot2 theme
 #' @importFrom ggplot2 element_blank
 #' @importFrom ggplot2 labs
+#' @export
 IDRDistributionHistogram <- function(df, remove.na = TRUE,
                                      xlab = "IDR",
                                      ylab = "density",
@@ -31,6 +56,36 @@ IDRDistributionHistogram <- function(df, remove.na = TRUE,
     return(g)
 }
 
+#' @title Create scatterplot of IDR values
+#'
+#' @description
+#' Creates diagnostic plots to visualize the results of \code{estimateIDR}.
+#'
+#' @param df part of output of \code{estimateIDR}, a data frame with at
+#' least the following named columns:
+#' \tabular{rl}{
+#'   \code{rank} \tab integer; rank of the peak, established by
+#'   value column, ascending order\cr
+#'   \code{rep.rank} \tab integer; rank of corresponding
+#'   replicate peak.\cr
+#'   \code{idr} \tab IDR of the peak and the
+#'   corresponding peak in the other replicate.
+#' }
+#' @param remove.na logical; should NA values be removed?
+#' @param xlab character; x axis label
+#' @param ylab character; y axis label
+#' @param title character; plot title
+#' @param color.gradient character; either "rainbow" or "default"
+#' @param max.points.shown integer; default is 2500
+#'
+#' @return ggplot2 object; IDR rank scatterplot
+#'
+#' @examples
+#' idr.results <- estimateIDR1D(idr2d:::chipseq$rep1.df,
+#'                              idr2d:::chipseq$rep2.df,
+#'                              value.transformation = "log")
+#' rankIDRScatterplot(idr.results$rep1.df)
+#'
 #' @importFrom dplyr filter
 #' @importFrom stats complete.cases
 #' @importFrom ggplot2 ggplot
@@ -81,6 +136,37 @@ rankIDRScatterplot <- function(df, remove.na = TRUE,
     return(g)
 }
 
+#' @title Create scatterplot of IDR values
+#'
+#' @description
+#' Creates diagnostic plots to visualize the results of \code{estimateIDR}.
+#'
+#' @param df part of output of \code{estimateIDR}, a data frame with at
+#' least the following named columns:
+#' \tabular{rl}{
+#'   \code{value} \tab numeric; p-value, FDR, or heuristic used
+#'   to rank the peaks\cr
+#'   \code{rep.value} \tab numeric; value of corresponding
+#'   replicate peak\cr
+#'   \code{idr} \tab IDR of the peak and the
+#'   corresponding peak in the other replicate.
+#' }
+#' @param remove.na logical; should NA values be removed?
+#' @param remove.outliers logical; removes extreme data points
+#' @param xlab character; x axis label
+#' @param ylab character; y axis label
+#' @param title character; plot title
+#' @param color.gradient character; either "rainbow" or "default"
+#' @param max.points.shown integer; default is 2500
+#'
+#' @return ggplot2 object; IDR value scatterplot
+#'
+#' @examples
+#' idr.results <- estimateIDR1D(idr2d:::chipseq$rep1.df,
+#'                              idr2d:::chipseq$rep2.df,
+#'                              value.transformation = "log")
+#' valueIDRScatterplot(idr.results$rep1.df)
+#'
 #' @importFrom dplyr filter
 #' @importFrom stats complete.cases
 #' @importFrom ggplot2 ggplot

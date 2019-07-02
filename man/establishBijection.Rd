@@ -10,8 +10,28 @@ establishBijection(rep1.df, rep2.df, analysis.type = c("IDR1D", "IDR2D"),
   max.gap = 0L)
 }
 \arguments{
+\item{rep1.df}{data frame of observations (i.e., genomic peaks or genomic
+interactions) of
+replicate 1. If \code{analysis.type} is IDR1D, the columns of \code{rep1.df}
+are described in \code{\link{establishBijection1D}}, otherwise in
+\code{\link{establishBijection2D}}}
+
+\item{rep2.df}{data frame of observations (i.e., genomic peaks or genomic
+interactions) of replicate 2. Same columns as \code{rep1.df}.}
+
 \item{analysis.type}{"IDR2D" for genomic interaction data sets,
 "IDR1D" for genomic peak data sets}
+
+\item{ambiguity.resolution.method}{defines how ambiguous assignments
+(when one interaction or peak in replicate 1 overlaps with
+multiple interactions or peaks in replicate 2 or vice versa)
+are resolved. For available methods, see \code{\link{overlap1D}} and
+\code{\link{overlap2D}}, respectively.}
+
+\item{max.gap}{integer; maximum gap in nucleotides allowed between two
+anchors for
+them to be considered as overlapping
+(defaults to zero, no gap between anchors)}
 }
 \description{
 Finds One-to-One Correspondence between Peaks or interactions

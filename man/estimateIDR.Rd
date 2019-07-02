@@ -14,6 +14,15 @@ estimateIDR(rep1.df, rep2.df, analysis.type = "IDR2D",
   local.idr = TRUE)
 }
 \arguments{
+\item{rep1.df}{data frame of observations (i.e., genomic peaks or genomic
+interactions) of
+replicate 1. If \code{analysis.type} is IDR1D, the columns of \code{rep1.df}
+are described in \code{\link{establishBijection1D}}, otherwise in
+\code{\link{establishBijection2D}}}
+
+\item{rep2.df}{data frame of observations (i.e., genomic peaks or genomic
+interactions) of replicate 2. Same columns as \code{rep1.df}.}
+
 \item{analysis.type}{"IDR2D" for genomic interaction data sets,
 "IDR1D" for genomic peak data sets}
 
@@ -37,6 +46,12 @@ either \code{"ascending"} (more significant
 interactions have lower value in \code{value} column) or \code{"descending"}
 (more significant interactions have higher value in \code{value} column)}
 
+\item{ambiguity.resolution.method}{defines how ambiguous assignments
+(when one interaction or peak in replicate 1 overlaps with
+multiple interactions or peaks in replicate 2 or vice versa)
+are resolved. For available methods, see \code{\link{overlap1D}} and
+\code{\link{overlap2D}}, respectively.}
+
 \item{remove.nonstandard.chromosomes}{removes peaks and interactions
 containing
 genomic locations on non-standard chromosomes using
@@ -49,6 +64,11 @@ and \code{-Inf}. \code{Inf} are replaced by \code{max(x) * max.factor} and
 
 \item{jitter.factor}{numeric; controls the magnitude of the noise that
 is added to \code{x}. This is done to break ties in \code{x}.}
+
+\item{max.gap}{integer; maximum gap in nucleotides allowed between two
+anchors for
+them to be considered as overlapping
+(defaults to zero, no gap between anchors)}
 
 \item{mu}{ a starting value for the mean of the reproducible component.}
 

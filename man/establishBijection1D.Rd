@@ -81,7 +81,7 @@ the following columns:
   column 4: \tab \code{value} \tab numeric; p-value, FDR, or heuristic used
   to rank the peaks\cr
   column 5: \tab \code{rep.value} \tab numeric; value of corresponding
-  replicate peak If no corresponding peak was found, \code{rep.value} is set
+  replicate peak. If no corresponding peak was found, \code{rep.value} is set
   to \code{NA}.\cr
   column 6: \tab \code{rank} \tab integer; rank of the peak, established by
   value column, ascending order\cr
@@ -105,10 +105,10 @@ lower \emph{ambiguity resolution value}.
 }
 \examples{
 rep1.df <- idr2d:::chipseq$rep1.df
-rep1.df$fdr <- preprocess(rep1.df$fdr, "log.additive.inverse")
+rep1.df$value <- preprocess(rep1.df$value, "log.additive.inverse")
 
 rep2.df <- idr2d:::chipseq$rep2.df
-rep2.df$fdr <- preprocess(rep2.df$fdr, "log.additive.inverse")
+rep2.df$value <- preprocess(rep2.df$value, "log.additive.inverse")
 
 mapping <- establishBijection1D(rep1.df, rep2.df)
 

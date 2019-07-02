@@ -13,6 +13,34 @@ estimateIDR1D(rep1.df, rep2.df, value.transformation = c("identity",
   local.idr = TRUE)
 }
 \arguments{
+\item{rep1.df}{data frame of observations (i.e., genomic peaks) of
+replicate 1, with at least the following columns (position of columns
+matter, column names are irrelevant):
+\tabular{rll}{
+  column 1:  \tab \code{chr} \tab character; genomic location of peak -
+  chromosome (e.g., \code{"chr3"})\cr
+  column 2:  \tab \code{start} \tab integer; genomic location of peak -
+  start coordinate\cr
+  column 3:  \tab \code{end} \tab integer; genomic location of peak -
+  end coordinate\cr
+  column 4:  \tab \code{value} \tab numeric; p-value, FDR, or heuristic used
+  to rank the interactions
+}}
+
+\item{rep2.df}{data frame of observations (i.e., genomic peaks) of
+replicate 2, with the following columns (position of columns
+matter, column names are irrelevant):
+\tabular{rll}{
+  column 1:  \tab \code{chr} \tab character; genomic location of peak -
+  chromosome (e.g., \code{"chr3"})\cr
+  column 2:  \tab \code{start} \tab integer; genomic location of peak -
+  start coordinate\cr
+  column 3:  \tab \code{end} \tab integer; genomic location of peak -
+  end coordinate\cr
+  column 4:  \tab \code{value} \tab numeric; p-value, FDR, or heuristic used
+  to rank the interactions
+}}
+
 \item{value.transformation}{the values in \code{x} have to be transformed in
 a way such that when ordered in descending order, more significant
 interactions end up on top of the list. If the values in \code{x} are
@@ -33,8 +61,32 @@ either \code{"ascending"} (more significant
 interactions have lower value in \code{value} column) or \code{"descending"}
 (more significant interactions have higher value in \code{value} column)}
 
-\item{remove.nonstandard.chromosomes}{removes peaks and interactions
-containing
+\item{ambiguity.resolution.method}{defines how ambiguous assignments
+(when one interaction in replicate 1 overlaps with multiple interactions in
+replicate 2 or vice versa)
+are resolved. Available methods:
+\tabular{rl}{
+  \code{"value"} \tab interactions are prioritized by ascending or descending
+  \code{value} column (see \code{sorting.direction}), e.g., if two
+  interactions in replicate 1 overlap with one interaction in replicate 2,
+  the interaction from replicate 1 is chosen which has a lower (if
+  \code{sorting.direction} is \code{"ascending"}) or higher (if
+  \code{"descending"}) value \cr
+  \code{"overlap"} \tab the interaction pair is chosen which has the highest
+  relative overlap, i.e., overlap in nucleotides of replicate 1 interaction
+  anchor A and replicate 2 interaction anchor A,
+  plus replicate 1 interaction anchor B and replicate 2 interaction anchor B,
+  normalized by their lengths\cr
+  \code{"midpoint"} \tab the interaction pair is chosen which has the
+  smallest
+  distance between their anchor midpoints, i.e., distance from midpoint of
+  replicate 1 interaction anchor A to midpoint of
+  replicate 2 interaction anchor A, plus distance from midpoint of
+  replicate 1 interaction anchor B to midpoint of
+  replicate 2 interaction anchor B
+}}
+
+\item{remove.nonstandard.chromosomes}{removes peaks containing
 genomic locations on non-standard chromosomes using
 \code{\link[GenomeInfoDb:seqlevels-wrappers]{keepStandardChromosomes}}
 (default is TRUE)}
@@ -45,6 +97,11 @@ and \code{-Inf}. \code{Inf} are replaced by \code{max(x) * max.factor} and
 
 \item{jitter.factor}{numeric; controls the magnitude of the noise that
 is added to \code{x}. This is done to break ties in \code{x}.}
+
+\item{max.gap}{integer; maximum gap in nucleotides allowed between two
+anchors for
+them to be considered as overlapping
+(defaults to zero, no gap between anchors)}
 
 \item{mu}{ a starting value for the mean of the reproducible component.}
 
@@ -79,7 +136,7 @@ the following columns:
   column 4: \tab \code{value} \tab numeric; p-value, FDR, or heuristic used
   to rank the peaks\cr
   column 5: \tab \code{rep.value} \tab numeric; value of corresponding
-  replicate peak If no corresponding peak was found, \code{rep.value} is set
+  replicate peak. If no corresponding peak was found, \code{rep.value} is set
   to \code{NA}.\cr
   column 6: \tab \code{rank} \tab integer; rank of the peak, established by
   value column, ascending order\cr

@@ -387,18 +387,18 @@ calculateRelativeOverlap2D <- function(int1.anchor.a.start, int1.anchor.a.end,
 #'
 #' @examples
 #' rep1.df <- idr2d:::chipseq$rep1.df
-#' rep1.df$fdr <- preprocess(rep1.df$fdr, "log.additive.inverse")
+#' rep1.df$value <- preprocess(rep1.df$value, "log.additive.inverse")
 #'
 #' rep2.df <- idr2d:::chipseq$rep2.df
-#' rep2.df$fdr <- preprocess(rep2.df$fdr, "log.additive.inverse")
+#' rep2.df$value <- preprocess(rep2.df$value, "log.additive.inverse")
 #'
 #' # shuffle to break preexisting order
 #' rep1.df <- rep1.df[sample.int(nrow(rep1.df)), ]
 #' rep2.df <- rep2.df[sample.int(nrow(rep2.df)), ]
 #'
 #' # sort by value column
-#' rep1.df <- dplyr::arrange(rep1.df, rep1.df$fdr)
-#' rep2.df <- dplyr::arrange(rep2.df, rep2.df$fdr)
+#' rep1.df <- dplyr::arrange(rep1.df, value)
+#' rep2.df <- dplyr::arrange(rep2.df, value)
 #'
 #' pairs.df <- overlap1D(rep1.df, rep2.df)
 #'
