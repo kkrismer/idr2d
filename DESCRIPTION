@@ -20,6 +20,7 @@ Description: This package measures reproducibility between
     original idr package, which is intended for (one-dimensional) ChIP-seq
     peaks.
 License: MIT + file LICENSE
+URL: https://idr2d.mit.edu
 Depends:
     R (>= 3.4)
 Imports:
