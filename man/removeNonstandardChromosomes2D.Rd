@@ -26,6 +26,13 @@ removeNonstandardChromosomes2D(x)
   to rank the interactions
 }}
 }
+\value{
+\code{x} without non-standard chromosomes.
+}
 \description{
 Removes Interactions on Non-standard Chromosomes
+}
+\examples{
+rep1.df <- removeNonstandardChromosomes2D(idr2d:::chiapet$rep1.df)
+
 }

@@ -49,7 +49,7 @@ interactions have lower value in \code{value} column) or \code{"descending"}
 \item{ambiguity.resolution.method}{defines how ambiguous assignments
 (when one interaction or peak in replicate 1 overlaps with
 multiple interactions or peaks in replicate 2 or vice versa)
-are resolved. For available methods, see \code{\link{overlap1D}} and
+are resolved. For available methods, see \code{\link{overlap1D}} or
 \code{\link{overlap2D}}, respectively.}
 
 \item{remove.nonstandard.chromosomes}{removes peaks and interactions
@@ -87,6 +87,10 @@ them to be considered as overlapping
 IDR estimation (defaults to 30)}
 
 \item{local.idr}{see \code{\link[idr:est.IDR]{est.IDR}}}
+}
+\value{
+See \code{\link{estimateIDR1D}} or
+\code{\link{estimateIDR2D}}, respectively.
 }
 \description{
 Estimates IDR for Genomic Peaks or Genomic Interactions

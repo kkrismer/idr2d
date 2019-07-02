@@ -25,7 +25,7 @@ interactions) of replicate 2. Same columns as \code{rep1.df}.}
 \item{ambiguity.resolution.method}{defines how ambiguous assignments
 (when one interaction or peak in replicate 1 overlaps with
 multiple interactions or peaks in replicate 2 or vice versa)
-are resolved. For available methods, see \code{\link{overlap1D}} and
+are resolved. For available methods, see \code{\link{overlap1D}} or
 \code{\link{overlap2D}}, respectively.}
 
 \item{max.gap}{integer; maximum gap in nucleotides allowed between two
@@ -33,7 +33,21 @@ anchors for
 them to be considered as overlapping
 (defaults to zero, no gap between anchors)}
 }
+\value{
+See \code{\link{establishBijection1D}} or
+\code{\link{establishBijection2D}}, respectively.
+}
 \description{
 Finds One-to-One Correspondence between Peaks or interactions
 from Replicate 1 and 2
+}
+\examples{
+rep1.df <- idr2d:::chipseq$rep1.df
+rep1.df$value <- preprocess(rep1.df$value, "log")
+
+rep2.df <- idr2d:::chipseq$rep2.df
+rep2.df$value <- preprocess(rep2.df$value, "log")
+
+mapping <- establishBijection(rep1.df, rep2.df, analysis.type = "IDR1D")
+
 }

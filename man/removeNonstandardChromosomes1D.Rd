@@ -20,6 +20,13 @@ removeNonstandardChromosomes1D(x)
   to rank the peaks
 }}
 }
+\value{
+\code{x} without non-standard chromosomes.
+}
 \description{
 Removes Peaks on Non-standard Chromosomes
+}
+\examples{
+rep1.df <- removeNonstandardChromosomes1D(idr2d:::chipseq$rep1.df)
+
 }

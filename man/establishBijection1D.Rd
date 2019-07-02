@@ -105,10 +105,10 @@ lower \emph{ambiguity resolution value}.
 }
 \examples{
 rep1.df <- idr2d:::chipseq$rep1.df
-rep1.df$value <- preprocess(rep1.df$value, "log.additive.inverse")
+rep1.df$value <- preprocess(rep1.df$value, "log")
 
 rep2.df <- idr2d:::chipseq$rep2.df
-rep2.df$value <- preprocess(rep2.df$value, "log.additive.inverse")
+rep2.df$value <- preprocess(rep2.df$value, "log")
 
 mapping <- establishBijection1D(rep1.df, rep2.df)
 
