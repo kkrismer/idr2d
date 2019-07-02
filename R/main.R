@@ -40,10 +40,10 @@
 #'
 #' @examples
 #' rep1.df <- idr2d:::chipseq$rep1.df
-#' rep1.df$value <- preprocess(rep1.df$value, "log.additive.inverse")
+#' rep1.df$value <- preprocess(rep1.df$value, "log")
 #'
 #' rep2.df <- idr2d:::chipseq$rep2.df
-#' rep2.df$value <- preprocess(rep2.df$value, "log.additive.inverse")
+#' rep2.df$value <- preprocess(rep2.df$value, "log")
 #'
 #' mapping <- establishBijection1D(rep1.df, rep2.df)
 #'
@@ -138,9 +138,21 @@ establishBijection2D <- function(rep1.df, rep2.df,
 #' @param ambiguity.resolution.method defines how ambiguous assignments
 #' (when one interaction or peak in replicate 1 overlaps with
 #' multiple interactions or peaks in replicate 2 or vice versa)
-#' are resolved. For available methods, see \code{\link{overlap1D}} and
+#' are resolved. For available methods, see \code{\link{overlap1D}} or
 #' \code{\link{overlap2D}}, respectively.
 #' @inheritParams anchorOverlap
+#'
+#' @return See \code{\link{establishBijection1D}} or
+#' \code{\link{establishBijection2D}}, respectively.
+#'
+#' @examples
+#' rep1.df <- idr2d:::chipseq$rep1.df
+#' rep1.df$value <- preprocess(rep1.df$value, "log")
+#'
+#' rep2.df <- idr2d:::chipseq$rep2.df
+#' rep2.df$value <- preprocess(rep2.df$value, "log")
+#'
+#' mapping <- establishBijection(rep1.df, rep2.df, analysis.type = "IDR1D")
 #'
 #' @importFrom dplyr arrange
 #' @importFrom dplyr desc
@@ -567,6 +579,10 @@ estimateIDR2D <- function(rep1.df, rep2.df,
 #' @inheritParams idr::est.IDR
 #' @inheritParams preprocess
 #' @inheritParams establishBijection
+#'
+#'
+#' @return See \code{\link{estimateIDR1D}} or
+#' \code{\link{estimateIDR2D}}, respectively.
 #'
 #' @examples
 #' idr.results <- estimateIDR(idr2d:::chiapet$rep1.df,

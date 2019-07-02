@@ -128,7 +128,8 @@ rankIDRScatterplot <- function(df, remove.na = TRUE,
         ggplot2::labs(x = xlab, y = ylab, color = "IDR", title = title)
 
     if (color.gradient == "rainbow") {
-        g <- g + ggplot2::scale_color_gradientn(colours = grDevices::rainbow(10),
+        g <- g + ggplot2::scale_color_gradientn(colours =
+                                                    grDevices::rainbow(10),
                                                 limits = c(0, 1.0),
                                                 breaks = c(0.0, 0.25, 0.5,
                                                            0.75, 1.0))
@@ -274,7 +275,8 @@ valueIDRScatterplot <- function(df, remove.na = TRUE, remove.outliers = TRUE,
         ggplot2::labs(x = xlab, y = ylab, color = "IDR", title = title)
 
     if (color.gradient == "rainbow") {
-        g <- g + ggplot2::scale_color_gradientn(colours = grDevices::rainbow(10),
+        g <- g + ggplot2::scale_color_gradientn(colours =
+                                                    grDevices::rainbow(10),
                                                 limits = c(0, 1.0),
                                                 breaks = c(0.0, 0.25, 0.5,
                                                            0.75, 1.0))

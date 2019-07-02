@@ -660,6 +660,12 @@ overlap2D <- function(rep1.df, rep2.df,
 #'   column 4: \tab \code{value} \tab numeric; p-value, FDR, or heuristic used
 #'   to rank the peaks
 #' }
+#'
+#' @return \code{x} without non-standard chromosomes.
+#'
+#' @examples
+#' rep1.df <- removeNonstandardChromosomes1D(idr2d:::chipseq$rep1.df)
+#'
 #' @importFrom GenomicRanges GRanges
 #' @importFrom IRanges IRanges
 #' @importFrom GenomeInfoDb keepStandardChromosomes
@@ -695,6 +701,12 @@ removeNonstandardChromosomes1D <- function(x) {
 #'   column 7: \tab \code{value} \tab numeric; p-value, FDR, or heuristic used
 #'   to rank the interactions
 #' }
+#'
+#' @examples
+#' rep1.df <- removeNonstandardChromosomes2D(idr2d:::chiapet$rep1.df)
+#'
+#' @return \code{x} without non-standard chromosomes.
+#'
 #' @importFrom GenomicRanges GRanges
 #' @importFrom IRanges IRanges
 #' @importFrom GenomeInfoDb keepStandardChromosomes
