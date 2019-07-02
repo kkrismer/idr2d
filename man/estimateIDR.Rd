@@ -33,11 +33,11 @@ p-values, \code{"log.additive.inverse"} is recommended. The following
 transformations are supported:
 \tabular{rl}{
   \code{"identity"} \tab no transformation is performed on \code{x}\cr
-  \code{"additive.inverse"} \tab \code{x = -x}\cr
-  \code{"multiplicative.inverse"} \tab \code{x = 1 / x}\cr
-  \code{"log"} \tab \code{x = log(x)}. Note: zeros are replaced by
+  \code{"additive.inverse"} \tab \code{x′ = -x}\cr
+  \code{"multiplicative.inverse"} \tab \code{x′ = 1 / x}\cr
+  \code{"log"} \tab \code{x′ = log(x)}. Note: zeros are replaced by
   \code{.Machine$double.xmin}\cr
-  \code{"log.additive.inverse"} \tab \code{x = -log(x)}, recommended if
+  \code{"log.additive.inverse"} \tab \code{x′ = -log(x)}, recommended if
   \code{x} are p-values. Note: zeros are replaced by
   \code{.Machine$double.xmin}
 }
