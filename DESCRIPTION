@@ -13,7 +13,6 @@ Authors@R:
              role = c("ths", "cph"),
              email = "gifford@mit.edu",
              comment = c(ORCID = "0000-0003-1709-4034")))
-Maintainer: Konstantin Krismer <krismer@mit.edu>
 Description: This package measures reproducibility between
     genomic experiments that produce two-dimensional peaks (interactions
     between peaks), such as HiC and ChIA-PET. idr2d is an extension of the
@@ -22,17 +21,20 @@ Description: This package measures reproducibility between
 License: MIT + file LICENSE
 URL: https://idr2d.mit.edu
 Depends:
-    R (>= 3.4)
+    R (>= 3.6)
 Imports:
     dplyr (>= 0.7.6),
     futile.logger (>= 1.4.3),
     GenomeInfoDb (>= 1.14.0),
     GenomicRanges (>= 1.30),
     ggplot2 (>= 3.1.1),
+    grDevices,
     idr (>= 1.2),
     IRanges (>= 2.18.0),
     magrittr (>= 1.5),
-    stringr (>= 1.3.1)
+    stats,
+    stringr (>= 1.3.1),
+    utils
 Suggests:
     DT (>= 0.4),
     htmltools (>= 0.3.6),
