@@ -1,5 +1,5 @@
 Package: idr2d
-Title: Irreproducible discovery rate for genomic interaction
+Title: Irreproducible discovery rate for genomic interactions
     data
 Version: 0.99.2
 Authors@R: 
@@ -15,7 +15,7 @@ Authors@R:
              comment = c(ORCID = "0000-0003-1709-4034")))
 Description: This package measures reproducibility between
     genomic experiments that produce two-dimensional peaks (interactions
-    between peaks), such as HiC and ChIA-PET. idr2d is an extension of the
+    between peaks), such as ChIA-PET and HiChIP. idr2d is an extension of the
     original idr package, which is intended for (one-dimensional) ChIP-seq
     peaks.
 License: MIT + file LICENSE
