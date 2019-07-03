@@ -671,9 +671,9 @@ overlap2D <- function(rep1.df, rep2.df,
 #' @importFrom GenomeInfoDb keepStandardChromosomes
 #' @export
 removeNonstandardChromosomes1D <- function(x) {
-    x <- GenomicRanges::GRanges(x$chr,
-                                IRanges::IRanges(x$start, x$end),
-                                value = x$value)
+    x <- GenomicRanges::GRanges(x[, 1],
+                                IRanges::IRanges(x[, 2], x[, 3]),
+                                value = x[, 4])
     x <- GenomeInfoDb::keepStandardChromosomes(x, pruning.mode = "coarse")
     x.df <- as.data.frame(x)
     x.df$width <- NULL
@@ -718,9 +718,9 @@ removeNonstandardChromosomes2D <- function(x) {
     chr.a <- start.a <- end.a <- chr.b <- start.b <- end.b <- value <- NULL
 
     x$idx <- seq_len(nrow(x))
-    anchor.a <- GenomicRanges::GRanges(x$chr.a,
-                                       IRanges::IRanges(x$start.a, x$end.a),
-                                       value = x$value,
+    anchor.a <- GenomicRanges::GRanges(x[, 1],
+                                       IRanges::IRanges(x[, 2], x[, 3]),
+                                       value = x[, 7],
                                        idx = x$idx)
     anchor.a <- GenomeInfoDb::keepStandardChromosomes(anchor.a,
                                                       pruning.mode = "coarse")
@@ -729,8 +729,8 @@ removeNonstandardChromosomes2D <- function(x) {
     anchor.a.df$strand <- NULL
     colnames(anchor.a.df) <- c("chr.a", "start.a", "end.a", "value", "idx")
 
-    anchor.b <- GenomicRanges::GRanges(x$chr.b,
-                                       IRanges::IRanges(x$start.b, x$end.b),
+    anchor.b <- GenomicRanges::GRanges(x[, 4],
+                                       IRanges::IRanges(x[, 5], x[, 6]),
                                        idx = x$idx)
     anchor.b <- GenomeInfoDb::keepStandardChromosomes(anchor.b,
                                                       pruning.mode = "coarse")
