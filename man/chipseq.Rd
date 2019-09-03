@@ -4,8 +4,8 @@
 \name{chipseq}
 \alias{chipseq}
 \title{Example Genomic Peak Data Set}
-\format{A list with two components, the data frames \code{rep1.df} and
-\code{rep2.df}, which have the following four columns:
+\format{A list with two components, the data frames \code{rep1_df} and
+\code{rep2_df}, which have the following four columns:
 \tabular{rll}{
   column 1: \tab \code{chr} \tab character; genomic location of peak -
   chromosome (e.g., \code{"chr3"})\cr

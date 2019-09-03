@@ -4,7 +4,7 @@
 #' @description
 #' Identifies all overlapping anchor pairs (m:n mapping).
 #'
-#' @param rep1.anchor data frame with the following columns:
+#' @param rep1_anchor data frame with the following columns:
 #' \tabular{rll}{
 #'   column 1: \tab \code{chr} \tab character; genomic location of anchor in
 #'   replicate 1 - chromosome (e.g., \code{"chr3"})\cr
@@ -13,7 +13,7 @@
 #'   column 3: \tab \code{end} \tab integer; genomic location of anchor in
 #'   replicate 1 - end coordinate
 #' }
-#' @param rep2.anchor data frame with the following columns:
+#' @param rep2_anchor data frame with the following columns:
 #' \tabular{rll}{
 #'   column 1: \tab \code{chr} \tab character; genomic location of anchor in
 #'   replicate 2 - chromosome (e.g., \code{"chr3"})\cr
@@ -22,7 +22,7 @@
 #'   column 3: \tab \code{end} \tab integer; genomic location of anchor in
 #'   replicate 2 - end coordinate
 #' }
-#' @param max.gap integer; maximum gap in nucleotides allowed between two
+#' @param max_gap integer; maximum gap in nucleotides allowed between two
 #' anchors for
 #' them to be considered as overlapping
 #' (defaults to zero, no gap between anchors)
@@ -30,24 +30,24 @@
 #' @return A data frame containing overlapping
 #'  anchor pairs with the following columns:
 #' \tabular{rll}{
-#'   column 1: \tab \code{rep1.idx} \tab anchor index in data frame
-#'   \code{rep1.anchor} \cr
-#'   column 2: \tab \code{rep2.idx} \tab anchor index in data frame
-#'   \code{rep2.anchor}
+#'   column 1: \tab \code{rep1_idx} \tab anchor index in data frame
+#'   \code{rep1_anchor} \cr
+#'   column 2: \tab \code{rep2_idx} \tab anchor index in data frame
+#'   \code{rep2_anchor}
 #' }
 #'
 #' @examples
-#' rep1.df <- idr2d:::chiapet$rep1.df
-#' rep2.df <- idr2d:::chiapet$rep2.df
+#' rep1_df <- idr2d:::chiapet$rep1_df
+#' rep2_df <- idr2d:::chiapet$rep2_df
 #'
-#' rep1.anchor.a <- data.frame(chr = rep1.df[, 1],
-#'                             start = rep1.df[, 2],
-#'                             end = rep1.df[, 3])
-#' rep2.anchor.a <- data.frame(chr = rep2.df[, 1],
-#'                             start = rep2.df[, 2],
-#'                             end = rep2.df[, 3])
+#' rep1_anchor_a <- data.frame(chr = rep1_df[, 1],
+#'                             start = rep1_df[, 2],
+#'                             end = rep1_df[, 3])
+#' rep2_anchor_a <- data.frame(chr = rep2_df[, 1],
+#'                             start = rep2_df[, 2],
+#'                             end = rep2_df[, 3])
 #'
-#' anchor.a.overlap <- anchorOverlap(rep1.anchor.a, rep2.anchor.a)
+#' anchor_a_overlap <- anchorOverlap(rep1_anchor_a, rep2_anchor_a)
 #'
 #'
 #' @importFrom GenomicRanges makeGRangesFromDataFrame
@@ -55,24 +55,24 @@
 #' @importFrom stringr str_sort
 #' @importFrom GenomicRanges findOverlaps
 #' @export
-anchorOverlap <- function(rep1.anchor, rep2.anchor, max.gap = 0L) {
-    rep1.ranges <- GenomicRanges::makeGRangesFromDataFrame(rep1.anchor)
-    rep2.ranges <- GenomicRanges::makeGRangesFromDataFrame(rep2.anchor)
+anchorOverlap <- function(rep1_anchor, rep2_anchor, max_gap = 0L) {
+    rep1_ranges <- GenomicRanges::makeGRangesFromDataFrame(rep1_anchor)
+    rep2_ranges <- GenomicRanges::makeGRangesFromDataFrame(rep2_anchor)
 
     # adjust seq levels
-    seq.levels.r1 <- GenomeInfoDb::seqlevels(rep1.ranges)
-    seq.levels.r2 <- GenomeInfoDb::seqlevels(rep2.ranges)
-    combined.seq.levels <- stringr::str_sort(union(seq.levels.r1,
-                                                   seq.levels.r2))
-    GenomeInfoDb::seqlevels(rep1.ranges) <- combined.seq.levels
-    GenomeInfoDb::seqlevels(rep2.ranges) <- combined.seq.levels
+    seq_levels_r1 <- GenomeInfoDb::seqlevels(rep1_ranges)
+    seq_levels_r2 <- GenomeInfoDb::seqlevels(rep2_ranges)
+    combined_seq_levels <- stringr::str_sort(union(seq_levels_r1,
+                                                   seq_levels_r2))
+    GenomeInfoDb::seqlevels(rep1_ranges) <- combined_seq_levels
+    GenomeInfoDb::seqlevels(rep2_ranges) <- combined_seq_levels
 
     # get overlap between replicates, accept 1000 bp gap
-    overlap.df <- data.frame(GenomicRanges::findOverlaps(rep1.ranges,
-                                                         rep2.ranges,
-                                                         maxgap = max.gap))
-    colnames(overlap.df) <- c("rep1.idx", "rep2.idx")
-    return(overlap.df)
+    overlap_df <- data.frame(GenomicRanges::findOverlaps(rep1_ranges,
+                                                         rep2_ranges,
+                                                         maxgap = max_gap))
+    colnames(overlap_df) <- c("rep1_idx", "rep2_idx")
+    return(overlap_df)
 }
 
 #' @title Distance between Midpoints of two Peaks
@@ -108,11 +108,11 @@ anchorOverlap <- function(rep1.anchor, rep2.anchor, max.gap = 0L) {
 #'                           c(120, 130, 130))
 #'
 #' @export
-calculateMidpointDistance1D <- function(peak1.start, peak1.end,
-                                        peak2.start, peak2.end) {
-    midpoint.peak1 <- abs(peak1.start + (peak1.end - peak1.start) / 2)
-    midpoint.peak2 <- abs(peak2.start + (peak2.end - peak2.start) / 2)
-    return(as.integer(abs(midpoint.peak1 - midpoint.peak2)))
+calculateMidpointDistance1D <- function(peak1_start, peak1_end,
+                                        peak2_start, peak2_end) {
+    midpoint_peak1 <- abs(peak1_start + (peak1_end - peak1_start) / 2)
+    midpoint_peak2 <- abs(peak2_start + (peak2_end - peak2_start) / 2)
+    return(as.integer(abs(midpoint_peak1 - midpoint_peak2)))
 }
 
 #' @title Distance between Anchor Midpoints of two Interactions
@@ -159,28 +159,28 @@ calculateMidpointDistance1D <- function(peak1.start, peak1.end,
 #'                           c(260, 270, 240, 260))
 #'
 #' @export
-calculateMidpointDistance2D <- function(int1.anchor.a.start,
-                                        int1.anchor.a.end,
-                                        int1.anchor.b.start,
-                                        int1.anchor.b.end,
-                                        int2.anchor.a.start,
-                                        int2.anchor.a.end,
-                                        int2.anchor.b.start,
-                                        int2.anchor.b.end) {
-    midpoint.int1.anchor.a <- abs(int1.anchor.a.start +
-                                      (int1.anchor.a.end -
-                                           int1.anchor.a.start) / 2)
-    midpoint.int1.anchor.b <- abs(int1.anchor.b.start +
-                                      (int1.anchor.b.end -
-                                           int1.anchor.b.start) / 2)
-    midpoint.int2.anchor.a <- abs(int2.anchor.a.start +
-                                      (int2.anchor.a.end -
-                                           int2.anchor.a.start) / 2)
-    midpoint.int2.anchor.b <- abs(int2.anchor.b.start +
-                                      (int2.anchor.b.end -
-                                           int2.anchor.b.start) / 2)
-    return(as.integer(abs(midpoint.int1.anchor.a - midpoint.int2.anchor.a) +
-                          abs(midpoint.int1.anchor.b - midpoint.int2.anchor.b)))
+calculateMidpointDistance2D <- function(int1_anchor_a_start,
+                                        int1_anchor_a_end,
+                                        int1_anchor_b_start,
+                                        int1_anchor_b_end,
+                                        int2_anchor_a_start,
+                                        int2_anchor_a_end,
+                                        int2_anchor_b_start,
+                                        int2_anchor_b_end) {
+    midpoint_int1_anchor_a <- abs(int1_anchor_a_start +
+                                      (int1_anchor_a_end -
+                                           int1_anchor_a_start) / 2)
+    midpoint_int1_anchor_b <- abs(int1_anchor_b_start +
+                                      (int1_anchor_b_end -
+                                           int1_anchor_b_start) / 2)
+    midpoint_int2_anchor_a <- abs(int2_anchor_a_start +
+                                      (int2_anchor_a_end -
+                                           int2_anchor_a_start) / 2)
+    midpoint_int2_anchor_b <- abs(int2_anchor_b_start +
+                                      (int2_anchor_b_end -
+                                           int2_anchor_b_start) / 2)
+    return(as.integer(abs(midpoint_int1_anchor_a - midpoint_int2_anchor_a) +
+                          abs(midpoint_int1_anchor_b - midpoint_int2_anchor_b)))
 }
 
 #' @title Relative Anchor Overlap of two Peaks
@@ -191,13 +191,13 @@ calculateMidpointDistance2D <- function(int1.anchor.a.start,
 #' interaction 2. The overlap (in nucleotides) is then normalized by the length
 #' of the anchors.
 #'
-#' @param peak1.start integer vector; genomic start coordinate(s)
+#' @param peak1_start integer vector; genomic start coordinate(s)
 #' of peak in replicate 1
-#' @param peak1.end integer vector; genomic end coordinate(s)
+#' @param peak1_end integer vector; genomic end coordinate(s)
 #' of peak in replicate 1
-#' @param peak2.start integer vector; genomic start coordinate(s)
+#' @param peak2_start integer vector; genomic start coordinate(s)
 #' of peak in replicate 2
-#' @param peak2.end integer vector; genomic end coordinate(s)
+#' @param peak2_end integer vector; genomic end coordinate(s)
 #' of peak in replicate 2
 #'
 #' @return numeric vector; relative overlaps between peak pairs
@@ -225,15 +225,15 @@ calculateMidpointDistance2D <- function(int1.anchor.a.start,
 #'                          c(100, 100, 130, 200),
 #'                          c(120, 110, 140, 220))
 #' @export
-calculateRelativeOverlap1D <- function(peak1.start, peak1.end,
-                                       peak2.start, peak2.end) {
-    peak.overlap <- pmin(peak1.end, peak2.end) -
-        pmax(peak1.start, peak2.start)
+calculateRelativeOverlap1D <- function(peak1_start, peak1_end,
+                                       peak2_start, peak2_end) {
+    peak_overlap <- pmin(peak1_end, peak2_end) -
+        pmax(peak1_start, peak2_start)
 
-    peak.combined.length <- pmax(peak1.end, peak2.end) -
-        pmin(peak1.start, peak2.start)
+    peak_combined_length <- pmax(peak1_end, peak2_end) -
+        pmin(peak1_start, peak2_start)
 
-    return(peak.overlap / peak.combined.length)
+    return(peak_overlap / peak_combined_length)
 }
 
 #' @title Relative Anchor Overlap of two Interactions
@@ -247,21 +247,21 @@ calculateRelativeOverlap1D <- function(peak1.start, peak1.end,
 #' Note: anchors A and B of the same interaction have to be on the same
 #' chromosome; start coordinate is always less than end coordinate
 #'
-#' @param int1.anchor.a.start integer vector; genomic start coordinate(s)
+#' @param int1_anchor_a_start integer vector; genomic start coordinate(s)
 #' of anchor A in replicate 1 interaction
-#' @param int1.anchor.a.end integer vector; genomic end coordinate(s)
+#' @param int1_anchor_a_end integer vector; genomic end coordinate(s)
 #' of anchor A in replicate 1 interaction
-#' @param int1.anchor.b.start integer vector; genomic start coordinate(s)
+#' @param int1_anchor_b_start integer vector; genomic start coordinate(s)
 #' of anchor B in replicate 1 interaction
-#' @param int1.anchor.b.end integer vector; genomic end coordinate(s)
+#' @param int1_anchor_b_end integer vector; genomic end coordinate(s)
 #' of anchor B in replicate 1 interaction
-#' @param int2.anchor.a.start integer vector; genomic start coordinate(s)
+#' @param int2_anchor_a_start integer vector; genomic start coordinate(s)
 #' of anchor A in replicate 2 interaction
-#' @param int2.anchor.a.end integer vector; genomic end coordinate(s)
+#' @param int2_anchor_a_end integer vector; genomic end coordinate(s)
 #' of anchor A in replicate 2 interaction
-#' @param int2.anchor.b.start integer vector; genomic start coordinate(s)
+#' @param int2_anchor_b_start integer vector; genomic start coordinate(s)
 #' of anchor B in replicate 2 interaction
-#' @param int2.anchor.b.end integer vector; genomic end coordinate(s)
+#' @param int2_anchor_b_end integer vector; genomic end coordinate(s)
 #' of anchor B in replicate 2 interaction
 #'
 #' @return numeric vector; relative overlaps between interaction pairs
@@ -293,22 +293,22 @@ calculateRelativeOverlap1D <- function(peak1.start, peak1.end,
 #'                          c(240, 240, 260, 340),
 #'                          c(260, 260, 280, 350))
 #' @export
-calculateRelativeOverlap2D <- function(int1.anchor.a.start, int1.anchor.a.end,
-                                       int1.anchor.b.start, int1.anchor.b.end,
-                                       int2.anchor.a.start, int2.anchor.a.end,
-                                       int2.anchor.b.start, int2.anchor.b.end) {
-    anchor.a.overlap <- pmin(int1.anchor.a.end, int2.anchor.a.end) -
-        pmax(int1.anchor.a.start, int2.anchor.a.start)
-    anchor.b.overlap <- pmin(int1.anchor.b.end, int2.anchor.b.end) -
-        pmax(int1.anchor.b.start, int2.anchor.b.start)
+calculateRelativeOverlap2D <- function(int1_anchor_a_start, int1_anchor_a_end,
+                                       int1_anchor_b_start, int1_anchor_b_end,
+                                       int2_anchor_a_start, int2_anchor_a_end,
+                                       int2_anchor_b_start, int2_anchor_b_end) {
+    anchor_a_overlap <- pmin(int1_anchor_a_end, int2_anchor_a_end) -
+        pmax(int1_anchor_a_start, int2_anchor_a_start)
+    anchor_b_overlap <- pmin(int1_anchor_b_end, int2_anchor_b_end) -
+        pmax(int1_anchor_b_start, int2_anchor_b_start)
 
-    anchor.a.combined.length <- pmax(int1.anchor.a.end, int2.anchor.a.end) -
-        pmin(int1.anchor.a.start, int2.anchor.a.start)
-    anchor.b.combined.length <- pmax(int1.anchor.b.end, int2.anchor.b.end) -
-        pmin(int1.anchor.b.start, int2.anchor.b.start)
+    anchor_a_combined_length <- pmax(int1_anchor_a_end, int2_anchor_a_end) -
+        pmin(int1_anchor_a_start, int2_anchor_a_start)
+    anchor_b_combined_length <- pmax(int1_anchor_b_end, int2_anchor_b_end) -
+        pmin(int1_anchor_b_start, int2_anchor_b_start)
 
-    return((anchor.a.overlap + anchor.b.overlap) /
-               (anchor.a.combined.length + anchor.b.combined.length))
+    return((anchor_a_overlap + anchor_b_overlap) /
+               (anchor_a_combined_length + anchor_b_combined_length))
 }
 
 #' @title Establish m:n Mapping Between Peaks from Replicate 1 and 2
@@ -318,11 +318,11 @@ calculateRelativeOverlap2D <- function(int1.anchor.a.start, int1.anchor.a.end,
 #' For each pair of overlapping interactions, the
 #' \emph{ambiguity resolution value} (ARV) is calculated, which helps to reduce
 #' the m:n mapping to a 1:1 mapping. The semantics of the ARV depend on the
-#' specified \code{ambiguity.resolution.method}, but in general interaction
+#' specified \code{ambiguity_resolution_method}, but in general interaction
 #' pairs with lower ARVs have priority over interaction pairs with higher ARVs
 #' when the bijective mapping is established.
 #'
-#' @param rep1.df data frame of observations (i.e., genomic peaks) of
+#' @param rep1_df data frame of observations (i.e., genomic peaks) of
 #' replicate 1, with at least the following columns (position of columns
 #' matter, column names are irrelevant):
 #' \tabular{rll}{
@@ -335,7 +335,7 @@ calculateRelativeOverlap2D <- function(int1.anchor.a.start, int1.anchor.a.end,
 #'   column 4:  \tab \code{value} \tab numeric; p-value, FDR, or heuristic used
 #'   to rank the interactions
 #' }
-#' @param rep2.df data frame of observations (i.e., genomic peaks) of
+#' @param rep2_df data frame of observations (i.e., genomic peaks) of
 #' replicate 2, with the following columns (position of columns
 #' matter, column names are irrelevant):
 #' \tabular{rll}{
@@ -348,16 +348,16 @@ calculateRelativeOverlap2D <- function(int1.anchor.a.start, int1.anchor.a.end,
 #'   column 4:  \tab \code{value} \tab numeric; p-value, FDR, or heuristic used
 #'   to rank the interactions
 #' }
-#' @param ambiguity.resolution.method defines how ambiguous assignments
+#' @param ambiguity_resolution_method defines how ambiguous assignments
 #' (when one interaction in replicate 1 overlaps with multiple interactions in
 #' replicate 2 or vice versa)
 #' are resolved. Available methods:
 #' \tabular{rl}{
 #'   \code{"value"} \tab interactions are prioritized by ascending or descending
-#'   \code{value} column (see \code{sorting.direction}), e.g., if two
+#'   \code{value} column (see \code{sorting_direction}), e.g., if two
 #'   interactions in replicate 1 overlap with one interaction in replicate 2,
 #'   the interaction from replicate 1 is chosen which has a lower (if
-#'   \code{sorting.direction} is \code{"ascending"}) or higher (if
+#'   \code{sorting_direction} is \code{"ascending"}) or higher (if
 #'   \code{"descending"}) value \cr
 #'   \code{"overlap"} \tab the interaction pair is chosen which has the highest
 #'   relative overlap, i.e., overlap in nucleotides of replicate 1 interaction
@@ -376,87 +376,87 @@ calculateRelativeOverlap2D <- function(int1.anchor.a.start, int1.anchor.a.end,
 #'
 #' @return data frame with the following columns:
 #' \tabular{rll}{
-#'   column 1:  \tab \code{rep1.idx} \tab index of interaction in replicate 1
-#'   (i.e., row index in \code{rep1.df})\cr
-#'   column 2:  \tab \code{rep2.idx} \tab index of interaction in replicate 2
-#'   (i.e., row index in \code{rep2.df})\cr
+#'   column 1:  \tab \code{rep1_idx} \tab index of interaction in replicate 1
+#'   (i.e., row index in \code{rep1_df})\cr
+#'   column 2:  \tab \code{rep2_idx} \tab index of interaction in replicate 2
+#'   (i.e., row index in \code{rep2_df})\cr
 #'   column 3:  \tab \code{arv} \tab ambiguity resolution value used turn
 #'   m:n mapping into 1:1 mapping. Interaction pairs with lower \code{arv}
 #'   are prioritized.
 #' }
 #'
 #' @examples
-#' rep1.df <- idr2d:::chipseq$rep1.df
-#' rep1.df$value <- preprocess(rep1.df$value, "log.additive.inverse")
+#' rep1_df <- idr2d:::chipseq$rep1_df
+#' rep1_df$value <- preprocess(rep1_df$value, "log_additive_inverse")
 #'
-#' rep2.df <- idr2d:::chipseq$rep2.df
-#' rep2.df$value <- preprocess(rep2.df$value, "log.additive.inverse")
+#' rep2_df <- idr2d:::chipseq$rep2_df
+#' rep2_df$value <- preprocess(rep2_df$value, "log_additive_inverse")
 #'
 #' # shuffle to break preexisting order
-#' rep1.df <- rep1.df[sample.int(nrow(rep1.df)), ]
-#' rep2.df <- rep2.df[sample.int(nrow(rep2.df)), ]
+#' rep1_df <- rep1_df[sample.int(nrow(rep1_df)), ]
+#' rep2_df <- rep2_df[sample.int(nrow(rep2_df)), ]
 #'
 #' # sort by value column
-#' rep1.df <- dplyr::arrange(rep1.df, value)
-#' rep2.df <- dplyr::arrange(rep2.df, value)
+#' rep1_df <- dplyr::arrange(rep1_df, value)
+#' rep2_df <- dplyr::arrange(rep2_df, value)
 #'
-#' pairs.df <- overlap1D(rep1.df, rep2.df)
+#' pairs_df <- overlap1D(rep1_df, rep2_df)
 #'
 #' @export
-overlap1D <- function(rep1.df, rep2.df,
-                      ambiguity.resolution.method = c("overlap",
+overlap1D <- function(rep1_df, rep2_df,
+                      ambiguity_resolution_method = c("overlap",
                                                       "midpoint",
                                                       "value"),
-                      max.gap = 0L) {
+                      max_gap = 0L) {
     # argument handling
-    ambiguity.resolution.method <- match.arg(ambiguity.resolution.method,
+    ambiguity_resolution_method <- match.arg(ambiguity_resolution_method,
                                              choices = c("overlap",
                                                          "midpoint",
                                                          "value"))
 
-    if (nrow(rep1.df) > 0 && nrow(rep2.df) > 0) {
-        overlaps.df <- anchorOverlap(
-            data.frame(chr = rep1.df[, 1],
-                       start = rep1.df[, 2],
-                       end = rep1.df[, 3]),
-            data.frame(chr = rep2.df[, 1],
-                       start = rep2.df[, 2],
-                       end = rep2.df[, 3]),
-            max.gap = max.gap
+    if (nrow(rep1_df) > 0 && nrow(rep2_df) > 0) {
+        overlaps_df <- anchorOverlap(
+            data.frame(chr = rep1_df[, 1],
+                       start = rep1_df[, 2],
+                       end = rep1_df[, 3]),
+            data.frame(chr = rep2_df[, 1],
+                       start = rep2_df[, 2],
+                       end = rep2_df[, 3]),
+            max_gap = max_gap
         )
 
-        idx.rep1 <- overlaps.df$rep1.idx
-        idx.rep2 <- overlaps.df$rep2.idx
+        idx_rep1 <- overlaps_df$rep1_idx
+        idx_rep2 <- overlaps_df$rep2_idx
 
         # arv is ambiguity resolution value
         # the lower, the better
-        if (ambiguity.resolution.method == "value") {
-            arv <- rep1.df[idx.rep1, 4] + rep2.df[idx.rep2, 4]
+        if (ambiguity_resolution_method == "value") {
+            arv <- rep1_df[idx_rep1, 4] + rep2_df[idx_rep2, 4]
             arv <- (-1) * arv
-        } else if (ambiguity.resolution.method == "overlap") {
+        } else if (ambiguity_resolution_method == "overlap") {
             arv <- calculateRelativeOverlap1D(
-                rep1.df[idx.rep1, 2], rep1.df[idx.rep1, 3],
-                rep2.df[idx.rep2, 2], rep2.df[idx.rep2, 3]
+                rep1_df[idx_rep1, 2], rep1_df[idx_rep1, 3],
+                rep2_df[idx_rep2, 2], rep2_df[idx_rep2, 3]
             )
             arv <- (-1) * arv
-        } else if (ambiguity.resolution.method == "midpoint") {
+        } else if (ambiguity_resolution_method == "midpoint") {
             arv <- calculateMidpointDistance1D(
-                rep1.df[idx.rep1, 2], rep1.df[idx.rep1, 3],
-                rep2.df[idx.rep2, 2], rep2.df[idx.rep2, 3]
+                rep1_df[idx_rep1, 2], rep1_df[idx_rep1, 3],
+                rep2_df[idx_rep2, 2], rep2_df[idx_rep2, 3]
             )
         } else {
             stop(paste0("unknown ambiguity resolution method: ",
-                        ambiguity.resolution.method))
+                        ambiguity_resolution_method))
         }
 
-        pairs.df <- data.frame(rep1.idx = idx.rep1,
-                               rep2.idx = idx.rep2,
+        pairs_df <- data.frame(rep1_idx = idx_rep1,
+                               rep2_idx = idx_rep2,
                                arv = arv)
     } else {
-        pairs.df <- data.frame()
+        pairs_df <- data.frame()
     }
 
-    return(pairs.df)
+    return(pairs_df)
 }
 
 
@@ -467,58 +467,58 @@ overlap1D <- function(rep1.df, rep2.df,
 #' For each pair of overlapping interactions, the
 #' \emph{ambiguity resolution value} (ARV) is calculated, which helps to reduce
 #' the m:n mapping to a 1:1 mapping. The semantics of the ARV depend on the
-#' specified \code{ambiguity.resolution.method}, but in general interaction
+#' specified \code{ambiguity_resolution_method}, but in general interaction
 #' pairs with lower ARVs have priority over interaction pairs with higher ARVs
 #' when the bijective mapping is established.
 #'
-#' @param rep1.df data frame of observations (i.e., genomic interactions) of
+#' @param rep1_df data frame of observations (i.e., genomic interactions) of
 #' replicate 1, with at least the following columns (position of columns
 #' matter, column names are irrelevant):
 #' \tabular{rll}{
-#'   column 1: \tab \code{chr.a} \tab character; genomic location of anchor A -
+#'   column 1: \tab \code{chr_a} \tab character; genomic location of anchor A -
 #'   chromosome (e.g., \code{"chr3"})\cr
-#'   column 2: \tab \code{start.a} \tab integer; genomic location of anchor A -
+#'   column 2: \tab \code{start_a} \tab integer; genomic location of anchor A -
 #'   start coordinate\cr
-#'   column 3: \tab \code{end.a} \tab integer; genomic location of anchor A -
+#'   column 3: \tab \code{end_a} \tab integer; genomic location of anchor A -
 #'   end coordinate\cr
-#'   column 4: \tab \code{chr.b} \tab character; genomic location of anchor B -
+#'   column 4: \tab \code{chr_b} \tab character; genomic location of anchor B -
 #'   chromosome (e.g., \code{"chr3"})\cr
-#'   column 5: \tab \code{start.b} \tab integer; genomic location of anchor B -
+#'   column 5: \tab \code{start_b} \tab integer; genomic location of anchor B -
 #'   start coordinate\cr
-#'   column 6: \tab \code{end.b} \tab integer; genomic location of anchor B -
+#'   column 6: \tab \code{end_b} \tab integer; genomic location of anchor B -
 #'   end coordinate\cr
 #'   column 7: \tab \code{value} \tab numeric; p-value, FDR, or heuristic
 #'   used to rank the interactions
 #' }
-#' @param rep2.df data frame of observations (i.e., genomic interactions) of
+#' @param rep2_df data frame of observations (i.e., genomic interactions) of
 #' replicate 2, with the following columns (position of columns
 #' matter, column names are irrelevant):
 #' \tabular{rll}{
-#'   column 1: \tab \code{chr.a} \tab character; genomic location of anchor A -
+#'   column 1: \tab \code{chr_a} \tab character; genomic location of anchor A -
 #'   chromosome (e.g., \code{"chr3"})\cr
-#'   column 2: \tab \code{start.a} \tab integer; genomic location of anchor A -
+#'   column 2: \tab \code{start_a} \tab integer; genomic location of anchor A -
 #'   start coordinate\cr
-#'   column 3: \tab \code{end.a} \tab integer; genomic location of anchor A -
+#'   column 3: \tab \code{end_a} \tab integer; genomic location of anchor A -
 #'   end coordinate\cr
-#'   column 4: \tab \code{chr.b} \tab character; genomic location of anchor B -
+#'   column 4: \tab \code{chr_b} \tab character; genomic location of anchor B -
 #'   chromosome (e.g., \code{"chr3"})\cr
-#'   column 5: \tab \code{start.b} \tab integer; genomic location of anchor B -
+#'   column 5: \tab \code{start_b} \tab integer; genomic location of anchor B -
 #'   start coordinate\cr
-#'   column 6: \tab \code{end.b} \tab integer; genomic location of anchor B -
+#'   column 6: \tab \code{end_b} \tab integer; genomic location of anchor B -
 #'   end coordinate\cr
 #'   column 7: \tab \code{value} \tab numeric; p-value, FDR, or heuristic used
 #'   to rank the interactions
 #' }
-#' @param ambiguity.resolution.method defines how ambiguous assignments
+#' @param ambiguity_resolution_method defines how ambiguous assignments
 #' (when one interaction in replicate 1 overlaps with multiple interactions in
 #' replicate 2 or vice versa)
 #' are resolved. Available methods:
 #' \tabular{rl}{
 #'   \code{"value"} \tab interactions are prioritized by ascending or descending
-#'   \code{value} column (see \code{sorting.direction}), e.g., if two
+#'   \code{value} column (see \code{sorting_direction}), e.g., if two
 #'   interactions in replicate 1 overlap with one interaction in replicate 2,
 #'   the interaction from replicate 1 is chosen which has a lower (if
-#'   \code{sorting.direction} is \code{"ascending"}) or higher (if
+#'   \code{sorting_direction} is \code{"ascending"}) or higher (if
 #'   \code{"descending"}) value \cr
 #'   \code{"overlap"} \tab the interaction pair is chosen which has the highest
 #'   relative overlap, i.e., overlap in nucleotides of replicate 1 interaction
@@ -537,113 +537,113 @@ overlap1D <- function(rep1.df, rep2.df,
 #'
 #' @return data frame with the following columns:
 #' \tabular{rll}{
-#'   column 1: \tab \code{rep1.idx} \tab index of interaction in replicate 1
-#'   (i.e., row index in \code{rep1.df})\cr
-#'   column 2: \tab \code{rep2.idx} \tab index of interaction in replicate 2
-#'   (i.e., row index in \code{rep2.df})\cr
+#'   column 1: \tab \code{rep1_idx} \tab index of interaction in replicate 1
+#'   (i.e., row index in \code{rep1_df})\cr
+#'   column 2: \tab \code{rep2_idx} \tab index of interaction in replicate 2
+#'   (i.e., row index in \code{rep2_df})\cr
 #'   column 3: \tab \code{arv} \tab ambiguity resolution value used turn
 #'   m:n mapping into 1:1 mapping. Interaction pairs with lower \code{arv}
 #'   are prioritized.
 #' }
 #'
 #' @examples
-#' rep1.df <- idr2d:::chiapet$rep1.df
-#' rep1.df$fdr <- preprocess(rep1.df$fdr, "log.additive.inverse")
+#' rep1_df <- idr2d:::chiapet$rep1_df
+#' rep1_df$fdr <- preprocess(rep1_df$fdr, "log_additive_inverse")
 #'
-#' rep2.df <- idr2d:::chiapet$rep2.df
-#' rep2.df$fdr <- preprocess(rep2.df$fdr, "log.additive.inverse")
+#' rep2_df <- idr2d:::chiapet$rep2_df
+#' rep2_df$fdr <- preprocess(rep2_df$fdr, "log_additive_inverse")
 #'
 #' # shuffle to break preexisting order
-#' rep1.df <- rep1.df[sample.int(nrow(rep1.df)), ]
-#' rep2.df <- rep2.df[sample.int(nrow(rep2.df)), ]
+#' rep1_df <- rep1_df[sample.int(nrow(rep1_df)), ]
+#' rep2_df <- rep2_df[sample.int(nrow(rep2_df)), ]
 #'
 #' # sort by value column
-#' rep1.df <- dplyr::arrange(rep1.df, rep1.df$fdr)
-#' rep2.df <- dplyr::arrange(rep2.df, rep2.df$fdr)
+#' rep1_df <- dplyr::arrange(rep1_df, rep1_df$fdr)
+#' rep2_df <- dplyr::arrange(rep2_df, rep2_df$fdr)
 #'
-#' pairs.df <- overlap2D(rep1.df, rep2.df)
+#' pairs_df <- overlap2D(rep1_df, rep2_df)
 #'
 #' @export
-overlap2D <- function(rep1.df, rep2.df,
-                      ambiguity.resolution.method = c("overlap",
+overlap2D <- function(rep1_df, rep2_df,
+                      ambiguity_resolution_method = c("overlap",
                                                       "midpoint",
                                                       "value"),
-                      max.gap = 0L) {
+                      max_gap = 0L) {
     # argument handling
-    ambiguity.resolution.method <- match.arg(ambiguity.resolution.method,
+    ambiguity_resolution_method <- match.arg(ambiguity_resolution_method,
                                              choices = c("overlap",
                                                          "midpoint",
                                                          "value"))
-    if (nrow(rep1.df) > 0 && nrow(rep2.df) > 0) {
-        overlaps.anchorsA.df <- anchorOverlap(
-            data.frame(chr = rep1.df[, 1],
-                       start = rep1.df[, 2],
-                       end = rep1.df[, 3]),
-            data.frame(chr = rep2.df[, 1],
-                       start = rep2.df[, 2],
-                       end = rep2.df[, 3]),
-            max.gap = max.gap
+    if (nrow(rep1_df) > 0 && nrow(rep2_df) > 0) {
+        overlaps_anchors_a_df <- anchorOverlap(
+            data.frame(chr = rep1_df[, 1],
+                       start = rep1_df[, 2],
+                       end = rep1_df[, 3]),
+            data.frame(chr = rep2_df[, 1],
+                       start = rep2_df[, 2],
+                       end = rep2_df[, 3]),
+            max_gap = max_gap
         )
-        overlaps.anchorsB.df <- anchorOverlap(
-            data.frame(chr = rep1.df[, 4],
-                       start = rep1.df[, 5],
-                       end = rep1.df[, 6]),
-            data.frame(chr = rep2.df[, 4],
-                       start = rep2.df[, 5],
-                       end = rep2.df[, 6]),
-            max.gap = max.gap
+        overlaps_anchors_b_df <- anchorOverlap(
+            data.frame(chr = rep1_df[, 4],
+                       start = rep1_df[, 5],
+                       end = rep1_df[, 6]),
+            data.frame(chr = rep2_df[, 4],
+                       start = rep2_df[, 5],
+                       end = rep2_df[, 6]),
+            max_gap = max_gap
         )
 
-        a <- paste0(overlaps.anchorsA.df$rep1.idx, "-",
-                    overlaps.anchorsA.df$rep2.idx)
-        b <- paste0(overlaps.anchorsB.df$rep1.idx, "-",
-                    overlaps.anchorsB.df$rep2.idx)
+        a <- paste0(overlaps_anchors_a_df$rep1_idx, "-",
+                    overlaps_anchors_a_df$rep2_idx)
+        b <- paste0(overlaps_anchors_b_df$rep1_idx, "-",
+                    overlaps_anchors_b_df$rep2_idx)
 
         replicates <- intersect(a, b)
 
-        idx.rep1 <- unlist(lapply(strsplit(replicates, "-", fixed = TRUE),
+        idx_rep1 <- unlist(lapply(strsplit(replicates, "-", fixed = TRUE),
                                   function(interaction) {
                                       return(as.integer(interaction[1]))
                                   }))
 
-        idx.rep2 <- unlist(lapply(strsplit(replicates, "-", fixed = TRUE),
+        idx_rep2 <- unlist(lapply(strsplit(replicates, "-", fixed = TRUE),
                                   function(interaction) {
                                       return(as.integer(interaction[2]))
                                   }))
 
         # arv is ambiguity resolution value
         # the lower, the better
-        if (ambiguity.resolution.method == "value") {
-            arv <- rep1.df[idx.rep1, 7] + rep2.df[idx.rep2, 7]
+        if (ambiguity_resolution_method == "value") {
+            arv <- rep1_df[idx_rep1, 7] + rep2_df[idx_rep2, 7]
             arv <- (-1) * arv
-        } else if (ambiguity.resolution.method == "overlap") {
+        } else if (ambiguity_resolution_method == "overlap") {
             arv <- calculateRelativeOverlap2D(
-                rep1.df[idx.rep1, 2], rep1.df[idx.rep1, 3],
-                rep1.df[idx.rep1, 5], rep1.df[idx.rep1, 6],
-                rep2.df[idx.rep2, 2], rep2.df[idx.rep2, 3],
-                rep2.df[idx.rep2, 5], rep2.df[idx.rep2, 6]
+                rep1_df[idx_rep1, 2], rep1_df[idx_rep1, 3],
+                rep1_df[idx_rep1, 5], rep1_df[idx_rep1, 6],
+                rep2_df[idx_rep2, 2], rep2_df[idx_rep2, 3],
+                rep2_df[idx_rep2, 5], rep2_df[idx_rep2, 6]
             )
             arv <- (-1) * arv
-        } else if (ambiguity.resolution.method == "midpoint") {
+        } else if (ambiguity_resolution_method == "midpoint") {
             arv <- calculateMidpointDistance2D(
-                rep1.df[idx.rep1, 2], rep1.df[idx.rep1, 3],
-                rep1.df[idx.rep1, 5], rep1.df[idx.rep1, 6],
-                rep2.df[idx.rep2, 2], rep2.df[idx.rep2, 3],
-                rep2.df[idx.rep2, 5], rep2.df[idx.rep2, 6]
+                rep1_df[idx_rep1, 2], rep1_df[idx_rep1, 3],
+                rep1_df[idx_rep1, 5], rep1_df[idx_rep1, 6],
+                rep2_df[idx_rep2, 2], rep2_df[idx_rep2, 3],
+                rep2_df[idx_rep2, 5], rep2_df[idx_rep2, 6]
             )
         } else {
             stop(paste0("unknown ambiguity resolution method: ",
-                        ambiguity.resolution.method))
+                        ambiguity_resolution_method))
         }
 
-        pairs.df <- data.frame(rep1.idx = idx.rep1,
-                               rep2.idx = idx.rep2,
+        pairs_df <- data.frame(rep1_idx = idx_rep1,
+                               rep2_idx = idx_rep2,
                                arv = arv)
     } else {
-        pairs.df <- data.frame()
+        pairs_df <- data.frame()
     }
 
-    return(pairs.df)
+    return(pairs_df)
 }
 
 
@@ -664,7 +664,7 @@ overlap2D <- function(rep1.df, rep2.df,
 #' @return \code{x} without non-standard chromosomes.
 #'
 #' @examples
-#' rep1.df <- removeNonstandardChromosomes1D(idr2d:::chipseq$rep1.df)
+#' rep1_df <- removeNonstandardChromosomes1D(idr2d:::chipseq$rep1_df)
 #'
 #' @importFrom GenomicRanges GRanges
 #' @importFrom IRanges IRanges
@@ -675,35 +675,35 @@ removeNonstandardChromosomes1D <- function(x) {
                                 IRanges::IRanges(x[, 2], x[, 3]),
                                 value = x[, 4])
     x <- GenomeInfoDb::keepStandardChromosomes(x, pruning.mode = "coarse")
-    x.df <- as.data.frame(x)
-    x.df$width <- NULL
-    x.df$strand <- NULL
-    colnames(x.df) <- c("chr", "start", "end", "value")
-    return(x.df)
+    x_df <- as.data.frame(x)
+    x_df$width <- NULL
+    x_df$strand <- NULL
+    colnames(x_df) <- c("chr", "start", "end", "value")
+    return(x_df)
 }
 
 #' @title Removes Interactions on Non-standard Chromosomes
 #' @param x data frame of genomic interactions, with the following columns
 #' (position of columns matter, column names are irrelevant):
 #' \tabular{rll}{
-#'   column 1: \tab \code{chr.a} \tab character; genomic location of anchor A -
+#'   column 1: \tab \code{chr_a} \tab character; genomic location of anchor A -
 #'   chromosome (e.g., \code{"chr3"})\cr
-#'   column 2: \tab \code{start.a} \tab integer; genomic location of anchor A -
+#'   column 2: \tab \code{start_a} \tab integer; genomic location of anchor A -
 #'   start coordinate\cr
-#'   column 3: \tab \code{end.a} \tab integer; genomic location of anchor A -
+#'   column 3: \tab \code{end_a} \tab integer; genomic location of anchor A -
 #'   end coordinate\cr
-#'   column 4: \tab \code{chr.b} \tab character; genomic location of anchor B -
+#'   column 4: \tab \code{chr_b} \tab character; genomic location of anchor B -
 #'   chromosome (e.g., \code{"chr3"})\cr
-#'   column 5: \tab \code{start.b} \tab integer; genomic location of anchor B -
+#'   column 5: \tab \code{start_b} \tab integer; genomic location of anchor B -
 #'   start coordinate\cr
-#'   column 6: \tab \code{end.b} \tab integer; genomic location of anchor B -
+#'   column 6: \tab \code{end_b} \tab integer; genomic location of anchor B -
 #'   end coordinate\cr
 #'   column 7: \tab \code{value} \tab numeric; p-value, FDR, or heuristic used
 #'   to rank the interactions
 #' }
 #'
 #' @examples
-#' rep1.df <- removeNonstandardChromosomes2D(idr2d:::chiapet$rep1.df)
+#' rep1_df <- removeNonstandardChromosomes2D(idr2d:::chiapet$rep1_df)
 #'
 #' @return \code{x} without non-standard chromosomes.
 #'
@@ -715,33 +715,33 @@ removeNonstandardChromosomes1D <- function(x) {
 #' @export
 removeNonstandardChromosomes2D <- function(x) {
     # avoid CRAN warnings
-    chr.a <- start.a <- end.a <- chr.b <- start.b <- end.b <- value <- NULL
+    chr_a <- start_a <- end_a <- chr_b <- start_b <- end_b <- value <- NULL
 
     x$idx <- seq_len(nrow(x))
-    anchor.a <- GenomicRanges::GRanges(x[, 1],
+    anchor_a <- GenomicRanges::GRanges(x[, 1],
                                        IRanges::IRanges(x[, 2], x[, 3]),
                                        value = x[, 7],
                                        idx = x$idx)
-    anchor.a <- GenomeInfoDb::keepStandardChromosomes(anchor.a,
+    anchor_a <- GenomeInfoDb::keepStandardChromosomes(anchor_a,
                                                       pruning.mode = "coarse")
-    anchor.a.df <- as.data.frame(anchor.a)
-    anchor.a.df$width <- NULL
-    anchor.a.df$strand <- NULL
-    colnames(anchor.a.df) <- c("chr.a", "start.a", "end.a", "value", "idx")
+    anchor_a_df <- as.data.frame(anchor_a)
+    anchor_a_df$width <- NULL
+    anchor_a_df$strand <- NULL
+    colnames(anchor_a_df) <- c("chr_a", "start_a", "end_a", "value", "idx")
 
-    anchor.b <- GenomicRanges::GRanges(x[, 4],
+    anchor_b <- GenomicRanges::GRanges(x[, 4],
                                        IRanges::IRanges(x[, 5], x[, 6]),
                                        idx = x$idx)
-    anchor.b <- GenomeInfoDb::keepStandardChromosomes(anchor.b,
+    anchor_b <- GenomeInfoDb::keepStandardChromosomes(anchor_b,
                                                       pruning.mode = "coarse")
-    anchor.b.df <- as.data.frame(anchor.b)
-    anchor.b.df$width <- NULL
-    anchor.b.df$strand <- NULL
-    colnames(anchor.b.df) <- c("chr.b", "start.b", "end.b", "idx")
+    anchor_b_df <- as.data.frame(anchor_b)
+    anchor_b_df$width <- NULL
+    anchor_b_df$strand <- NULL
+    colnames(anchor_b_df) <- c("chr_b", "start_b", "end_b", "idx")
 
-    x.df <- dplyr::inner_join(anchor.a.df, anchor.b.df, by = "idx")
-    x.df <- dplyr::select(x.df, chr.a, start.a, end.a,
-                          chr.b, start.b, end.b, value)
+    x_df <- dplyr::inner_join(anchor_a_df, anchor_b_df, by = "idx")
+    x_df <- dplyr::select(x_df, chr_a, start_a, end_a,
+                          chr_b, start_b, end_b, value)
 
-    return(x.df)
+    return(x_df)
 }

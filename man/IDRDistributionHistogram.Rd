@@ -4,7 +4,7 @@
 \alias{IDRDistributionHistogram}
 \title{Create histogram of IDR values}
 \usage{
-IDRDistributionHistogram(df, remove.na = TRUE, xlab = "IDR",
+IDRDistributionHistogram(df, remove_na = TRUE, xlab = "IDR",
   ylab = "density", title = "IDR value distribution")
 }
 \arguments{
@@ -15,7 +15,7 @@ least the following named columns:
   corresponding peak in the other replicate.
 }}
 
-\item{remove.na}{logical; should NA values be removed?}
+\item{remove_na}{logical; should NA values be removed?}
 
 \item{xlab}{character; x axis label}
 
@@ -30,9 +30,9 @@ ggplot2 object; IDR distribution histogram
 Creates diagnostic plots to visualize the results of \code{estimateIDR}.
 }
 \examples{
-idr.results <- estimateIDR1D(idr2d:::chipseq$rep1.df,
-                             idr2d:::chipseq$rep2.df,
-                             value.transformation = "log")
-IDRDistributionHistogram(idr.results$rep1.df)
+idr_results <- estimateIDR1D(idr2d:::chipseq$rep1_df,
+                             idr2d:::chipseq$rep2_df,
+                             value_transformation = "log")
+IDRDistributionHistogram(idr_results$rep1_df)
 
 }

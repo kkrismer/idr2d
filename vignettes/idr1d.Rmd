@@ -27,8 +27,8 @@ knitr::opts_chunk$set(fig.width = 7, fig.height = 7, echo = FALSE,
 
 Load example data:
 ```{r, echo = TRUE}
-rep1.df <- idr2d:::chipseq$rep1.df
-rep2.df <- idr2d:::chipseq$rep2.df
+rep1_df <- idr2d:::chipseq$rep1_df
+rep2_df <- idr2d:::chipseq$rep2_df
 ```
 
 ## Example data - replicate 1
@@ -46,7 +46,7 @@ header <- htmltools::withTags(table(
     )
   )
 ))
-datatable(rep1.df, container = header, rownames = FALSE,
+datatable(rep1_df, container = header, rownames = FALSE,
               options = list(searching = FALSE)) %>%
     formatRound("value", 3)
 ```
@@ -54,7 +54,7 @@ datatable(rep1.df, container = header, rownames = FALSE,
 ## Example data - replicate 2
 
 ```{r}
-datatable(rep2.df, container = header, rownames = FALSE,
+datatable(rep2_df, container = header, rownames = FALSE,
               options = list(searching = FALSE)) %>%
     formatRound("value", 3)
 ```
@@ -69,26 +69,26 @@ library(idr2d)
 
 Estimate IDR:
 ```{r, echo = TRUE}
-idr.results <- estimateIDR1D(rep1.df, rep2.df, 
-                             value.transformation = "log")
-rep1.idr.df <- idr.results$rep1.df
+idr_results <- estimateIDR1D(rep1_df, rep2_df, 
+                             value_transformation = "log")
+rep1_idr_df <- idr_results$rep1_df
 ```
 
 Important to note here is that the appropriate value transformation depends
-on the semantics of the *value* column (always the seventh column) in `rep1.df`
-and `rep2.df`. This column is used to establish a ranking between interactions,
+on the semantics of the *value* column (always the seventh column) in `rep1_df`
+and `rep2_df`. This column is used to establish a ranking between interactions,
 with highly significant interactions on top of the list and least significant
 interactions (i.e., most likely noise) at the bottom of the list. The ranking
 is established by the *value* column, sorted in descending order. Since our 
 *value* column contains FDRs (the lower, the more significant), we need to
 transform the values to comply with the assumption that high values indicate
 high significance. For p-values and p-value derived measures (like Q values),
-the `log.additive.inverse` transformation (`-log(x)`) is recommended.
+the `log_additive_inverse` transformation (`-log(x)`) is recommended.
 
 ## Results
 
 ```{r}
-chr <- start <- end <- rank <- rep.rank <- value <- rep.value <- idr <- NULL
+chr <- start <- end <- rank <- rep_rank <- value <- rep_value <- idr <- NULL
 header <- htmltools::withTags(table(
   class = 'display',
   thead(
@@ -104,30 +104,30 @@ header <- htmltools::withTags(table(
     )
   )
 ))
-datatable(dplyr::select(rep1.idr.df, chr, start, end,
-                        rank, rep.rank, value, rep.value, idr), 
+datatable(dplyr::select(rep1_idr_df, chr, start, end,
+                        rank, rep_rank, value, rep_value, idr), 
           rownames = FALSE,
           options = list(searching = FALSE),
           container = header) %>%
-    formatRound(c("value", "rep.value", "idr"), 3)
+    formatRound(c("value", "rep_value", "idr"), 3)
 ```
 
 ### Distribution of IDRs
 
 ```{r, echo = TRUE}
-IDRDistributionHistogram(rep1.idr.df)
+IDRDistributionHistogram(rep1_idr_df)
 ```
 
 ### Rank - IDR dependence
 
 ```{r, echo = TRUE}
-rankIDRScatterplot(rep1.idr.df)
+rankIDRScatterplot(rep1_idr_df)
 ```
 
 ### Value - IDR dependence
 
 ```{r, echo = TRUE}
-valueIDRScatterplot(rep1.idr.df)
+valueIDRScatterplot(rep1_idr_df)
 ```
 
 # Additional information

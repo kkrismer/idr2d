@@ -4,10 +4,10 @@
 \alias{anchorOverlap}
 \title{Identifies Overlapping Anchors}
 \usage{
-anchorOverlap(rep1.anchor, rep2.anchor, max.gap = 0L)
+anchorOverlap(rep1_anchor, rep2_anchor, max_gap = 0L)
 }
 \arguments{
-\item{rep1.anchor}{data frame with the following columns:
+\item{rep1_anchor}{data frame with the following columns:
 \tabular{rll}{
   column 1: \tab \code{chr} \tab character; genomic location of anchor in
   replicate 1 - chromosome (e.g., \code{"chr3"})\cr
@@ -17,7 +17,7 @@ anchorOverlap(rep1.anchor, rep2.anchor, max.gap = 0L)
   replicate 1 - end coordinate
 }}
 
-\item{rep2.anchor}{data frame with the following columns:
+\item{rep2_anchor}{data frame with the following columns:
 \tabular{rll}{
   column 1: \tab \code{chr} \tab character; genomic location of anchor in
   replicate 2 - chromosome (e.g., \code{"chr3"})\cr
@@ -27,7 +27,7 @@ anchorOverlap(rep1.anchor, rep2.anchor, max.gap = 0L)
   replicate 2 - end coordinate
 }}
 
-\item{max.gap}{integer; maximum gap in nucleotides allowed between two
+\item{max_gap}{integer; maximum gap in nucleotides allowed between two
 anchors for
 them to be considered as overlapping
 (defaults to zero, no gap between anchors)}
@@ -36,27 +36,27 @@ them to be considered as overlapping
 A data frame containing overlapping
  anchor pairs with the following columns:
 \tabular{rll}{
-  column 1: \tab \code{rep1.idx} \tab anchor index in data frame
-  \code{rep1.anchor} \cr
-  column 2: \tab \code{rep2.idx} \tab anchor index in data frame
-  \code{rep2.anchor}
+  column 1: \tab \code{rep1_idx} \tab anchor index in data frame
+  \code{rep1_anchor} \cr
+  column 2: \tab \code{rep2_idx} \tab anchor index in data frame
+  \code{rep2_anchor}
 }
 }
 \description{
 Identifies all overlapping anchor pairs (m:n mapping).
 }
 \examples{
-rep1.df <- idr2d:::chiapet$rep1.df
-rep2.df <- idr2d:::chiapet$rep2.df
+rep1_df <- idr2d:::chiapet$rep1_df
+rep2_df <- idr2d:::chiapet$rep2_df
 
-rep1.anchor.a <- data.frame(chr = rep1.df[, 1],
-                            start = rep1.df[, 2],
-                            end = rep1.df[, 3])
-rep2.anchor.a <- data.frame(chr = rep2.df[, 1],
-                            start = rep2.df[, 2],
-                            end = rep2.df[, 3])
+rep1_anchor_a <- data.frame(chr = rep1_df[, 1],
+                            start = rep1_df[, 2],
+                            end = rep1_df[, 3])
+rep2_anchor_a <- data.frame(chr = rep2_df[, 1],
+                            start = rep2_df[, 2],
+                            end = rep2_df[, 3])
 
-anchor.a.overlap <- anchorOverlap(rep1.anchor.a, rep2.anchor.a)
+anchor_a_overlap <- anchorOverlap(rep1_anchor_a, rep2_anchor_a)
 
 
 }

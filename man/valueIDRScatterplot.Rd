@@ -4,11 +4,11 @@
 \alias{valueIDRScatterplot}
 \title{Create scatterplot of IDR values}
 \usage{
-valueIDRScatterplot(df, remove.na = TRUE, remove.outliers = TRUE,
+valueIDRScatterplot(df, remove_na = TRUE, remove_outliers = TRUE,
   xlab = "transformed value in replicate 1",
   ylab = "transformed value in replicate 2",
-  title = "value - IDR dependence", color.gradient = c("rainbow",
-  "default"), max.points.shown = 2500)
+  title = "value - IDR dependence", color_gradient = c("rainbow",
+  "default"), max_points_shown = 2500)
 }
 \arguments{
 \item{df}{part of output of \code{estimateIDR}, a data frame with at
@@ -16,15 +16,15 @@ least the following named columns:
 \tabular{rl}{
   \code{value} \tab numeric; p-value, FDR, or heuristic used
   to rank the peaks\cr
-  \code{rep.value} \tab numeric; value of corresponding
+  \code{rep_value} \tab numeric; value of corresponding
   replicate peak\cr
   \code{idr} \tab IDR of the peak and the
   corresponding peak in the other replicate.
 }}
 
-\item{remove.na}{logical; should NA values be removed?}
+\item{remove_na}{logical; should NA values be removed?}
 
-\item{remove.outliers}{logical; removes extreme data points}
+\item{remove_outliers}{logical; removes extreme data points}
 
 \item{xlab}{character; x axis label}
 
@@ -32,9 +32,9 @@ least the following named columns:
 
 \item{title}{character; plot title}
 
-\item{color.gradient}{character; either "rainbow" or "default"}
+\item{color_gradient}{character; either "rainbow" or "default"}
 
-\item{max.points.shown}{integer; default is 2500}
+\item{max_points_shown}{integer; default is 2500}
 }
 \value{
 ggplot2 object; IDR value scatterplot
@@ -43,9 +43,9 @@ ggplot2 object; IDR value scatterplot
 Creates diagnostic plots to visualize the results of \code{estimateIDR}.
 }
 \examples{
-idr.results <- estimateIDR1D(idr2d:::chipseq$rep1.df,
-                             idr2d:::chipseq$rep2.df,
-                             value.transformation = "log")
-valueIDRScatterplot(idr.results$rep1.df)
+idr_results <- estimateIDR1D(idr2d:::chipseq$rep1_df,
+                             idr2d:::chipseq$rep2_df,
+                             value_transformation = "log")
+valueIDRScatterplot(idr_results$rep1_df)
 
 }

@@ -4,15 +4,17 @@
 \alias{estimateIDR2DHiC}
 \title{TODO}
 \usage{
-estimateIDR2DHiC(rep1.hic.file, rep2.hic.file, resolution = 10000,
+estimateIDR2DHiC(rep1_hic_file, rep2_hic_file, resolution = 10000,
   normalization = c("NONE", "VC", "VC_SQRT", "KR"), chromosomes = NULL,
-  max.factor = 1.5, jitter.factor = 1e-04, mu = 0.1, sigma = 1,
-  rho = 0.2, p = 0.5, eps = 0.001, max.iteration = 30,
-  local.idr = TRUE, use.python = NULL, use.virtualenv = NULL,
-  use.condaenv = NULL)
+  max_factor = 1.5, jitter_factor = 1e-04, mu = 0.1, sigma = 1,
+  rho = 0.2, p = 0.5, eps = 0.001, max_iteration = 30,
+  local_idr = TRUE, use_python = NULL, use_virtualenv = NULL,
+  use_condaenv = NULL)
 }
 \arguments{
-\item{rep1.hic.file}{path to .hic file for replicate 1}
+\item{rep1_hic_file}{path to .hic file for replicate 1}
+
+\item{rep2_hic_file}{path to .hic file for replicate 2}
 
 \item{resolution}{block resolution of HiC contact matrix in base pairs,
 defaults to 10,000 bp}
@@ -20,11 +22,11 @@ defaults to 10,000 bp}
 \item{chromosomes}{list of chromosome names in HiC files, defaults to UCSC
 human chromosome names (chr1, ..., chr22, chrX, chrY, chrM)}
 
-\item{max.factor}{numeric; controls the replacement values for \code{Inf}
-and \code{-Inf}. \code{Inf} are replaced by \code{max(x) * max.factor} and
-\code{-Inf} are replaced by \code{min(x) / max.factor}.}
+\item{max_factor}{numeric; controls the replacement values for \code{Inf}
+and \code{-Inf}. \code{Inf} are replaced by \code{max(x) * max_factor} and
+\code{-Inf} are replaced by \code{min(x) / max_factor}.}
 
-\item{jitter.factor}{numeric; controls the magnitude of the noise that
+\item{jitter_factor}{numeric; controls the magnitude of the noise that
 is added to \code{x}. This is done to break ties in \code{x}.}
 
 \item{mu}{ a starting value for the mean of the reproducible component.}
@@ -40,66 +42,64 @@ is added to \code{x}. This is done to break ties in \code{x}.}
 \item{eps}{ Stopping criterion. Iterations stop when the increment of
     log-likelihood is < eps*log-likelihood, Default=0.001.}
 
-\item{max.iteration}{integer; maximum number of iterations for
+\item{max_iteration}{integer; maximum number of iterations for
 IDR estimation (defaults to 30)}
 
-\item{local.idr}{see \code{\link[idr:est.IDR]{est.IDR}}}
+\item{local_idr}{see \code{\link[idr:est.IDR]{est.IDR}}}
 
-\item{use.python}{if Python is not on PATH, specify path to Python binary
+\item{use_python}{if Python is not on PATH, specify path to Python binary
 here (see \code{\link[reticulate:use_python]{use_python}})}
 
-\item{use.virtualenv}{if Python package \code{hic-straw} is not in base
+\item{use_virtualenv}{if Python package \code{hic-straw} is not in base
 virtualenv environment, specify environment here (see
 \code{\link[reticulate:use_python]{use_virtualenv}})}
 
-\item{use.condaenv}{if Python package \code{hic-straw} is not in base
+\item{use_condaenv}{if Python package \code{hic-straw} is not in base
 conda environment, specify environment here (see
 \code{\link[reticulate:use_python]{use_condaenv}})}
-
-\item{rep1.hic.file}{path to .hic file for replicate 2}
 }
 \value{
-Data frames \code{rep1.df} and \code{rep2.df} with
+Data frames \code{rep1_df} and \code{rep2_df} with
 the following columns:
 \tabular{rll}{
-  column 1: \tab \code{chr.a} \tab character; genomic location of anchor A -
+  column 1: \tab \code{chr_a} \tab character; genomic location of anchor A -
   chromosome (e.g., \code{"chr3"})\cr
-  column 2: \tab \code{start.a} \tab integer; genomic location of anchor A -
+  column 2: \tab \code{start_a} \tab integer; genomic location of anchor A -
   start coordinate\cr
-  column 3: \tab \code{end.a} \tab integer; genomic location of anchor A -
+  column 3: \tab \code{end_a} \tab integer; genomic location of anchor A -
   end coordinate\cr
-  column 4: \tab \code{chr.b} \tab character; genomic location of anchor B -
+  column 4: \tab \code{chr_b} \tab character; genomic location of anchor B -
   chromosome (e.g., \code{"chr3"})\cr
-  column 5: \tab \code{start.b} \tab integer; genomic location of anchor B -
+  column 5: \tab \code{start_b} \tab integer; genomic location of anchor B -
   start coordinate\cr
-  column 6: \tab \code{end.b} \tab integer; genomic location of anchor B -
+  column 6: \tab \code{end_b} \tab integer; genomic location of anchor B -
   end coordinate\cr
   column 7: \tab \code{value} \tab numeric; p-value, FDR, or heuristic used
   to rank the interactions\cr
-  column 8: \tab \code{"rep.value"} \tab numeric; value of corresponding
+  column 8: \tab \code{"rep_value"} \tab numeric; value of corresponding
   replicate interaction. If no corresponding interaction was found,
-  \code{rep.value} is set to \code{NA}.\cr
+  \code{rep_value} is set to \code{NA}.\cr
   column 9: \tab \code{"rank"} \tab integer; rank of the interaction,
   established by value column, ascending order\cr
-  column 10: \tab \code{"rep.rank"} \tab integer; rank of corresponding
+  column 10: \tab \code{"rep_rank"} \tab integer; rank of corresponding
   replicate interaction. If no corresponding interaction was found,
-  \code{rep.rank} is set to \code{NA}.\cr
+  \code{rep_rank} is set to \code{NA}.\cr
   column 11: \tab \code{"idx"} \tab integer; interaction index,
   primary key\cr
-  column 12: \tab \code{"rep.idx"} \tab integer; specifies the index of the
+  column 12: \tab \code{"rep_idx"} \tab integer; specifies the index of the
   corresponding interaction in the other replicate (foreign key). If no
-  corresponding interaction was found, \code{rep.idx} is set to \code{NA}.
+  corresponding interaction was found, \code{rep_idx} is set to \code{NA}.
 }
 }
 \description{
 TODO
 }
 \examples{
-rep1.hic.file <- "D:/MIT/Research/PhD/Gifford/projects/chia-pet/data/GSE71831/GSE71831_Patski_paternal.hic"
-rep2.hic.file <- "D:/MIT/Research/PhD/Gifford/projects/chia-pet/data/GSE71831/GSE71831_Patski_maternal.hic"
+rep1_hic_file <- "D:/MIT/Research/PhD/Gifford/projects/chia-pet/data/GSE71831/GSE71831_Patski_paternal.hic"
+rep2_hic_file <- "D:/MIT/Research/PhD/Gifford/projects/chia-pet/data/GSE71831/GSE71831_Patski_maternal.hic"
 resolution <- 1000000
-mus musculus
-chromosomes <- paste0("chr", c(1:19, "X", "Y"))
-df <- estimateIDR2DHiC(rep1.hic.file, rep2.hic.file, resolution, chromosomes = chromosomes)
+#mus musculus
+#chromosomes <- paste0("chr", c(1:19, "X", "Y"))
+#df <- estimateIDR2DHiC(rep1_hic_file, rep2_hic_file, resolution, chromosomes = chromosomes)
 
 }

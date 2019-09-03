@@ -4,60 +4,60 @@
 \alias{overlap2D}
 \title{Establish m:n mapping between interactions from replicate 1 and 2}
 \usage{
-overlap2D(rep1.df, rep2.df, ambiguity.resolution.method = c("overlap",
-  "midpoint", "value"), max.gap = 0L)
+overlap2D(rep1_df, rep2_df, ambiguity_resolution_method = c("overlap",
+  "midpoint", "value"), max_gap = 0L)
 }
 \arguments{
-\item{rep1.df}{data frame of observations (i.e., genomic interactions) of
+\item{rep1_df}{data frame of observations (i.e., genomic interactions) of
 replicate 1, with at least the following columns (position of columns
 matter, column names are irrelevant):
 \tabular{rll}{
-  column 1: \tab \code{chr.a} \tab character; genomic location of anchor A -
+  column 1: \tab \code{chr_a} \tab character; genomic location of anchor A -
   chromosome (e.g., \code{"chr3"})\cr
-  column 2: \tab \code{start.a} \tab integer; genomic location of anchor A -
+  column 2: \tab \code{start_a} \tab integer; genomic location of anchor A -
   start coordinate\cr
-  column 3: \tab \code{end.a} \tab integer; genomic location of anchor A -
+  column 3: \tab \code{end_a} \tab integer; genomic location of anchor A -
   end coordinate\cr
-  column 4: \tab \code{chr.b} \tab character; genomic location of anchor B -
+  column 4: \tab \code{chr_b} \tab character; genomic location of anchor B -
   chromosome (e.g., \code{"chr3"})\cr
-  column 5: \tab \code{start.b} \tab integer; genomic location of anchor B -
+  column 5: \tab \code{start_b} \tab integer; genomic location of anchor B -
   start coordinate\cr
-  column 6: \tab \code{end.b} \tab integer; genomic location of anchor B -
+  column 6: \tab \code{end_b} \tab integer; genomic location of anchor B -
   end coordinate\cr
   column 7: \tab \code{value} \tab numeric; p-value, FDR, or heuristic
   used to rank the interactions
 }}
 
-\item{rep2.df}{data frame of observations (i.e., genomic interactions) of
+\item{rep2_df}{data frame of observations (i.e., genomic interactions) of
 replicate 2, with the following columns (position of columns
 matter, column names are irrelevant):
 \tabular{rll}{
-  column 1: \tab \code{chr.a} \tab character; genomic location of anchor A -
+  column 1: \tab \code{chr_a} \tab character; genomic location of anchor A -
   chromosome (e.g., \code{"chr3"})\cr
-  column 2: \tab \code{start.a} \tab integer; genomic location of anchor A -
+  column 2: \tab \code{start_a} \tab integer; genomic location of anchor A -
   start coordinate\cr
-  column 3: \tab \code{end.a} \tab integer; genomic location of anchor A -
+  column 3: \tab \code{end_a} \tab integer; genomic location of anchor A -
   end coordinate\cr
-  column 4: \tab \code{chr.b} \tab character; genomic location of anchor B -
+  column 4: \tab \code{chr_b} \tab character; genomic location of anchor B -
   chromosome (e.g., \code{"chr3"})\cr
-  column 5: \tab \code{start.b} \tab integer; genomic location of anchor B -
+  column 5: \tab \code{start_b} \tab integer; genomic location of anchor B -
   start coordinate\cr
-  column 6: \tab \code{end.b} \tab integer; genomic location of anchor B -
+  column 6: \tab \code{end_b} \tab integer; genomic location of anchor B -
   end coordinate\cr
   column 7: \tab \code{value} \tab numeric; p-value, FDR, or heuristic used
   to rank the interactions
 }}
 
-\item{ambiguity.resolution.method}{defines how ambiguous assignments
+\item{ambiguity_resolution_method}{defines how ambiguous assignments
 (when one interaction in replicate 1 overlaps with multiple interactions in
 replicate 2 or vice versa)
 are resolved. Available methods:
 \tabular{rl}{
   \code{"value"} \tab interactions are prioritized by ascending or descending
-  \code{value} column (see \code{sorting.direction}), e.g., if two
+  \code{value} column (see \code{sorting_direction}), e.g., if two
   interactions in replicate 1 overlap with one interaction in replicate 2,
   the interaction from replicate 1 is chosen which has a lower (if
-  \code{sorting.direction} is \code{"ascending"}) or higher (if
+  \code{sorting_direction} is \code{"ascending"}) or higher (if
   \code{"descending"}) value \cr
   \code{"overlap"} \tab the interaction pair is chosen which has the highest
   relative overlap, i.e., overlap in nucleotides of replicate 1 interaction
@@ -73,7 +73,7 @@ are resolved. Available methods:
   replicate 2 interaction anchor B
 }}
 
-\item{max.gap}{integer; maximum gap in nucleotides allowed between two
+\item{max_gap}{integer; maximum gap in nucleotides allowed between two
 anchors for
 them to be considered as overlapping
 (defaults to zero, no gap between anchors)}
@@ -81,10 +81,10 @@ them to be considered as overlapping
 \value{
 data frame with the following columns:
 \tabular{rll}{
-  column 1: \tab \code{rep1.idx} \tab index of interaction in replicate 1
-  (i.e., row index in \code{rep1.df})\cr
-  column 2: \tab \code{rep2.idx} \tab index of interaction in replicate 2
-  (i.e., row index in \code{rep2.df})\cr
+  column 1: \tab \code{rep1_idx} \tab index of interaction in replicate 1
+  (i.e., row index in \code{rep1_df})\cr
+  column 2: \tab \code{rep2_idx} \tab index of interaction in replicate 2
+  (i.e., row index in \code{rep2_df})\cr
   column 3: \tab \code{arv} \tab ambiguity resolution value used turn
   m:n mapping into 1:1 mapping. Interaction pairs with lower \code{arv}
   are prioritized.
@@ -95,25 +95,25 @@ This method returns all overlapping interactions between two replicates.
 For each pair of overlapping interactions, the
 \emph{ambiguity resolution value} (ARV) is calculated, which helps to reduce
 the m:n mapping to a 1:1 mapping. The semantics of the ARV depend on the
-specified \code{ambiguity.resolution.method}, but in general interaction
+specified \code{ambiguity_resolution_method}, but in general interaction
 pairs with lower ARVs have priority over interaction pairs with higher ARVs
 when the bijective mapping is established.
 }
 \examples{
-rep1.df <- idr2d:::chiapet$rep1.df
-rep1.df$fdr <- preprocess(rep1.df$fdr, "log.additive.inverse")
+rep1_df <- idr2d:::chiapet$rep1_df
+rep1_df$fdr <- preprocess(rep1_df$fdr, "log_additive_inverse")
 
-rep2.df <- idr2d:::chiapet$rep2.df
-rep2.df$fdr <- preprocess(rep2.df$fdr, "log.additive.inverse")
+rep2_df <- idr2d:::chiapet$rep2_df
+rep2_df$fdr <- preprocess(rep2_df$fdr, "log_additive_inverse")
 
 # shuffle to break preexisting order
-rep1.df <- rep1.df[sample.int(nrow(rep1.df)), ]
-rep2.df <- rep2.df[sample.int(nrow(rep2.df)), ]
+rep1_df <- rep1_df[sample.int(nrow(rep1_df)), ]
+rep2_df <- rep2_df[sample.int(nrow(rep2_df)), ]
 
 # sort by value column
-rep1.df <- dplyr::arrange(rep1.df, rep1.df$fdr)
-rep2.df <- dplyr::arrange(rep2.df, rep2.df$fdr)
+rep1_df <- dplyr::arrange(rep1_df, rep1_df$fdr)
+rep2_df <- dplyr::arrange(rep2_df, rep2_df$fdr)
 
-pairs.df <- overlap2D(rep1.df, rep2.df)
+pairs_df <- overlap2D(rep1_df, rep2_df)
 
 }

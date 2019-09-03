@@ -5,12 +5,12 @@
 \title{Finds One-to-One Correspondence between Peaks from Replicate 1
 and 2}
 \usage{
-establishBijection1D(rep1.df, rep2.df,
-  ambiguity.resolution.method = c("overlap", "midpoint", "value"),
-  max.gap = 0L)
+establishBijection1D(rep1_df, rep2_df,
+  ambiguity_resolution_method = c("overlap", "midpoint", "value"),
+  max_gap = 0L)
 }
 \arguments{
-\item{rep1.df}{data frame of observations (i.e., genomic peaks) of
+\item{rep1_df}{data frame of observations (i.e., genomic peaks) of
 replicate 1, with at least the following columns (position of columns
 matter, column names are irrelevant):
 \tabular{rll}{
@@ -24,7 +24,7 @@ matter, column names are irrelevant):
   to rank the interactions
 }}
 
-\item{rep2.df}{data frame of observations (i.e., genomic peaks) of
+\item{rep2_df}{data frame of observations (i.e., genomic peaks) of
 replicate 2, with the following columns (position of columns
 matter, column names are irrelevant):
 \tabular{rll}{
@@ -38,16 +38,16 @@ matter, column names are irrelevant):
   to rank the interactions
 }}
 
-\item{ambiguity.resolution.method}{defines how ambiguous assignments
+\item{ambiguity_resolution_method}{defines how ambiguous assignments
 (when one interaction in replicate 1 overlaps with multiple interactions in
 replicate 2 or vice versa)
 are resolved. Available methods:
 \tabular{rl}{
   \code{"value"} \tab interactions are prioritized by ascending or descending
-  \code{value} column (see \code{sorting.direction}), e.g., if two
+  \code{value} column (see \code{sorting_direction}), e.g., if two
   interactions in replicate 1 overlap with one interaction in replicate 2,
   the interaction from replicate 1 is chosen which has a lower (if
-  \code{sorting.direction} is \code{"ascending"}) or higher (if
+  \code{sorting_direction} is \code{"ascending"}) or higher (if
   \code{"descending"}) value \cr
   \code{"overlap"} \tab the interaction pair is chosen which has the highest
   relative overlap, i.e., overlap in nucleotides of replicate 1 interaction
@@ -63,13 +63,13 @@ are resolved. Available methods:
   replicate 2 interaction anchor B
 }}
 
-\item{max.gap}{integer; maximum gap in nucleotides allowed between two
+\item{max_gap}{integer; maximum gap in nucleotides allowed between two
 anchors for
 them to be considered as overlapping
 (defaults to zero, no gap between anchors)}
 }
 \value{
-Data frames \code{rep1.df} and \code{rep2.df} with
+Data frames \code{rep1_df} and \code{rep2_df} with
 the following columns:
 \tabular{rll}{
   column 1: \tab \code{chr} \tab character; genomic location of peak -
@@ -80,36 +80,36 @@ the following columns:
   end coordinate\cr
   column 4: \tab \code{value} \tab numeric; p-value, FDR, or heuristic used
   to rank the peaks\cr
-  column 5: \tab \code{rep.value} \tab numeric; value of corresponding
-  replicate peak. If no corresponding peak was found, \code{rep.value} is set
+  column 5: \tab \code{rep_value} \tab numeric; value of corresponding
+  replicate peak. If no corresponding peak was found, \code{rep_value} is set
   to \code{NA}.\cr
   column 6: \tab \code{rank} \tab integer; rank of the peak, established by
   value column, ascending order\cr
-  column 7: \tab \code{rep.rank} \tab integer; rank of corresponding
-  replicate peak. If no corresponding peak was found, \code{rep.rank} is
+  column 7: \tab \code{rep_rank} \tab integer; rank of corresponding
+  replicate peak. If no corresponding peak was found, \code{rep_rank} is
   set to \code{NA}.\cr
   column 8: \tab \code{idx} \tab integer; peak index, primary key\cr
-  column 9: \tab \code{rep.idx} \tab integer; specifies the index of the
+  column 9: \tab \code{rep_idx} \tab integer; specifies the index of the
   corresponding peak in the other replicate (foreign key). If no
-  corresponding peak was found, \code{rep.idx} is set to \code{NA}.
+  corresponding peak was found, \code{rep_idx} is set to \code{NA}.
 }
 }
 \description{
 This method establishes a bijective assignment between peaks from
 replicate 1 and 2. A peak in replicate 1 is assigned to a
 peak in replicate 2 if and only if (1) they overlap (or the gap between the
-peaks is less than or equal to \code{max.gap}), and (2) there is no other
+peaks is less than or equal to \code{max_gap}), and (2) there is no other
 peak in
 replicate 2 that overlaps with the peak in replicate 1 and has a
 lower \emph{ambiguity resolution value}.
 }
 \examples{
-rep1.df <- idr2d:::chipseq$rep1.df
-rep1.df$value <- preprocess(rep1.df$value, "log")
+rep1_df <- idr2d:::chipseq$rep1_df
+rep1_df$value <- preprocess(rep1_df$value, "log")
 
-rep2.df <- idr2d:::chipseq$rep2.df
-rep2.df$value <- preprocess(rep2.df$value, "log")
+rep2_df <- idr2d:::chipseq$rep2_df
+rep2_df$value <- preprocess(rep2_df$value, "log")
 
-mapping <- establishBijection1D(rep1.df, rep2.df)
+mapping <- establishBijection1D(rep1_df, rep2_df)
 
 }

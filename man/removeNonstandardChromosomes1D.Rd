@@ -27,6 +27,6 @@ removeNonstandardChromosomes1D(x)
 Removes Peaks on Non-standard Chromosomes
 }
 \examples{
-rep1.df <- removeNonstandardChromosomes1D(idr2d:::chipseq$rep1.df)
+rep1_df <- removeNonstandardChromosomes1D(idr2d:::chipseq$rep1_df)
 
 }

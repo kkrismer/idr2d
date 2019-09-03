@@ -4,40 +4,40 @@
 \alias{estimateIDR}
 \title{Estimates IDR for Genomic Peaks or Genomic Interactions}
 \usage{
-estimateIDR(rep1.df, rep2.df, analysis.type = "IDR2D",
-  value.transformation = c("identity", "additive.inverse",
-  "multiplicative.inverse", "log", "log.additive.inverse"),
-  ambiguity.resolution.method = c("overlap", "midpoint", "value"),
-  remove.nonstandard.chromosomes = TRUE, max.factor = 1.5,
-  jitter.factor = 1e-04, max.gap = 0L, mu = 0.1, sigma = 1,
-  rho = 0.2, p = 0.5, eps = 0.001, max.iteration = 30,
-  local.idr = TRUE)
+estimateIDR(rep1_df, rep2_df, analysis_type = "IDR2D",
+  value_transformation = c("identity", "additive_inverse",
+  "multiplicative_inverse", "log", "log_additive_inverse"),
+  ambiguity_resolution_method = c("overlap", "midpoint", "value"),
+  remove_nonstandard_chromosomes = TRUE, max_factor = 1.5,
+  jitter_factor = 1e-04, max_gap = 0L, mu = 0.1, sigma = 1,
+  rho = 0.2, p = 0.5, eps = 0.001, max_iteration = 30,
+  local_idr = TRUE)
 }
 \arguments{
-\item{rep1.df}{data frame of observations (i.e., genomic peaks or genomic
+\item{rep1_df}{data frame of observations (i.e., genomic peaks or genomic
 interactions) of
-replicate 1. If \code{analysis.type} is IDR1D, the columns of \code{rep1.df}
+replicate 1. If \code{analysis_type} is IDR1D, the columns of \code{rep1_df}
 are described in \code{\link{establishBijection1D}}, otherwise in
 \code{\link{establishBijection2D}}}
 
-\item{rep2.df}{data frame of observations (i.e., genomic peaks or genomic
-interactions) of replicate 2. Same columns as \code{rep1.df}.}
+\item{rep2_df}{data frame of observations (i.e., genomic peaks or genomic
+interactions) of replicate 2. Same columns as \code{rep1_df}.}
 
-\item{analysis.type}{"IDR2D" for genomic interaction data sets,
+\item{analysis_type}{"IDR2D" for genomic interaction data sets,
 "IDR1D" for genomic peak data sets}
 
-\item{value.transformation}{the values in \code{x} have to be transformed in
+\item{value_transformation}{the values in \code{x} have to be transformed in
 a way such that when ordered in descending order, more significant
 interactions end up on top of the list. If the values in \code{x} are
-p-values, \code{"log.additive.inverse"} is recommended. The following
+p-values, \code{"log_additive_inverse"} is recommended. The following
 transformations are supported:
 \tabular{rl}{
   \code{"identity"} \tab no transformation is performed on \code{x}\cr
-  \code{"additive.inverse"} \tab \code{x. = -x}\cr
-  \code{"multiplicative.inverse"} \tab \code{x. = 1 / x}\cr
+  \code{"additive_inverse"} \tab \code{x. = -x}\cr
+  \code{"multiplicative_inverse"} \tab \code{x. = 1 / x}\cr
   \code{"log"} \tab \code{x. = log(x)}. Note: zeros are replaced by
   \code{.Machine$double.xmin}\cr
-  \code{"log.additive.inverse"} \tab \code{x. = -log(x)}, recommended if
+  \code{"log_additive_inverse"} \tab \code{x. = -log(x)}, recommended if
   \code{x} are p-values. Note: zeros are replaced by
   \code{.Machine$double.xmin}
 }
@@ -46,26 +46,26 @@ either \code{"ascending"} (more significant
 interactions have lower value in \code{value} column) or \code{"descending"}
 (more significant interactions have higher value in \code{value} column)}
 
-\item{ambiguity.resolution.method}{defines how ambiguous assignments
+\item{ambiguity_resolution_method}{defines how ambiguous assignments
 (when one interaction or peak in replicate 1 overlaps with
 multiple interactions or peaks in replicate 2 or vice versa)
 are resolved. For available methods, see \code{\link{overlap1D}} or
 \code{\link{overlap2D}}, respectively.}
 
-\item{remove.nonstandard.chromosomes}{removes peaks and interactions
+\item{remove_nonstandard_chromosomes}{removes peaks and interactions
 containing
 genomic locations on non-standard chromosomes using
 \code{\link[GenomeInfoDb:seqlevels-wrappers]{keepStandardChromosomes}}
 (default is TRUE)}
 
-\item{max.factor}{numeric; controls the replacement values for \code{Inf}
-and \code{-Inf}. \code{Inf} are replaced by \code{max(x) * max.factor} and
-\code{-Inf} are replaced by \code{min(x) / max.factor}.}
+\item{max_factor}{numeric; controls the replacement values for \code{Inf}
+and \code{-Inf}. \code{Inf} are replaced by \code{max(x) * max_factor} and
+\code{-Inf} are replaced by \code{min(x) / max_factor}.}
 
-\item{jitter.factor}{numeric; controls the magnitude of the noise that
+\item{jitter_factor}{numeric; controls the magnitude of the noise that
 is added to \code{x}. This is done to break ties in \code{x}.}
 
-\item{max.gap}{integer; maximum gap in nucleotides allowed between two
+\item{max_gap}{integer; maximum gap in nucleotides allowed between two
 anchors for
 them to be considered as overlapping
 (defaults to zero, no gap between anchors)}
@@ -83,10 +83,10 @@ them to be considered as overlapping
 \item{eps}{ Stopping criterion. Iterations stop when the increment of
     log-likelihood is < eps*log-likelihood, Default=0.001.}
 
-\item{max.iteration}{integer; maximum number of iterations for
+\item{max_iteration}{integer; maximum number of iterations for
 IDR estimation (defaults to 30)}
 
-\item{local.idr}{see \code{\link[idr:est.IDR]{est.IDR}}}
+\item{local_idr}{see \code{\link[idr:est.IDR]{est.IDR}}}
 }
 \value{
 See \code{\link{estimateIDR1D}} or
@@ -96,10 +96,10 @@ See \code{\link{estimateIDR1D}} or
 Estimates IDR for Genomic Peaks or Genomic Interactions
 }
 \examples{
-idr.results <- estimateIDR(idr2d:::chiapet$rep1.df,
-                           idr2d:::chiapet$rep2.df,
-                           analysis.type = "IDR2D",
-                           value.transformation = "log.additive.inverse")
+idr_results <- estimateIDR(idr2d:::chiapet$rep1_df,
+                           idr2d:::chiapet$rep2_df,
+                           analysis_type = "IDR2D",
+                           value_transformation = "log_additive_inverse")
 
 }
 \references{

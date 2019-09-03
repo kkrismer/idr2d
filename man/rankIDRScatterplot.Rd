@@ -4,9 +4,9 @@
 \alias{rankIDRScatterplot}
 \title{Create scatterplot of IDR values}
 \usage{
-rankIDRScatterplot(df, remove.na = TRUE, xlab = "rank in replicate 1",
+rankIDRScatterplot(df, remove_na = TRUE, xlab = "rank in replicate 1",
   ylab = "rank in replicate 2", title = "rank - IDR dependence",
-  color.gradient = c("rainbow", "default"), max.points.shown = 2500)
+  color_gradient = c("rainbow", "default"), max_points_shown = 2500)
 }
 \arguments{
 \item{df}{part of output of \code{estimateIDR}, a data frame with at
@@ -14,13 +14,13 @@ least the following named columns:
 \tabular{rl}{
   \code{rank} \tab integer; rank of the peak, established by
   value column, ascending order\cr
-  \code{rep.rank} \tab integer; rank of corresponding
+  \code{rep_rank} \tab integer; rank of corresponding
   replicate peak.\cr
   \code{idr} \tab IDR of the peak and the
   corresponding peak in the other replicate.
 }}
 
-\item{remove.na}{logical; should NA values be removed?}
+\item{remove_na}{logical; should NA values be removed?}
 
 \item{xlab}{character; x axis label}
 
@@ -28,9 +28,9 @@ least the following named columns:
 
 \item{title}{character; plot title}
 
-\item{color.gradient}{character; either "rainbow" or "default"}
+\item{color_gradient}{character; either "rainbow" or "default"}
 
-\item{max.points.shown}{integer; default is 2500}
+\item{max_points_shown}{integer; default is 2500}
 }
 \value{
 ggplot2 object; IDR rank scatterplot
@@ -39,9 +39,9 @@ ggplot2 object; IDR rank scatterplot
 Creates diagnostic plots to visualize the results of \code{estimateIDR}.
 }
 \examples{
-idr.results <- estimateIDR1D(idr2d:::chipseq$rep1.df,
-                             idr2d:::chipseq$rep2.df,
-                             value.transformation = "log")
-rankIDRScatterplot(idr.results$rep1.df)
+idr_results <- estimateIDR1D(idr2d:::chipseq$rep1_df,
+                             idr2d:::chipseq$rep2_df,
+                             value_transformation = "log")
+rankIDRScatterplot(idr_results$rep1_df)
 
 }

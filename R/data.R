@@ -3,20 +3,20 @@
 #' This object contains genomic interactions on chromosomes 1 to 5, which could
 #' be the results of HiC or ChIA-PET experiments, done in duplicates.
 #'
-#' @format A list with two components, the data frames \code{rep1.df} and
-#' \code{rep2.df}, which have the following seven columns:
+#' @format A list with two components, the data frames \code{rep1_df} and
+#' \code{rep2_df}, which have the following seven columns:
 #' \tabular{rll}{
-#'   column 1: \tab \code{chr.a} \tab character; genomic location of anchor A -
+#'   column 1: \tab \code{chr_a} \tab character; genomic location of anchor A -
 #'   chromosome (e.g., \code{"chr3"})\cr
-#'   column 2: \tab \code{start.a} \tab integer; genomic location of anchor A -
+#'   column 2: \tab \code{start_a} \tab integer; genomic location of anchor A -
 #'   start coordinate\cr
-#'   column 3: \tab \code{end.a} \tab integer; genomic location of anchor A -
+#'   column 3: \tab \code{end_a} \tab integer; genomic location of anchor A -
 #'   end coordinate\cr
-#'   column 4: \tab \code{chr.b} \tab character; genomic location of anchor B -
+#'   column 4: \tab \code{chr_b} \tab character; genomic location of anchor B -
 #'   chromosome (e.g., \code{"chr3"})\cr
-#'   column 5: \tab \code{start.b} \tab integer; genomic location of anchor B -
+#'   column 5: \tab \code{start_b} \tab integer; genomic location of anchor B -
 #'   start coordinate\cr
-#'   column 6: \tab \code{end.b} \tab integer; genomic location of anchor B -
+#'   column 6: \tab \code{end_b} \tab integer; genomic location of anchor B -
 #'   end coordinate\cr
 #'   column 7: \tab \code{fdr} \tab numeric; False Discovery Rate -
 #'   significance of interaction
@@ -27,8 +27,8 @@
 #'
 #' This object contains genomic peaks from two replicate ChIP-seq experiments.
 #'
-#' @format A list with two components, the data frames \code{rep1.df} and
-#' \code{rep2.df}, which have the following four columns:
+#' @format A list with two components, the data frames \code{rep1_df} and
+#' \code{rep2_df}, which have the following four columns:
 #' \tabular{rll}{
 #'   column 1: \tab \code{chr} \tab character; genomic location of peak -
 #'   chromosome (e.g., \code{"chr3"})\cr

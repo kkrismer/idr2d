@@ -4,33 +4,33 @@
 \alias{calculateRelativeOverlap2D}
 \title{Relative Anchor Overlap of two Interactions}
 \usage{
-calculateRelativeOverlap2D(int1.anchor.a.start, int1.anchor.a.end,
-  int1.anchor.b.start, int1.anchor.b.end, int2.anchor.a.start,
-  int2.anchor.a.end, int2.anchor.b.start, int2.anchor.b.end)
+calculateRelativeOverlap2D(int1_anchor_a_start, int1_anchor_a_end,
+  int1_anchor_b_start, int1_anchor_b_end, int2_anchor_a_start,
+  int2_anchor_a_end, int2_anchor_b_start, int2_anchor_b_end)
 }
 \arguments{
-\item{int1.anchor.a.start}{integer vector; genomic start coordinate(s)
+\item{int1_anchor_a_start}{integer vector; genomic start coordinate(s)
 of anchor A in replicate 1 interaction}
 
-\item{int1.anchor.a.end}{integer vector; genomic end coordinate(s)
+\item{int1_anchor_a_end}{integer vector; genomic end coordinate(s)
 of anchor A in replicate 1 interaction}
 
-\item{int1.anchor.b.start}{integer vector; genomic start coordinate(s)
+\item{int1_anchor_b_start}{integer vector; genomic start coordinate(s)
 of anchor B in replicate 1 interaction}
 
-\item{int1.anchor.b.end}{integer vector; genomic end coordinate(s)
+\item{int1_anchor_b_end}{integer vector; genomic end coordinate(s)
 of anchor B in replicate 1 interaction}
 
-\item{int2.anchor.a.start}{integer vector; genomic start coordinate(s)
+\item{int2_anchor_a_start}{integer vector; genomic start coordinate(s)
 of anchor A in replicate 2 interaction}
 
-\item{int2.anchor.a.end}{integer vector; genomic end coordinate(s)
+\item{int2_anchor_a_end}{integer vector; genomic end coordinate(s)
 of anchor A in replicate 2 interaction}
 
-\item{int2.anchor.b.start}{integer vector; genomic start coordinate(s)
+\item{int2_anchor_b_start}{integer vector; genomic start coordinate(s)
 of anchor B in replicate 2 interaction}
 
-\item{int2.anchor.b.end}{integer vector; genomic end coordinate(s)
+\item{int2_anchor_b_end}{integer vector; genomic end coordinate(s)
 of anchor B in replicate 2 interaction}
 }
 \value{

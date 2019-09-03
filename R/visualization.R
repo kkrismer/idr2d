@@ -11,7 +11,7 @@
 #'   \code{idr} \tab IDR of the peak and the
 #'   corresponding peak in the other replicate.
 #' }
-#' @param remove.na logical; should NA values be removed?
+#' @param remove_na logical; should NA values be removed?
 #' @param xlab character; x axis label
 #' @param ylab character; y axis label
 #' @param title character; plot title
@@ -19,10 +19,10 @@
 #' @return ggplot2 object; IDR distribution histogram
 #'
 #' @examples
-#' idr.results <- estimateIDR1D(idr2d:::chipseq$rep1.df,
-#'                              idr2d:::chipseq$rep2.df,
-#'                              value.transformation = "log")
-#' IDRDistributionHistogram(idr.results$rep1.df)
+#' idr_results <- estimateIDR1D(idr2d:::chipseq$rep1_df,
+#'                              idr2d:::chipseq$rep2_df,
+#'                              value_transformation = "log")
+#' IDRDistributionHistogram(idr_results$rep1_df)
 #'
 #' @importFrom stats complete.cases
 #' @importFrom dplyr filter
@@ -35,14 +35,14 @@
 #' @importFrom ggplot2 element_blank
 #' @importFrom ggplot2 labs
 #' @export
-IDRDistributionHistogram <- function(df, remove.na = TRUE,
+IDRDistributionHistogram <- function(df, remove_na = TRUE,
                                      xlab = "IDR",
                                      ylab = "density",
                                      title = "IDR value distribution") {
     # avoid CRAN warnings
     idr <- NULL
 
-    if (remove.na) {
+    if (remove_na) {
         df <- dplyr::filter(df, stats::complete.cases(idr))
     }
 
@@ -66,25 +66,25 @@ IDRDistributionHistogram <- function(df, remove.na = TRUE,
 #' \tabular{rl}{
 #'   \code{rank} \tab integer; rank of the peak, established by
 #'   value column, ascending order\cr
-#'   \code{rep.rank} \tab integer; rank of corresponding
+#'   \code{rep_rank} \tab integer; rank of corresponding
 #'   replicate peak.\cr
 #'   \code{idr} \tab IDR of the peak and the
 #'   corresponding peak in the other replicate.
 #' }
-#' @param remove.na logical; should NA values be removed?
+#' @param remove_na logical; should NA values be removed?
 #' @param xlab character; x axis label
 #' @param ylab character; y axis label
 #' @param title character; plot title
-#' @param color.gradient character; either "rainbow" or "default"
-#' @param max.points.shown integer; default is 2500
+#' @param color_gradient character; either "rainbow" or "default"
+#' @param max_points_shown integer; default is 2500
 #'
 #' @return ggplot2 object; IDR rank scatterplot
 #'
 #' @examples
-#' idr.results <- estimateIDR1D(idr2d:::chipseq$rep1.df,
-#'                              idr2d:::chipseq$rep2.df,
-#'                              value.transformation = "log")
-#' rankIDRScatterplot(idr.results$rep1.df)
+#' idr_results <- estimateIDR1D(idr2d:::chipseq$rep1_df,
+#'                              idr2d:::chipseq$rep2_df,
+#'                              value_transformation = "log")
+#' rankIDRScatterplot(idr_results$rep1_df)
 #'
 #' @importFrom dplyr filter
 #' @importFrom stats complete.cases
@@ -98,41 +98,38 @@ IDRDistributionHistogram <- function(df, remove.na = TRUE,
 #' @importFrom ggplot2 scale_color_gradientn
 #' @importFrom grDevices rainbow
 #' @export
-rankIDRScatterplot <- function(df, remove.na = TRUE,
+rankIDRScatterplot <- function(df, remove_na = TRUE,
                                xlab = "rank in replicate 1",
                                ylab = "rank in replicate 2",
                                title = "rank - IDR dependence",
-                               color.gradient = c("rainbow", "default"),
-                               max.points.shown = 2500) {
+                               color_gradient = c("rainbow", "default"),
+                               max_points_shown = 2500) {
     # avoid CRAN warnings
-    rank <- rep.rank <- idr <- NULL
+    rank <- rep_rank <- idr <- NULL
 
     # argument handling
-    color.gradient <- match.arg(color.gradient,
+    color_gradient <- match.arg(color_gradient,
                                 choices = c("rainbow", "default"))
 
-    if (remove.na) {
+    if (remove_na) {
         df <- dplyr::filter(df, stats::complete.cases(idr))
     }
 
-    if (nrow(df) > max.points.shown) {
-        df <- df[sample.int(nrow(df), max.points.shown), ]
+    if (nrow(df) > max_points_shown) {
+        df <- df[sample.int(nrow(df), max_points_shown), ]
     }
 
     g <- ggplot2::ggplot(df, ggplot2::aes(x = rank,
-                                          y = rep.rank,
-                                          color = idr)) +
+                                          y = rep_rank,
+                                          color = abs(log(idr)))) +
         ggplot2::geom_point() +
         ggplot2::theme_bw() +
         ggplot2::theme(panel.border = ggplot2::element_blank()) +
         ggplot2::labs(x = xlab, y = ylab, color = "IDR", title = title)
 
-    if (color.gradient == "rainbow") {
-        g <- g + ggplot2::scale_color_gradientn(colours =
-                                                    grDevices::rainbow(10),
-                                                limits = c(0, 1.0),
-                                                breaks = c(0.0, 0.25, 0.5,
-                                                           0.75, 1.0))
+    if (color_gradient == "rainbow") {
+        g <- g + ggplot2::scale_color_gradientn(colors =
+                                                    grDevices::rainbow(10))
     }
     return(g)
 }
@@ -147,26 +144,26 @@ rankIDRScatterplot <- function(df, remove.na = TRUE,
 #' \tabular{rl}{
 #'   \code{value} \tab numeric; p-value, FDR, or heuristic used
 #'   to rank the peaks\cr
-#'   \code{rep.value} \tab numeric; value of corresponding
+#'   \code{rep_value} \tab numeric; value of corresponding
 #'   replicate peak\cr
 #'   \code{idr} \tab IDR of the peak and the
 #'   corresponding peak in the other replicate.
 #' }
-#' @param remove.na logical; should NA values be removed?
-#' @param remove.outliers logical; removes extreme data points
+#' @param remove_na logical; should NA values be removed?
+#' @param remove_outliers logical; removes extreme data points
 #' @param xlab character; x axis label
 #' @param ylab character; y axis label
 #' @param title character; plot title
-#' @param color.gradient character; either "rainbow" or "default"
-#' @param max.points.shown integer; default is 2500
+#' @param color_gradient character; either "rainbow" or "default"
+#' @param max_points_shown integer; default is 2500
 #'
 #' @return ggplot2 object; IDR value scatterplot
 #'
 #' @examples
-#' idr.results <- estimateIDR1D(idr2d:::chipseq$rep1.df,
-#'                              idr2d:::chipseq$rep2.df,
-#'                              value.transformation = "log")
-#' valueIDRScatterplot(idr.results$rep1.df)
+#' idr_results <- estimateIDR1D(idr2d:::chipseq$rep1_df,
+#'                              idr2d:::chipseq$rep2_df,
+#'                              value_transformation = "log")
+#' valueIDRScatterplot(idr_results$rep1_df)
 #'
 #' @importFrom dplyr filter
 #' @importFrom stats complete.cases
@@ -180,101 +177,101 @@ rankIDRScatterplot <- function(df, remove.na = TRUE,
 #' @importFrom ggplot2 scale_color_gradientn
 #' @importFrom grDevices rainbow
 #' @export
-valueIDRScatterplot <- function(df, remove.na = TRUE, remove.outliers = TRUE,
+valueIDRScatterplot <- function(df, remove_na = TRUE, remove_outliers = TRUE,
                                 xlab = "transformed value in replicate 1",
                                 ylab = "transformed value in replicate 2",
                                 title = "value - IDR dependence",
-                                color.gradient = c("rainbow", "default"),
-                                max.points.shown = 2500) {
+                                color_gradient = c("rainbow", "default"),
+                                max_points_shown = 2500) {
     # avoid CRAN warnings
-    value <- rep.value <- idr <- NULL
+    value <- rep_value <- idr <- NULL
 
     # argument handling
-    color.gradient <- match.arg(color.gradient,
+    color_gradient <- match.arg(color_gradient,
                                 choices = c("rainbow", "default"))
 
-    if (remove.na) {
+    if (remove_na) {
         df <- dplyr::filter(df, stats::complete.cases(idr))
     }
 
-    if (remove.outliers) {
+    if (remove_outliers) {
         # remove outliers on upper tail (value)
-        data.range <- range(df$value)[2] - range(df$value)[1]
+        data_range <- range(df$value)[2] - range(df$value)[1]
         if (max(df$value) > 0) {
-            truncated.df <- dplyr::filter(df, value < max(df$value) * 0.99)
+            truncated_df <- dplyr::filter(df, value < max(df$value) * 0.99)
         } else {
-            truncated.df <- dplyr::filter(df, value < max(df$value) * 1.01)
+            truncated_df <- dplyr::filter(df, value < max(df$value) * 1.01)
         }
 
-        truncated.data.range <- range(truncated.df$value)[2] -
-            range(truncated.df$value)[1]
+        truncated_data_range <- range(truncated_df$value)[2] -
+            range(truncated_df$value)[1]
 
-        if (truncated.data.range < 0.7 * data.range) {
-            df <- truncated.df
+        if (truncated_data_range < 0.7 * data_range) {
+            df <- truncated_df
         }
 
         # remove outliers on lower tail (value)
-        data.range <- range(df$value)[2] - range(df$value)[1]
+        data_range <- range(df$value)[2] - range(df$value)[1]
         if (min(df$value) > 0) {
-            truncated.df <- dplyr::filter(df, value > min(df$value) * 1.01)
+            truncated_df <- dplyr::filter(df, value > min(df$value) * 1.01)
         } else {
-            truncated.df <- dplyr::filter(df, value > min(df$value) * 0.99)
+            truncated_df <- dplyr::filter(df, value > min(df$value) * 0.99)
         }
 
-        truncated.data.range <- range(truncated.df$value)[2] -
-            range(truncated.df$value)[1]
+        truncated_data_range <- range(truncated_df$value)[2] -
+            range(truncated_df$value)[1]
 
-        if (truncated.data.range < 0.7 * data.range) {
-            df <- truncated.df
+        if (truncated_data_range < 0.7 * data_range) {
+            df <- truncated_df
         }
 
-        # remove outliers on upper tail (rep.value)
-        data.range <- range(df$rep.value)[2] - range(df$rep.value)[1]
-        if (max(df$rep.value) > 0) {
-            truncated.df <- dplyr::filter(df, rep.value < max(df$rep.value) *
+        # remove outliers on upper tail (rep_value)
+        data_range <- range(df$rep_value)[2] - range(df$rep_value)[1]
+        if (max(df$rep_value) > 0) {
+            truncated_df <- dplyr::filter(df, rep_value < max(df$rep_value) *
                                               0.99)
         } else {
-            truncated.df <- dplyr::filter(df, rep.value < max(rep.value) * 1.01)
+            truncated_df <- dplyr::filter(df, rep_value < max(rep_value) * 1.01)
         }
 
-        truncated.data.range <- range(truncated.df$rep.value)[2] -
-            range(truncated.df$rep.value)[1]
+        truncated_data_range <- range(truncated_df$rep_value)[2] -
+            range(truncated_df$rep_value)[1]
 
-        if (truncated.data.range < 0.7 * data.range) {
-            df <- truncated.df
+        if (truncated_data_range < 0.7 * data_range) {
+            df <- truncated_df
         }
 
-        # remove outliers on lower tail (rep.value)
-        data.range <- range(df$rep.value)[2] - range(df$rep.value)[1]
-        if (min(df$rep.value) > 0) {
-            truncated.df <- dplyr::filter(df, rep.value > min(df$rep.value) *
+        # remove outliers on lower tail (rep_value)
+        data_range <- range(df$rep_value)[2] - range(df$rep_value)[1]
+        if (min(df$rep_value) > 0) {
+            truncated_df <- dplyr::filter(df, rep_value > min(df$rep_value) *
                                               1.01)
         } else {
-            truncated.df <- dplyr::filter(df, rep.value > min(df$rep.value) *
+            truncated_df <- dplyr::filter(df, rep_value > min(df$rep_value) *
                                               0.99)
         }
 
-        truncated.data.range <- range(truncated.df$rep.value)[2] -
-            range(truncated.df$rep.value)[1]
+        truncated_data_range <- range(truncated_df$rep_value)[2] -
+            range(truncated_df$rep_value)[1]
 
-        if (truncated.data.range < 0.7 * data.range) {
-            df <- truncated.df
+        if (truncated_data_range < 0.7 * data_range) {
+            df <- truncated_df
         }
     }
 
-    if (nrow(df) > max.points.shown) {
-        df <- df[sample.int(nrow(df), max.points.shown), ]
+    if (nrow(df) > max_points_shown) {
+        df <- df[sample.int(nrow(df), max_points_shown), ]
     }
 
     g <- ggplot2::ggplot(df, ggplot2::aes(x = value,
-                                          y = rep.value,
+                                          y = rep_value,
                                           color = idr)) +
         ggplot2::geom_point() +
         ggplot2::theme_bw() +
         ggplot2::theme(panel.border = ggplot2::element_blank()) +
         ggplot2::labs(x = xlab, y = ylab, color = "IDR", title = title)
 
-    if (color.gradient == "rainbow") {
+    if (color_gradient == "rainbow") {
         g <- g + ggplot2::scale_color_gradientn(colours =
                                                     grDevices::rainbow(10),
                                                 limits = c(0, 1.0),

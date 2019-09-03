@@ -4,19 +4,19 @@
 \alias{calculateMidpointDistance1D}
 \title{Distance between Midpoints of two Peaks}
 \usage{
-calculateMidpointDistance1D(peak1.start, peak1.end, peak2.start, peak2.end)
+calculateMidpointDistance1D(peak1_start, peak1_end, peak2_start, peak2_end)
 }
 \arguments{
-\item{peak1.start}{integer vector; genomic start coordinate(s)
+\item{peak1_start}{integer vector; genomic start coordinate(s)
 of peak in replicate 1}
 
-\item{peak1.end}{integer vector; genomic end coordinate(s)
+\item{peak1_end}{integer vector; genomic end coordinate(s)
 of peak in replicate 1}
 
-\item{peak2.start}{integer vector; genomic start coordinate(s)
+\item{peak2_start}{integer vector; genomic start coordinate(s)
 of peak in replicate 2}
 
-\item{peak2.end}{integer vector; genomic end coordinate(s)
+\item{peak2_end}{integer vector; genomic end coordinate(s)
 of peak in replicate 2}
 }
 \value{

@@ -4,25 +4,25 @@
 \alias{preprocess}
 \title{Prepares Data for IDR Analysis}
 \usage{
-preprocess(x, value.transformation = c("identity", "additive.inverse",
-  "multiplicative.inverse", "log", "log.additive.inverse"),
-  max.factor = 1.5, jitter.factor = 1e-04)
+preprocess(x, value_transformation = c("identity", "additive_inverse",
+  "multiplicative_inverse", "log", "log_additive_inverse"),
+  max_factor = 1.5, jitter_factor = 1e-04)
 }
 \arguments{
 \item{x}{numeric vector of values}
 
-\item{value.transformation}{the values in \code{x} have to be transformed in
+\item{value_transformation}{the values in \code{x} have to be transformed in
 a way such that when ordered in descending order, more significant
 interactions end up on top of the list. If the values in \code{x} are
-p-values, \code{"log.additive.inverse"} is recommended. The following
+p-values, \code{"log_additive_inverse"} is recommended. The following
 transformations are supported:
 \tabular{rl}{
   \code{"identity"} \tab no transformation is performed on \code{x}\cr
-  \code{"additive.inverse"} \tab \code{x. = -x}\cr
-  \code{"multiplicative.inverse"} \tab \code{x. = 1 / x}\cr
+  \code{"additive_inverse"} \tab \code{x. = -x}\cr
+  \code{"multiplicative_inverse"} \tab \code{x. = 1 / x}\cr
   \code{"log"} \tab \code{x. = log(x)}. Note: zeros are replaced by
   \code{.Machine$double.xmin}\cr
-  \code{"log.additive.inverse"} \tab \code{x. = -log(x)}, recommended if
+  \code{"log_additive_inverse"} \tab \code{x. = -log(x)}, recommended if
   \code{x} are p-values. Note: zeros are replaced by
   \code{.Machine$double.xmin}
 }
@@ -31,11 +31,11 @@ either \code{"ascending"} (more significant
 interactions have lower value in \code{value} column) or \code{"descending"}
 (more significant interactions have higher value in \code{value} column)}
 
-\item{max.factor}{numeric; controls the replacement values for \code{Inf}
-and \code{-Inf}. \code{Inf} are replaced by \code{max(x) * max.factor} and
-\code{-Inf} are replaced by \code{min(x) / max.factor}.}
+\item{max_factor}{numeric; controls the replacement values for \code{Inf}
+and \code{-Inf}. \code{Inf} are replaced by \code{max(x) * max_factor} and
+\code{-Inf} are replaced by \code{min(x) / max_factor}.}
 
-\item{jitter.factor}{numeric; controls the magnitude of the noise that
+\item{jitter_factor}{numeric; controls the magnitude of the noise that
 is added to \code{x}. This is done to break ties in \code{x}.}
 }
 \value{
@@ -46,19 +46,19 @@ for IDR analysis
 This method removes invalid values, establishes the correct
 ranking, and breaks ties prior to IDR analysis.
 
-\code{Inf} and \code{-Inf} are replaced by \code{max(x) * max.factor}
-and \code{min(x) / max.factor}, respectively.
+\code{Inf} and \code{-Inf} are replaced by \code{max(x) * max_factor}
+and \code{min(x) / max_factor}, respectively.
 
 \code{NA} values in \code{x} are replaced by \code{mean(x)}.
 
 All values in \code{x} are transformed using the transformation specified
-in \code{value.transformation}.
+in \code{value_transformation}.
 
 Lastly, a small amount of noise is added to \code{x} to break ties. The
-magnitude of the noise is controlled by \code{jitter.factor}.
+magnitude of the noise is controlled by \code{jitter_factor}.
 }
 \examples{
-rep1.df <- idr2d:::chiapet$rep1.df
-rep1.df$fdr <- preprocess(rep1.df$fdr, "log.additive.inverse")
+rep1_df <- idr2d:::chiapet$rep1_df
+rep1_df$fdr <- preprocess(rep1_df$fdr, "log_additive_inverse")
 
 }

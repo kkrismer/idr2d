@@ -5,30 +5,30 @@
 \title{Finds One-to-One Correspondence between Peaks or interactions
 from Replicate 1 and 2}
 \usage{
-establishBijection(rep1.df, rep2.df, analysis.type = c("IDR1D", "IDR2D"),
-  ambiguity.resolution.method = c("overlap", "midpoint", "value"),
-  max.gap = 0L)
+establishBijection(rep1_df, rep2_df, analysis_type = c("IDR1D", "IDR2D"),
+  ambiguity_resolution_method = c("overlap", "midpoint", "value"),
+  max_gap = 0L)
 }
 \arguments{
-\item{rep1.df}{data frame of observations (i.e., genomic peaks or genomic
+\item{rep1_df}{data frame of observations (i.e., genomic peaks or genomic
 interactions) of
-replicate 1. If \code{analysis.type} is IDR1D, the columns of \code{rep1.df}
+replicate 1. If \code{analysis_type} is IDR1D, the columns of \code{rep1_df}
 are described in \code{\link{establishBijection1D}}, otherwise in
 \code{\link{establishBijection2D}}}
 
-\item{rep2.df}{data frame of observations (i.e., genomic peaks or genomic
-interactions) of replicate 2. Same columns as \code{rep1.df}.}
+\item{rep2_df}{data frame of observations (i.e., genomic peaks or genomic
+interactions) of replicate 2. Same columns as \code{rep1_df}.}
 
-\item{analysis.type}{"IDR2D" for genomic interaction data sets,
+\item{analysis_type}{"IDR2D" for genomic interaction data sets,
 "IDR1D" for genomic peak data sets}
 
-\item{ambiguity.resolution.method}{defines how ambiguous assignments
+\item{ambiguity_resolution_method}{defines how ambiguous assignments
 (when one interaction or peak in replicate 1 overlaps with
 multiple interactions or peaks in replicate 2 or vice versa)
 are resolved. For available methods, see \code{\link{overlap1D}} or
 \code{\link{overlap2D}}, respectively.}
 
-\item{max.gap}{integer; maximum gap in nucleotides allowed between two
+\item{max_gap}{integer; maximum gap in nucleotides allowed between two
 anchors for
 them to be considered as overlapping
 (defaults to zero, no gap between anchors)}
@@ -42,12 +42,12 @@ Finds One-to-One Correspondence between Peaks or interactions
 from Replicate 1 and 2
 }
 \examples{
-rep1.df <- idr2d:::chipseq$rep1.df
-rep1.df$value <- preprocess(rep1.df$value, "log")
+rep1_df <- idr2d:::chipseq$rep1_df
+rep1_df$value <- preprocess(rep1_df$value, "log")
 
-rep2.df <- idr2d:::chipseq$rep2.df
-rep2.df$value <- preprocess(rep2.df$value, "log")
+rep2_df <- idr2d:::chipseq$rep2_df
+rep2_df$value <- preprocess(rep2_df$value, "log")
 
-mapping <- establishBijection(rep1.df, rep2.df, analysis.type = "IDR1D")
+mapping <- establishBijection(rep1_df, rep2_df, analysis_type = "IDR1D")
 
 }
