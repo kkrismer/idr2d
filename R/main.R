@@ -384,7 +384,8 @@ preprocess <- function(x, value.transformation = c("identity",
     # add jitter to break ties
     invisible(tryCatch({
         x <- jitter(x, factor = jitter.factor)
-    }, error = function(e) {
+    },
+    error = function(e) {
         futile.logger::flog.warn(stringr::str_trim(e))
     }))
 
@@ -691,7 +692,8 @@ estimateIDR <- function(rep1.df, rep2.df, analysis.type = "IDR2D",
                 } else {
                     idx.df$idr <- idr.results$IDR
                 }
-            }, error = function(e) {
+            },
+            error = function(e) {
                 idx.df$idr <- as.numeric(NA)
                 futile.logger::flog.warn(stringr::str_trim(e))
             }))

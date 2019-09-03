@@ -9,7 +9,7 @@ getStandardChromosomes <- function(species, style) {
 #' TODO
 #'
 #' @param rep1.hic.file path to .hic file for replicate 1
-#' @param rep1.hic.file path to .hic file for replicate 2
+#' @param rep2.hic.file path to .hic file for replicate 2
 #' @param resolution block resolution of HiC contact matrix in base pairs,
 #' defaults to 10,000 bp
 #' @param chromosomes list of chromosome names in HiC files, defaults to UCSC
@@ -60,9 +60,9 @@ getStandardChromosomes <- function(species, style) {
 #' rep1.hic.file <- "D:/MIT/Research/PhD/Gifford/projects/chia-pet/data/GSE71831/GSE71831_Patski_paternal.hic"
 #' rep2.hic.file <- "D:/MIT/Research/PhD/Gifford/projects/chia-pet/data/GSE71831/GSE71831_Patski_maternal.hic"
 #' resolution <- 1000000
-#' mus musculus
-#' chromosomes <- paste0("chr", c(1:19, "X", "Y"))
-#' df <- estimateIDR2DHiC(rep1.hic.file, rep2.hic.file, resolution, chromosomes = chromosomes)
+#' #mus musculus
+#' #chromosomes <- paste0("chr", c(1:19, "X", "Y"))
+#' #df <- estimateIDR2DHiC(rep1.hic.file, rep2.hic.file, resolution, chromosomes = chromosomes)
 #'
 #' @export
 estimateIDR2DHiC <- function(rep1.hic.file, rep2.hic.file, resolution = 10000,
@@ -99,7 +99,7 @@ estimateIDR2DHiC <- function(rep1.hic.file, rep2.hic.file, resolution = 10000,
         print(chromosome)
         counts <- straw$straw(normalization, rep1.hic.file,
                               chromosome, chromosome,
-                              'BP', resolution)
+                              "BP", resolution)
         return(data.frame(interaction = paste0(
             chromosome, ":",
             format(counts[[1]], scientific = FALSE), "-",
@@ -111,7 +111,7 @@ estimateIDR2DHiC <- function(rep1.hic.file, rep2.hic.file, resolution = 10000,
     rep2 <- lapply(chromosomes, function(chromosome) {
         counts <- straw$straw(normalization, rep2.hic.file,
                               chromosome, chromosome,
-                              'BP', resolution)
+                              "BP", resolution)
         futile.logger::flog.info(paste0("completed ", chromosome))
         return(data.frame(interaction = paste0(
             chromosome, ":",
@@ -144,7 +144,8 @@ estimateIDR2DHiC <- function(rep1.hic.file, rep2.hic.file, resolution = 10000,
         } else {
             df$idr <- idr.results$IDR
         }
-    }, error = function(e) {
+    },
+    error = function(e) {
         df$idr <- as.numeric(NA)
         futile.logger::flog.warn(stringr::str_trim(e))
     }))
