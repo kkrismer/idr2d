@@ -11,7 +11,7 @@
 #' replicate 2 that overlaps with the peak in replicate 1 and has a
 #' lower \emph{ambiguity resolution value}.
 #'
-#' @inheritParams overlap1D
+#' @inheritParams overlap_1d
 #'
 #' @return Data frames \code{rep1_df} and \code{rep2_df} with
 #' the following columns:
@@ -45,16 +45,16 @@
 #' rep2_df <- idr2d:::chipseq$rep2_df
 #' rep2_df$value <- preprocess(rep2_df$value, "log")
 #'
-#' mapping <- establishBijection1D(rep1_df, rep2_df)
+#' mapping <- establish_bijection_1d(rep1_df, rep2_df)
 #'
 #' @export
-establishBijection1D <- function(rep1_df, rep2_df,
-                                 ambiguity_resolution_method = c("overlap",
-                                                                 "midpoint",
-                                                                 "value"),
-                                 max_gap = 0L) {
-    return(establishBijection(rep1_df, rep2_df, "IDR1D",
-                              ambiguity_resolution_method))
+establish_bijection_1d <- function(rep1_df, rep2_df,
+                                   ambiguity_resolution_method = c("overlap",
+                                                                   "midpoint",
+                                                                   "value"),
+                                   max_gap = 0L) {
+    return(establish_bijection(rep1_df, rep2_df, "IDR1D",
+                               ambiguity_resolution_method))
 }
 
 #' @title Finds One-to-One Correspondence between Interactions from Replicate 1
@@ -70,7 +70,7 @@ establishBijection1D <- function(rep1_df, rep2_df,
 #' replicate 2 that overlaps with the interaction in replicate 1 and has a
 #' lower \emph{ambiguity resolution value}.
 #'
-#' @inheritParams overlap2D
+#' @inheritParams overlap_2d
 #'
 #' @return Data frames \code{rep1_df} and \code{rep2_df} with
 #' the following columns:
@@ -111,16 +111,16 @@ establishBijection1D <- function(rep1_df, rep2_df,
 #' rep2_df <- idr2d:::chiapet$rep2_df
 #' rep2_df$fdr <- preprocess(rep2_df$fdr, "log_additive_inverse")
 #'
-#' mapping <- establishBijection2D(rep1_df, rep2_df)
+#' mapping <- establish_bijection_2d(rep1_df, rep2_df)
 #'
 #' @export
-establishBijection2D <- function(rep1_df, rep2_df,
-                                 ambiguity_resolution_method = c("overlap",
-                                                                 "midpoint",
-                                                                 "value"),
-                                 max_gap = 0L) {
-    return(establishBijection(rep1_df, rep2_df, "IDR2D",
-                              ambiguity_resolution_method))
+establish_bijection_2d <- function(rep1_df, rep2_df,
+                                   ambiguity_resolution_method = c("overlap",
+                                                                   "midpoint",
+                                                                   "value"),
+                                   max_gap = 0L) {
+    return(establish_bijection(rep1_df, rep2_df, "IDR2D",
+                               ambiguity_resolution_method))
 }
 
 #' @title Finds One-to-One Correspondence between Peaks or interactions
@@ -129,8 +129,8 @@ establishBijection2D <- function(rep1_df, rep2_df,
 #'@param rep1_df data frame of observations (i.e., genomic peaks or genomic
 #' interactions) of
 #' replicate 1. If \code{analysis_type} is IDR1D, the columns of \code{rep1_df}
-#' are described in \code{\link{establishBijection1D}}, otherwise in
-#' \code{\link{establishBijection2D}}
+#' are described in \code{\link{establish_bijection_1d}}, otherwise in
+#' \code{\link{establish_bijection_2d}}
 #' @param rep2_df data frame of observations (i.e., genomic peaks or genomic
 #' interactions) of replicate 2. Same columns as \code{rep1_df}.
 #' @param analysis_type "IDR2D" for genomic interaction data sets,
@@ -138,12 +138,13 @@ establishBijection2D <- function(rep1_df, rep2_df,
 #' @param ambiguity_resolution_method defines how ambiguous assignments
 #' (when one interaction or peak in replicate 1 overlaps with
 #' multiple interactions or peaks in replicate 2 or vice versa)
-#' are resolved. For available methods, see \code{\link{overlap1D}} or
-#' \code{\link{overlap2D}}, respectively.
-#' @inheritParams anchorOverlap
+#' are resolved. For available methods, see \code{\link{overlap_1d}} or
+#' \code{\link{overlap_2d}}, respectively.
 #'
-#' @return See \code{\link{establishBijection1D}} or
-#' \code{\link{establishBijection2D}}, respectively.
+#' @inheritParams anchor_overlap
+#'
+#' @return See \code{\link{establish_bijection_1d}} or
+#' \code{\link{establish_bijection_2d}}, respectively.
 #'
 #' @examples
 #' rep1_df <- idr2d:::chipseq$rep1_df
@@ -152,7 +153,7 @@ establishBijection2D <- function(rep1_df, rep2_df,
 #' rep2_df <- idr2d:::chipseq$rep2_df
 #' rep2_df$value <- preprocess(rep2_df$value, "log")
 #'
-#' mapping <- establishBijection(rep1_df, rep2_df, analysis_type = "IDR1D")
+#' mapping <- establish_bijection(rep1_df, rep2_df, analysis_type = "IDR1D")
 #'
 #' @importFrom dplyr arrange
 #' @importFrom dplyr desc
@@ -162,12 +163,12 @@ establishBijection2D <- function(rep1_df, rep2_df,
 #' @importFrom futile.logger flog.warn
 #' @importFrom magrittr "%>%"
 #' @export
-establishBijection <- function(rep1_df, rep2_df,
-                               analysis_type = c("IDR1D", "IDR2D"),
-                               ambiguity_resolution_method = c("overlap",
-                                                               "midpoint",
-                                                               "value"),
-                               max_gap = 0L) {
+establish_bijection <- function(rep1_df, rep2_df,
+                                analysis_type = c("IDR1D", "IDR2D"),
+                                ambiguity_resolution_method = c("overlap",
+                                                                "midpoint",
+                                                                "value"),
+                                max_gap = 0L) {
     # avoid CRAN warnings
     rep1_idx <- rep2_idx <- arv <- NULL
     chr <- start <- end <- NULL
@@ -210,11 +211,11 @@ establishBijection <- function(rep1_df, rep2_df,
         rep2_df$rank <- seq_len(nrow(rep2_df))
 
         if (analysis_type == "IDR1D") {
-            pairs_df <- overlap1D(rep1_df, rep2_df,
-                                  ambiguity_resolution_method, max_gap)
+            pairs_df <- overlap_1d(rep1_df, rep2_df,
+                                   ambiguity_resolution_method, max_gap)
         } else if (analysis_type == "IDR2D") {
-            pairs_df <- overlap2D(rep1_df, rep2_df,
-                                  ambiguity_resolution_method, max_gap)
+            pairs_df <- overlap_2d(rep1_df, rep2_df,
+                                   ambiguity_resolution_method, max_gap)
         }
 
         top_pairs_df <- pairs_df %>% dplyr::group_by(rep1_idx) %>%
@@ -407,7 +408,7 @@ preprocess <- function(x, value_transformation = c("identity",
 #' IDR estimation (defaults to 30)
 #' @param local_idr see \code{\link[idr:est.IDR]{est.IDR}}
 #'
-#' @inheritParams establishBijection1D
+#' @inheritParams establish_bijection_1d
 #' @inheritParams idr::est.IDR
 #' @inheritParams preprocess
 #'
@@ -442,32 +443,32 @@ preprocess <- function(x, value_transformation = c("identity",
 #' }
 #'
 #' @examples
-#' idr_results <- estimateIDR1D(idr2d:::chipseq$rep1_df,
-#'                              idr2d:::chipseq$rep2_df,
-#'                              value_transformation = "log")
+#' idr_results <- estimate_idr_1d(idr2d:::chipseq$rep1_df,
+#'                                idr2d:::chipseq$rep2_df,
+#'                                value_transformation = "log")
 #'
 #' @export
-estimateIDR1D <- function(rep1_df, rep2_df,
-                          value_transformation = c("identity",
-                                                   "additive_inverse",
-                                                   "multiplicative_inverse",
-                                                   "log",
-                                                   "log_additive_inverse"),
-                          ambiguity_resolution_method = c("overlap",
-                                                          "midpoint",
-                                                          "value"),
-                          remove_nonstandard_chromosomes = TRUE,
-                          max_factor = 1.5, jitter_factor = 0.0001,
-                          max_gap = 0L,
-                          mu = 0.1, sigma = 1.0, rho = 0.2, p = 0.5,
-                          eps = 0.001, max_iteration = 30, local_idr = TRUE) {
-    return(estimateIDR(rep1_df, rep2_df, "IDR1D",
-                       value_transformation,
-                       ambiguity_resolution_method,
-                       remove_nonstandard_chromosomes,
-                       max_factor, jitter_factor, max_gap,
-                       mu, sigma, rho, p,
-                       eps, max_iteration, local_idr))
+estimate_idr_1d <- function(rep1_df, rep2_df,
+                            value_transformation = c("identity",
+                                                     "additive_inverse",
+                                                     "multiplicative_inverse",
+                                                     "log",
+                                                     "log_additive_inverse"),
+                            ambiguity_resolution_method = c("overlap",
+                                                            "midpoint",
+                                                            "value"),
+                            remove_nonstandard_chromosomes = TRUE,
+                            max_factor = 1.5, jitter_factor = 0.0001,
+                            max_gap = 0L,
+                            mu = 0.1, sigma = 1.0, rho = 0.2, p = 0.5,
+                            eps = 0.001, max_iteration = 30, local_idr = TRUE) {
+    return(estimate_idr(rep1_df, rep2_df, "IDR1D",
+                        value_transformation,
+                        ambiguity_resolution_method,
+                        remove_nonstandard_chromosomes,
+                        max_factor, jitter_factor, max_gap,
+                        mu, sigma, rho, p,
+                        eps, max_iteration, local_idr))
 }
 
 #' @title Estimates IDR for Genomic Interaction Data
@@ -491,7 +492,7 @@ estimateIDR1D <- function(rep1_df, rep2_df,
 #' IDR estimation (defaults to 30)
 #' @param local_idr see \code{\link[idr:est.IDR]{est.IDR}}
 #'
-#' @inheritParams establishBijection2D
+#' @inheritParams establish_bijection_2d
 #' @inheritParams idr::est.IDR
 #' @inheritParams preprocess
 #'
@@ -533,33 +534,33 @@ estimateIDR1D <- function(rep1_df, rep2_df,
 #' }
 #'
 #' @examples
-#' idr_results <- estimateIDR2D(idr2d:::chiapet$rep1_df,
-#'                              idr2d:::chiapet$rep2_df,
-#'                              value_transformation = "log_additive_inverse")
+#' idr_results <- estimate_idr_2d(idr2d:::chiapet$rep1_df,
+#'                                idr2d:::chiapet$rep2_df,
+#'                                value_transformation = "log_additive_inverse")
 #'
 #' @export
-estimateIDR2D <- function(rep1_df, rep2_df,
-                          value_transformation = c("identity",
-                                                   "additive_inverse",
-                                                   "multiplicative_inverse",
-                                                   "log",
-                                                   "log_additive_inverse"),
-                          ambiguity_resolution_method = c("overlap",
-                                                          "midpoint",
-                                                          "value"),
-                          remove_nonstandard_chromosomes = TRUE,
-                          max_factor = 1.5, jitter_factor = 0.0001,
-                          max_gap = 0L,
-                          mu = 0.1, sigma = 1.0, rho = 0.2, p = 0.5,
-                          eps = 0.001, max_iteration = 30, local_idr = TRUE) {
-    return(estimateIDR(rep1_df, rep2_df, "IDR2D",
-                       value_transformation,
-                       ambiguity_resolution_method,
-                       remove_nonstandard_chromosomes,
-                       max_factor, jitter_factor,
-                       max_gap,
-                       mu, sigma, rho, p,
-                       eps, max_iteration, local_idr))
+estimate_idr_2d <- function(rep1_df, rep2_df,
+                            value_transformation = c("identity",
+                                                     "additive_inverse",
+                                                     "multiplicative_inverse",
+                                                     "log",
+                                                     "log_additive_inverse"),
+                            ambiguity_resolution_method = c("overlap",
+                                                            "midpoint",
+                                                            "value"),
+                            remove_nonstandard_chromosomes = TRUE,
+                            max_factor = 1.5, jitter_factor = 0.0001,
+                            max_gap = 0L,
+                            mu = 0.1, sigma = 1.0, rho = 0.2, p = 0.5,
+                            eps = 0.001, max_iteration = 30, local_idr = TRUE) {
+    return(estimate_idr(rep1_df, rep2_df, "IDR2D",
+                        value_transformation,
+                        ambiguity_resolution_method,
+                        remove_nonstandard_chromosomes,
+                        max_factor, jitter_factor,
+                        max_gap,
+                        mu, sigma, rho, p,
+                        eps, max_iteration, local_idr))
 }
 
 #' @title Estimates IDR for Genomic Peaks or Genomic Interactions
@@ -579,17 +580,17 @@ estimateIDR2D <- function(rep1_df, rep2_df,
 #'
 #' @inheritParams idr::est.IDR
 #' @inheritParams preprocess
-#' @inheritParams establishBijection
+#' @inheritParams establish_bijection
 #'
 #'
-#' @return See \code{\link{estimateIDR1D}} or
-#' \code{\link{estimateIDR2D}}, respectively.
+#' @return See \code{\link{estimate_idr_1d}} or
+#' \code{\link{estimate_idr_2d}}, respectively.
 #'
 #' @examples
-#' idr_results <- estimateIDR(idr2d:::chiapet$rep1_df,
-#'                            idr2d:::chiapet$rep2_df,
-#'                            analysis_type = "IDR2D",
-#'                            value_transformation = "log_additive_inverse")
+#' idr_results <- estimate_idr(idr2d:::chiapet$rep1_df,
+#'                             idr2d:::chiapet$rep2_df,
+#'                             analysis_type = "IDR2D",
+#'                             value_transformation = "log_additive_inverse")
 #'
 #' @importFrom dplyr arrange
 #' @importFrom dplyr select
@@ -598,20 +599,20 @@ estimateIDR2D <- function(rep1_df, rep2_df,
 #' @importFrom stringr str_trim
 #' @importFrom idr est.IDR
 #' @export
-estimateIDR <- function(rep1_df, rep2_df, analysis_type = "IDR2D",
-                        value_transformation = c("identity",
-                                                 "additive_inverse",
-                                                 "multiplicative_inverse",
-                                                 "log",
-                                                 "log_additive_inverse"),
-                        ambiguity_resolution_method = c("overlap",
-                                                        "midpoint",
-                                                        "value"),
-                        remove_nonstandard_chromosomes = TRUE,
-                        max_factor = 1.5, jitter_factor = 0.0001,
-                        max_gap = 0L,
-                        mu = 0.1, sigma = 1.0, rho = 0.2, p = 0.5,
-                        eps = 0.001, max_iteration = 30, local_idr = TRUE) {
+estimate_idr <- function(rep1_df, rep2_df, analysis_type = "IDR2D",
+                         value_transformation = c("identity",
+                                                  "additive_inverse",
+                                                  "multiplicative_inverse",
+                                                  "log",
+                                                  "log_additive_inverse"),
+                         ambiguity_resolution_method = c("overlap",
+                                                         "midpoint",
+                                                         "value"),
+                         remove_nonstandard_chromosomes = TRUE,
+                         max_factor = 1.5, jitter_factor = 0.0001,
+                         max_gap = 0L,
+                         mu = 0.1, sigma = 1.0, rho = 0.2, p = 0.5,
+                         eps = 0.001, max_iteration = 30, local_idr = TRUE) {
     # avoid CRAN warnings
     rep2_idx <- rep1_value <- rep2_value <- NULL
     chr <- start <- end <- NULL
@@ -638,11 +639,11 @@ estimateIDR <- function(rep1_df, rep2_df, analysis_type = "IDR2D",
 
     if (remove_nonstandard_chromosomes) {
         if (analysis_type == "IDR1D") {
-            rep1_df <- removeNonstandardChromosomes1D(rep1_df)
-            rep2_df <- removeNonstandardChromosomes1D(rep2_df)
+            rep1_df <- remove_nonstandard_chromosomes_1d(rep1_df)
+            rep2_df <- remove_nonstandard_chromosomes_1d(rep2_df)
         } else if (analysis_type == "IDR2D") {
-            rep1_df <- removeNonstandardChromosomes2D(rep1_df)
-            rep2_df <- removeNonstandardChromosomes2D(rep2_df)
+            rep1_df <- remove_nonstandard_chromosomes_2d(rep1_df)
+            rep2_df <- remove_nonstandard_chromosomes_2d(rep2_df)
         }
     }
 
@@ -656,9 +657,9 @@ estimateIDR <- function(rep1_df, rep2_df, analysis_type = "IDR2D",
                                 max_factor = max_factor,
                                 jitter_factor = jitter_factor)
 
-    mapping <- establishBijection(rep1_df, rep2_df, analysis_type,
-                                  ambiguity_resolution_method,
-                                  max_gap = max_gap)
+    mapping <- establish_bijection(rep1_df, rep2_df, analysis_type,
+                                   ambiguity_resolution_method,
+                                   max_gap = max_gap)
 
     if (nrow(mapping$rep1_df) > 0 && nrow(mapping$rep2_df) > 0) {
         rep1_df <- mapping$rep1_df

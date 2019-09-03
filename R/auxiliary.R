@@ -47,7 +47,7 @@
 #'                             start = rep2_df[, 2],
 #'                             end = rep2_df[, 3])
 #'
-#' anchor_a_overlap <- anchorOverlap(rep1_anchor_a, rep2_anchor_a)
+#' anchor_a_overlap <- anchor_overlap(rep1_anchor_a, rep2_anchor_a)
 #'
 #'
 #' @importFrom GenomicRanges makeGRangesFromDataFrame
@@ -55,7 +55,7 @@
 #' @importFrom stringr str_sort
 #' @importFrom GenomicRanges findOverlaps
 #' @export
-anchorOverlap <- function(rep1_anchor, rep2_anchor, max_gap = 0L) {
+anchor_overlap <- function(rep1_anchor, rep2_anchor, max_gap = 0L) {
     rep1_ranges <- GenomicRanges::makeGRangesFromDataFrame(rep1_anchor)
     rep2_ranges <- GenomicRanges::makeGRangesFromDataFrame(rep2_anchor)
 
@@ -84,32 +84,32 @@ anchorOverlap <- function(rep1_anchor, rep2_anchor, max_gap = 0L) {
 #' Note: peaks must be on the same
 #' chromosome; start coordinate is always less than end coordinate
 #'
-#' @inheritParams calculateRelativeOverlap1D
+#' @inheritParams calculate_relative_overlap_1d
 #'
 #' @return positive integer vector; distances between peak pairs
 #'
 #' @examples
 #' # identical, zero distance
-#' calculateMidpointDistance1D(100, 120,
+#' calculate_midpoint_distance_1d(100, 120,
 #'                           100, 120)
 #'
 #' # centered, zero distance
-#' calculateMidpointDistance1D(100, 120,
+#' calculate_midpoint_distance_1d(100, 120,
 #'                           90, 130)
 #'
 #' # off by 10 per anchor
-#' calculateMidpointDistance1D(100, 120,
+#' calculate_midpoint_distance_1d(100, 120,
 #'                          110, 130)
 #'
 #' # vectorized example
-#' calculateMidpointDistance1D(c(100, 100, 100),
+#' calculate_midpoint_distance_1d(c(100, 100, 100),
 #'                           c(120, 120, 120),
 #'                           c(100, 90, 110),
 #'                           c(120, 130, 130))
 #'
 #' @export
-calculateMidpointDistance1D <- function(peak1_start, peak1_end,
-                                        peak2_start, peak2_end) {
+calculate_midpoint_distance_1d <- function(peak1_start, peak1_end,
+                                           peak2_start, peak2_end) {
     midpoint_peak1 <- abs(peak1_start + (peak1_end - peak1_start) / 2)
     midpoint_peak2 <- abs(peak2_start + (peak2_end - peak2_start) / 2)
     return(as.integer(abs(midpoint_peak1 - midpoint_peak2)))
@@ -127,29 +127,29 @@ calculateMidpointDistance1D <- function(peak1_start, peak1_end,
 #' Note: all anchors must be on the same
 #' chromosome; start coordinate is always less than end coordinate
 #'
-#' @inheritParams calculateRelativeOverlap2D
+#' @inheritParams calculate_relative_overlap_2d
 #'
 #' @return positive integer vector; distances between interaction pairs
 #'
 #' @examples
 #' # identical, zero distance
-#' calculateMidpointDistance2D(100, 120, 240, 260,
+#' calculate_midpoint_distance_2d(100, 120, 240, 260,
 #'                           100, 120, 240, 260)
 #'
 #' # centered, zero distance
-#' calculateMidpointDistance2D(100, 120, 240, 260,
+#' calculate_midpoint_distance_2d(100, 120, 240, 260,
 #'                           90, 130, 230, 270)
 #'
 #' # off by 10 per anchor
-#' calculateMidpointDistance2D(100, 120, 240, 250,
+#' calculate_midpoint_distance_2d(100, 120, 240, 250,
 #'                          110, 130, 230, 240)
 #'
 #' # off by 10 (anchor B only)
-#' calculateMidpointDistance2D(100, 120, 240, 250,
+#' calculate_midpoint_distance_2d(100, 120, 240, 250,
 #'                          90, 130, 250, 260)
 #'
 #' # vectorized example
-#' calculateMidpointDistance2D(c(100, 100, 100, 100),
+#' calculate_midpoint_distance_2d(c(100, 100, 100, 100),
 #'                           c(120, 120, 120, 120),
 #'                           c(240, 240, 240, 240),
 #'                           c(260, 260, 250, 250),
@@ -159,14 +159,14 @@ calculateMidpointDistance1D <- function(peak1_start, peak1_end,
 #'                           c(260, 270, 240, 260))
 #'
 #' @export
-calculateMidpointDistance2D <- function(int1_anchor_a_start,
-                                        int1_anchor_a_end,
-                                        int1_anchor_b_start,
-                                        int1_anchor_b_end,
-                                        int2_anchor_a_start,
-                                        int2_anchor_a_end,
-                                        int2_anchor_b_start,
-                                        int2_anchor_b_end) {
+calculate_midpoint_distance_2d <- function(int1_anchor_a_start,
+                                           int1_anchor_a_end,
+                                           int1_anchor_b_start,
+                                           int1_anchor_b_end,
+                                           int2_anchor_a_start,
+                                           int2_anchor_a_end,
+                                           int2_anchor_b_start,
+                                           int2_anchor_b_end) {
     midpoint_int1_anchor_a <- abs(int1_anchor_a_start +
                                       (int1_anchor_a_end -
                                            int1_anchor_a_start) / 2)
@@ -204,29 +204,29 @@ calculateMidpointDistance2D <- function(int1_anchor_a_start,
 #'
 #' @examples
 #' # 100% overlap
-#' calculateRelativeOverlap1D(100, 120,
+#' calculate_relative_overlap_1d(100, 120,
 #'                          100, 120)
 #'
 #' # 50% overlap
-#' calculateRelativeOverlap1D(100, 120,
+#' calculate_relative_overlap_1d(100, 120,
 #'                          100, 110)
 #'
 #' # negative overlap
-#' calculateRelativeOverlap1D(100, 120,
+#' calculate_relative_overlap_1d(100, 120,
 #'                          130, 140)
 #'
 #' # larger negative overlap
-#' calculateRelativeOverlap1D(100, 120,
+#' calculate_relative_overlap_1d(100, 120,
 #'                          200, 220)
 #'
 #' # vectorized example
-#' calculateRelativeOverlap1D(c(100, 100, 100, 100),
+#' calculate_relative_overlap_1d(c(100, 100, 100, 100),
 #'                          c(120, 120, 120, 120),
 #'                          c(100, 100, 130, 200),
 #'                          c(120, 110, 140, 220))
 #' @export
-calculateRelativeOverlap1D <- function(peak1_start, peak1_end,
-                                       peak2_start, peak2_end) {
+calculate_relative_overlap_1d <- function(peak1_start, peak1_end,
+                                          peak2_start, peak2_end) {
     peak_overlap <- pmin(peak1_end, peak2_end) -
         pmax(peak1_start, peak2_start)
 
@@ -268,23 +268,23 @@ calculateRelativeOverlap1D <- function(peak1_start, peak1_end,
 #'
 #' @examples
 #' # 100% overlap
-#' calculateRelativeOverlap2D(100, 120, 240, 260,
+#' calculate_relative_overlap_2d(100, 120, 240, 260,
 #'                          100, 120, 240, 260)
 #'
 #' # 50% overlap
-#' calculateRelativeOverlap2D(100, 120, 240, 250,
+#' calculate_relative_overlap_2d(100, 120, 240, 250,
 #'                          100, 110, 240, 260)
 #'
 #' # negative overlap
-#' calculateRelativeOverlap2D(100, 120, 240, 250,
+#' calculate_relative_overlap_2d(100, 120, 240, 250,
 #'                          130, 140, 260, 280)
 #'
 #' # larger negative overlap
-#' calculateRelativeOverlap2D(100, 120, 240, 250,
+#' calculate_relative_overlap_2d(100, 120, 240, 250,
 #'                          200, 220, 340, 350)
 #'
 #' # vectorized example
-#' calculateRelativeOverlap2D(c(100, 100, 100, 100),
+#' calculate_relative_overlap_2d(c(100, 100, 100, 100),
 #'                          c(120, 120, 120, 120),
 #'                          c(240, 240, 240, 240),
 #'                          c(260, 250, 250, 250),
@@ -293,10 +293,14 @@ calculateRelativeOverlap1D <- function(peak1_start, peak1_end,
 #'                          c(240, 240, 260, 340),
 #'                          c(260, 260, 280, 350))
 #' @export
-calculateRelativeOverlap2D <- function(int1_anchor_a_start, int1_anchor_a_end,
-                                       int1_anchor_b_start, int1_anchor_b_end,
-                                       int2_anchor_a_start, int2_anchor_a_end,
-                                       int2_anchor_b_start, int2_anchor_b_end) {
+calculate_relative_overlap_2d <- function(int1_anchor_a_start,
+                                          int1_anchor_a_end,
+                                          int1_anchor_b_start,
+                                          int1_anchor_b_end,
+                                          int2_anchor_a_start,
+                                          int2_anchor_a_end,
+                                          int2_anchor_b_start,
+                                          int2_anchor_b_end) {
     anchor_a_overlap <- pmin(int1_anchor_a_end, int2_anchor_a_end) -
         pmax(int1_anchor_a_start, int2_anchor_a_start)
     anchor_b_overlap <- pmin(int1_anchor_b_end, int2_anchor_b_end) -
@@ -372,7 +376,7 @@ calculateRelativeOverlap2D <- function(int1_anchor_a_start, int1_anchor_a_end,
 #'   replicate 1 interaction anchor B to midpoint of
 #'   replicate 2 interaction anchor B
 #' }
-#' @inheritParams anchorOverlap
+#' @inheritParams anchor_overlap
 #'
 #' @return data frame with the following columns:
 #' \tabular{rll}{
@@ -400,14 +404,14 @@ calculateRelativeOverlap2D <- function(int1_anchor_a_start, int1_anchor_a_end,
 #' rep1_df <- dplyr::arrange(rep1_df, value)
 #' rep2_df <- dplyr::arrange(rep2_df, value)
 #'
-#' pairs_df <- overlap1D(rep1_df, rep2_df)
+#' pairs_df <- overlap_1d(rep1_df, rep2_df)
 #'
 #' @export
-overlap1D <- function(rep1_df, rep2_df,
-                      ambiguity_resolution_method = c("overlap",
-                                                      "midpoint",
-                                                      "value"),
-                      max_gap = 0L) {
+overlap_1d <- function(rep1_df, rep2_df,
+                       ambiguity_resolution_method = c("overlap",
+                                                       "midpoint",
+                                                       "value"),
+                       max_gap = 0L) {
     # argument handling
     ambiguity_resolution_method <- match.arg(ambiguity_resolution_method,
                                              choices = c("overlap",
@@ -415,7 +419,7 @@ overlap1D <- function(rep1_df, rep2_df,
                                                          "value"))
 
     if (nrow(rep1_df) > 0 && nrow(rep2_df) > 0) {
-        overlaps_df <- anchorOverlap(
+        overlaps_df <- anchor_overlap(
             data.frame(chr = rep1_df[, 1],
                        start = rep1_df[, 2],
                        end = rep1_df[, 3]),
@@ -434,13 +438,13 @@ overlap1D <- function(rep1_df, rep2_df,
             arv <- rep1_df[idx_rep1, 4] + rep2_df[idx_rep2, 4]
             arv <- (-1) * arv
         } else if (ambiguity_resolution_method == "overlap") {
-            arv <- calculateRelativeOverlap1D(
+            arv <- calculate_relative_overlap_1d(
                 rep1_df[idx_rep1, 2], rep1_df[idx_rep1, 3],
                 rep2_df[idx_rep2, 2], rep2_df[idx_rep2, 3]
             )
             arv <- (-1) * arv
         } else if (ambiguity_resolution_method == "midpoint") {
-            arv <- calculateMidpointDistance1D(
+            arv <- calculate_midpoint_distance_1d(
                 rep1_df[idx_rep1, 2], rep1_df[idx_rep1, 3],
                 rep2_df[idx_rep2, 2], rep2_df[idx_rep2, 3]
             )
@@ -533,7 +537,7 @@ overlap1D <- function(rep1_df, rep2_df,
 #'   replicate 1 interaction anchor B to midpoint of
 #'   replicate 2 interaction anchor B
 #' }
-#' @inheritParams anchorOverlap
+#' @inheritParams anchor_overlap
 #'
 #' @return data frame with the following columns:
 #' \tabular{rll}{
@@ -561,13 +565,13 @@ overlap1D <- function(rep1_df, rep2_df,
 #' rep1_df <- dplyr::arrange(rep1_df, rep1_df$fdr)
 #' rep2_df <- dplyr::arrange(rep2_df, rep2_df$fdr)
 #'
-#' pairs_df <- overlap2D(rep1_df, rep2_df)
+#' pairs_df <- overlap_2d(rep1_df, rep2_df)
 #'
 #' @export
-overlap2D <- function(rep1_df, rep2_df,
-                      ambiguity_resolution_method = c("overlap",
-                                                      "midpoint",
-                                                      "value"),
+overlap_2d <- function(rep1_df, rep2_df,
+                       ambiguity_resolution_method = c("overlap",
+                                                       "midpoint",
+                                                       "value"),
                       max_gap = 0L) {
     # argument handling
     ambiguity_resolution_method <- match.arg(ambiguity_resolution_method,
@@ -575,7 +579,7 @@ overlap2D <- function(rep1_df, rep2_df,
                                                          "midpoint",
                                                          "value"))
     if (nrow(rep1_df) > 0 && nrow(rep2_df) > 0) {
-        overlaps_anchors_a_df <- anchorOverlap(
+        overlaps_anchors_a_df <- anchor_overlap(
             data.frame(chr = rep1_df[, 1],
                        start = rep1_df[, 2],
                        end = rep1_df[, 3]),
@@ -584,7 +588,7 @@ overlap2D <- function(rep1_df, rep2_df,
                        end = rep2_df[, 3]),
             max_gap = max_gap
         )
-        overlaps_anchors_b_df <- anchorOverlap(
+        overlaps_anchors_b_df <- anchor_overlap(
             data.frame(chr = rep1_df[, 4],
                        start = rep1_df[, 5],
                        end = rep1_df[, 6]),
@@ -617,7 +621,7 @@ overlap2D <- function(rep1_df, rep2_df,
             arv <- rep1_df[idx_rep1, 7] + rep2_df[idx_rep2, 7]
             arv <- (-1) * arv
         } else if (ambiguity_resolution_method == "overlap") {
-            arv <- calculateRelativeOverlap2D(
+            arv <- calculate_relative_overlap_2d(
                 rep1_df[idx_rep1, 2], rep1_df[idx_rep1, 3],
                 rep1_df[idx_rep1, 5], rep1_df[idx_rep1, 6],
                 rep2_df[idx_rep2, 2], rep2_df[idx_rep2, 3],
@@ -625,7 +629,7 @@ overlap2D <- function(rep1_df, rep2_df,
             )
             arv <- (-1) * arv
         } else if (ambiguity_resolution_method == "midpoint") {
-            arv <- calculateMidpointDistance2D(
+            arv <- calculate_midpoint_distance_2d(
                 rep1_df[idx_rep1, 2], rep1_df[idx_rep1, 3],
                 rep1_df[idx_rep1, 5], rep1_df[idx_rep1, 6],
                 rep2_df[idx_rep2, 2], rep2_df[idx_rep2, 3],
@@ -664,13 +668,13 @@ overlap2D <- function(rep1_df, rep2_df,
 #' @return \code{x} without non-standard chromosomes.
 #'
 #' @examples
-#' rep1_df <- removeNonstandardChromosomes1D(idr2d:::chipseq$rep1_df)
+#' rep1_df <- remove_nonstandard_chromosomes_1d(idr2d:::chipseq$rep1_df)
 #'
 #' @importFrom GenomicRanges GRanges
 #' @importFrom IRanges IRanges
 #' @importFrom GenomeInfoDb keepStandardChromosomes
 #' @export
-removeNonstandardChromosomes1D <- function(x) {
+remove_nonstandard_chromosomes_1d <- function(x) {
     x <- GenomicRanges::GRanges(x[, 1],
                                 IRanges::IRanges(x[, 2], x[, 3]),
                                 value = x[, 4])
@@ -703,7 +707,7 @@ removeNonstandardChromosomes1D <- function(x) {
 #' }
 #'
 #' @examples
-#' rep1_df <- removeNonstandardChromosomes2D(idr2d:::chiapet$rep1_df)
+#' rep1_df <- remove_nonstandard_chromosomes_2d(idr2d:::chiapet$rep1_df)
 #'
 #' @return \code{x} without non-standard chromosomes.
 #'
@@ -713,7 +717,7 @@ removeNonstandardChromosomes1D <- function(x) {
 #' @importFrom dplyr inner_join
 #' @importFrom dplyr select
 #' @export
-removeNonstandardChromosomes2D <- function(x) {
+remove_nonstandard_chromosomes_2d <- function(x) {
     # avoid CRAN warnings
     chr_a <- start_a <- end_a <- chr_b <- start_b <- end_b <- value <- NULL
 

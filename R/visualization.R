@@ -2,10 +2,10 @@
 #' @title Create histogram of IDR values
 #'
 #' @description
-#' Creates diagnostic plots to visualize the results of \code{estimateIDR}.
+#' Creates diagnostic plots to visualize the results of
+#' \code{\link{estimate_idr}}.
 #'
-#'
-#' @param df part of output of \code{estimateIDR}, a data frame with at
+#' @param df part of output of \code{\link{estimate_idr}}, a data frame with at
 #' least the following named columns:
 #' \tabular{rl}{
 #'   \code{idr} \tab IDR of the peak and the
@@ -19,10 +19,10 @@
 #' @return ggplot2 object; IDR distribution histogram
 #'
 #' @examples
-#' idr_results <- estimateIDR1D(idr2d:::chipseq$rep1_df,
-#'                              idr2d:::chipseq$rep2_df,
-#'                              value_transformation = "log")
-#' IDRDistributionHistogram(idr_results$rep1_df)
+#' idr_results <- estimate_idr_1d(idr2d:::chipseq$rep1_df,
+#'                                idr2d:::chipseq$rep2_df,
+#'                                value_transformation = "log")
+#' draw_idr_distribution_histogram(idr_results$rep1_df)
 #'
 #' @importFrom stats complete.cases
 #' @importFrom dplyr filter
@@ -35,7 +35,7 @@
 #' @importFrom ggplot2 element_blank
 #' @importFrom ggplot2 labs
 #' @export
-IDRDistributionHistogram <- function(df, remove_na = TRUE,
+draw_idr_distribution_histogram <- function(df, remove_na = TRUE,
                                      xlab = "IDR",
                                      ylab = "density",
                                      title = "IDR value distribution") {
@@ -59,9 +59,10 @@ IDRDistributionHistogram <- function(df, remove_na = TRUE,
 #' @title Create scatterplot of IDR values
 #'
 #' @description
-#' Creates diagnostic plots to visualize the results of \code{estimateIDR}.
+#' Creates diagnostic plots to visualize the results of
+#' \code{\link{estimate_idr}}.
 #'
-#' @param df part of output of \code{estimateIDR}, a data frame with at
+#' @param df part of output of \code{\link{estimate_idr}}, a data frame with at
 #' least the following named columns:
 #' \tabular{rl}{
 #'   \code{rank} \tab integer; rank of the peak, established by
@@ -81,10 +82,10 @@ IDRDistributionHistogram <- function(df, remove_na = TRUE,
 #' @return ggplot2 object; IDR rank scatterplot
 #'
 #' @examples
-#' idr_results <- estimateIDR1D(idr2d:::chipseq$rep1_df,
-#'                              idr2d:::chipseq$rep2_df,
-#'                              value_transformation = "log")
-#' rankIDRScatterplot(idr_results$rep1_df)
+#' idr_results <- estimate_idr_1d(idr2d:::chipseq$rep1_df,
+#'                                idr2d:::chipseq$rep2_df,
+#'                                value_transformation = "log")
+#' draw_rank_idr_scatterplot(idr_results$rep1_df)
 #'
 #' @importFrom dplyr filter
 #' @importFrom stats complete.cases
@@ -98,7 +99,7 @@ IDRDistributionHistogram <- function(df, remove_na = TRUE,
 #' @importFrom ggplot2 scale_color_gradientn
 #' @importFrom grDevices rainbow
 #' @export
-rankIDRScatterplot <- function(df, remove_na = TRUE,
+draw_rank_idr_scatterplot <- function(df, remove_na = TRUE,
                                xlab = "rank in replicate 1",
                                ylab = "rank in replicate 2",
                                title = "rank - IDR dependence",
@@ -137,9 +138,10 @@ rankIDRScatterplot <- function(df, remove_na = TRUE,
 #' @title Create scatterplot of IDR values
 #'
 #' @description
-#' Creates diagnostic plots to visualize the results of \code{estimateIDR}.
+#' Creates diagnostic plots to visualize the results of
+#' \code{\link{estimate_idr}}.
 #'
-#' @param df part of output of \code{estimateIDR}, a data frame with at
+#' @param df part of output of \code{\link{estimate_idr}}, a data frame with at
 #' least the following named columns:
 #' \tabular{rl}{
 #'   \code{value} \tab numeric; p-value, FDR, or heuristic used
@@ -160,10 +162,10 @@ rankIDRScatterplot <- function(df, remove_na = TRUE,
 #' @return ggplot2 object; IDR value scatterplot
 #'
 #' @examples
-#' idr_results <- estimateIDR1D(idr2d:::chipseq$rep1_df,
-#'                              idr2d:::chipseq$rep2_df,
-#'                              value_transformation = "log")
-#' valueIDRScatterplot(idr_results$rep1_df)
+#' idr_results <- estimate_idr_1d(idr2d:::chipseq$rep1_df,
+#'                                idr2d:::chipseq$rep2_df,
+#'                                value_transformation = "log")
+#' draw_value_idr_scatterplot(idr_results$rep1_df)
 #'
 #' @importFrom dplyr filter
 #' @importFrom stats complete.cases
@@ -177,7 +179,7 @@ rankIDRScatterplot <- function(df, remove_na = TRUE,
 #' @importFrom ggplot2 scale_color_gradientn
 #' @importFrom grDevices rainbow
 #' @export
-valueIDRScatterplot <- function(df, remove_na = TRUE, remove_outliers = TRUE,
+draw_value_idr_scatterplot <- function(df, remove_na = TRUE, remove_outliers = TRUE,
                                 xlab = "transformed value in replicate 1",
                                 ylab = "transformed value in replicate 2",
                                 title = "value - IDR dependence",

@@ -70,8 +70,8 @@ library(idr2d)
 
 Estimate IDR:
 ```{r, echo = TRUE}
-idr_results <- estimateIDR2D(rep1_df, rep2_df,
-                             value_transformation = "log_additive_inverse")
+idr_results <- estimate_idr_2d(rep1_df, rep2_df,
+                               value_transformation = "log_additive_inverse")
 rep1_idr_df <- idr_results$rep1_df
 ```
 
@@ -115,19 +115,19 @@ datatable(dplyr::select(rep1_idr_df, rank, rep_rank, value, rep_value, idr),
 ### Distribution of IDRs
 
 ```{r, echo = TRUE}
-IDRDistributionHistogram(rep1_idr_df)
+draw_idr_distribution_histogram(rep1_idr_df)
 ```
 
 ### Rank - IDR dependence
 
 ```{r, echo = TRUE}
-rankIDRScatterplot(rep1_idr_df)
+draw_rank_idr_scatterplot(rep1_idr_df)
 ```
 
 ### Value - IDR dependence
 
 ```{r, echo = TRUE}
-valueIDRScatterplot(rep1_idr_df)
+draw_value_idr_scatterplot(rep1_idr_df)
 ```
 
 # Additional information

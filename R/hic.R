@@ -1,5 +1,5 @@
 
-getStandardChromosomes <- function(species, style) {
+get_standard_chromosomes <- function(species, style) {
     system.file(package = "GenomeInfoDb", "extdata", "dataFiles")
 }
 
@@ -22,7 +22,7 @@ getStandardChromosomes <- function(species, style) {
 #' @param use_condaenv if Python package \code{hic-straw} is not in base
 #' conda environment, specify environment here (see
 #' \code{\link[reticulate:use_python]{use_condaenv}})
-#' @inheritParams estimateIDR2D
+#' @inheritParams estimate_idr_2d
 #'
 #' @return Data frames \code{rep1_df} and \code{rep2_df} with
 #' the following columns:
@@ -62,10 +62,10 @@ getStandardChromosomes <- function(species, style) {
 #' resolution <- 1000000
 #' #mus musculus
 #' #chromosomes <- paste0("chr", c(1:19, "X", "Y"))
-#' #df <- estimateIDR2DHiC(rep1_hic_file, rep2_hic_file, resolution, chromosomes = chromosomes)
+#' #df <- estimate_idr2d_hic(rep1_hic_file, rep2_hic_file, resolution, chromosomes = chromosomes)
 #'
 #' @export
-estimateIDR2DHiC <- function(rep1_hic_file, rep2_hic_file, resolution = 10000,
+estimate_idr2d_hic <- function(rep1_hic_file, rep2_hic_file, resolution = 10000,
                              normalization = c("NONE", "VC", "VC_SQRT", "KR"),
                              chromosomes = NULL,
                              max_factor = 1.5, jitter_factor = 0.0001,
