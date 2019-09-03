@@ -10,4 +10,4 @@ If you use IDR2D in your research, please cite:
 
 **IDR2D identifies reproducible genomic interactions**  
 Konstantin Krismer, Yuchun Guo, and David K. Gifford
-bioRxiv 691295; doi: https://doi.org/10.1101/691295
+bioRxiv 691295; DOI: https://doi.org/10.1101/691295
