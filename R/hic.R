@@ -12,6 +12,9 @@ get_standard_chromosomes <- function(species, style) {
 #' @param rep2_hic_file path to .hic file for replicate 2
 #' @param resolution block resolution of HiC contact matrix in base pairs,
 #' defaults to 10,000 bp
+#' @param normalization normalization step performed by Python package
+#' \code{hic-straw}, one of the following: \code{"NONE"}, \code{"VC"},
+#' \code{"VC_SQRT"}, \code{"KR"}.
 #' @param chromosomes list of chromosome names in HiC files, defaults to UCSC
 #' human chromosome names (chr1, ..., chr22, chrX, chrY, chrM)
 #' @param use_python if Python is not on PATH, specify path to Python binary
@@ -56,23 +59,16 @@ get_standard_chromosomes <- function(species, style) {
 #'   corresponding interaction was found, \code{rep_idx} is set to \code{NA}.
 #' }
 #'
-#' @examples
-#' rep1_hic_file <- "D:/MIT/Research/PhD/Gifford/projects/chia-pet/data/GSE71831/GSE71831_Patski_paternal.hic"
-#' rep2_hic_file <- "D:/MIT/Research/PhD/Gifford/projects/chia-pet/data/GSE71831/GSE71831_Patski_maternal.hic"
-#' resolution <- 1000000
-#' #mus musculus
-#' #chromosomes <- paste0("chr", c(1:19, "X", "Y"))
-#' #df <- estimate_idr2d_hic(rep1_hic_file, rep2_hic_file, resolution, chromosomes = chromosomes)
-#'
 #' @export
 estimate_idr2d_hic <- function(rep1_hic_file, rep2_hic_file, resolution = 10000,
-                             normalization = c("NONE", "VC", "VC_SQRT", "KR"),
-                             chromosomes = NULL,
-                             max_factor = 1.5, jitter_factor = 0.0001,
-                             mu = 0.1, sigma = 1.0, rho = 0.2, p = 0.5,
-                             eps = 0.001, max_iteration = 30, local_idr = TRUE,
-                             use_python = NULL, use_virtualenv = NULL,
-                             use_condaenv = NULL) {
+                               normalization = c("NONE", "VC", "VC_SQRT", "KR"),
+                               chromosomes = NULL,
+                               max_factor = 1.5, jitter_factor = 0.0001,
+                               mu = 0.1, sigma = 1.0, rho = 0.2, p = 0.5,
+                               eps = 0.001, max_iteration = 30,
+                               local_idr = TRUE,
+                               use_python = NULL, use_virtualenv = NULL,
+                               use_condaenv = NULL) {
     value <- rep_value <- idr <- NULL
 
     normalization <- match.arg(normalization,
