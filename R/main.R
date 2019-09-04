@@ -170,10 +170,7 @@ establish_bijection <- function(rep1_df, rep2_df,
                                                                 "value"),
                                 max_gap = 0L) {
     # avoid CRAN warnings
-    rep1_idx <- rep2_idx <- arv <- NULL
-    chr <- start <- end <- NULL
-    chr_a <- start_a <- end_a <- chr_b <- start_b <- end_b <- NULL
-    value <- rep_value <- rank <- rep_rank <- idx <- rep_idx <- NULL
+    rep1_idx <- rep2_idx <- arv <- value <- NULL
 
     # argument handling
     analysis_type <- match.arg(analysis_type, choices = c("IDR1D", "IDR2D"))
@@ -262,26 +259,13 @@ establish_bijection <- function(rep1_df, rep2_df,
         rep2_df$rep_value <- numeric(0)
     }
 
+    columns <- c(columns, "rep_value", "rank", "rep_rank", "idx", "rep_idx")
     if (analysis_type == "IDR1D") {
-        rep1_df <- dplyr::select(rep1_df, chr, start, end,
-                                 value, rep_value,
-                                 rank, rep_rank,
-                                 idx, rep_idx)
-        rep2_df <- dplyr::select(rep2_df, chr, start, end,
-                                 value, rep_value,
-                                 rank, rep_rank,
-                                 idx, rep_idx)
+        rep1_df <- dplyr::select(rep1_df, columns)
+        rep2_df <- dplyr::select(rep2_df, columns)
     } else if (analysis_type == "IDR2D") {
-        rep1_df <- dplyr::select(rep1_df, chr_a, start_a, end_a,
-                                 chr_b, start_b, end_b,
-                                 value, rep_value,
-                                 rank, rep_rank,
-                                 idx, rep_idx)
-        rep2_df <- dplyr::select(rep2_df, chr_a, start_a, end_a,
-                                 chr_b, start_b, end_b,
-                                 value, rep_value,
-                                 rank, rep_rank,
-                                 idx, rep_idx)
+        rep1_df <- dplyr::select(rep1_df, columns)
+        rep2_df <- dplyr::select(rep2_df, columns)
     }
 
     return(list(rep1_df = rep1_df, rep2_df = rep2_df))
@@ -614,10 +598,7 @@ estimate_idr <- function(rep1_df, rep2_df, analysis_type = "IDR2D",
                          mu = 0.1, sigma = 1.0, rho = 0.2, p = 0.5,
                          eps = 0.001, max_iteration = 30, local_idr = TRUE) {
     # avoid CRAN warnings
-    rep2_idx <- rep1_value <- rep2_value <- NULL
-    chr <- start <- end <- NULL
-    chr_a <- start_a <- end_a <- chr_b <- start_b <- end_b <- NULL
-    value <- rep_value <- rank <- rep_rank <- idx <- rep_idx <- idr <- NULL
+    rep2_idx <- rep1_value <- rep2_value <- idr <- NULL
 
     # argument handling
     analysis_type <- match.arg(analysis_type, choices = c("IDR1D", "IDR2D"))
@@ -735,26 +716,14 @@ estimate_idr <- function(rep1_df, rep2_df, analysis_type = "IDR2D",
         }
     }
 
+    columns <- c(columns, "rep_value", "rank", "rep_rank",
+                 "idx", "rep_idx", "idr")
     if (analysis_type == "IDR1D") {
-        rep1_df <- dplyr::select(rep1_df, chr, start, end,
-                                 value, rep_value,
-                                 rank, rep_rank,
-                                 idx, rep_idx, idr)
-        rep2_df <- dplyr::select(rep2_df, chr, start, end,
-                                 value, rep_value,
-                                 rank, rep_rank,
-                                 idx, rep_idx, idr)
+        rep1_df <- dplyr::select(rep1_df, columns)
+        rep2_df <- dplyr::select(rep2_df, columns)
     } else if (analysis_type == "IDR2D") {
-        rep1_df <- dplyr::select(rep1_df, chr_a, start_a, end_a,
-                                 chr_b, start_b, end_b,
-                                 value, rep_value,
-                                 rank, rep_rank,
-                                 idx, rep_idx, idr)
-        rep2_df <- dplyr::select(rep2_df, chr_a, start_a, end_a,
-                                 chr_b, start_b, end_b,
-                                 value, rep_value,
-                                 rank, rep_rank,
-                                 idx, rep_idx, idr)
+        rep1_df <- dplyr::select(rep1_df, columns)
+        rep2_df <- dplyr::select(rep2_df, columns)
     }
 
     return(list(rep1_df = rep1_df, rep2_df = rep2_df))
