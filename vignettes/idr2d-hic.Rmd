@@ -1,11 +1,11 @@
 ---
-title: "Identify reproducible genomic interactions from replicate ChIA-PET experiments"
+title: "Using IDR2D to analyze replicate HiC experiments"
 author: "Konstantin Krismer"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 bibliography: bibliography.bib
 vignette: >
-  %\VignetteIndexEntry{Identify reproducible genomic interactions from replicate ChIA-PET experiments}
+  %\VignetteIndexEntry{Using IDR2D to analyze replicate HiC experiments}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -70,9 +70,16 @@ library(idr2d)
 
 Estimate IDR:
 ```{r, echo = TRUE}
-idr_results <- estimate_idr2d(rep1_df, rep2_df,
-                              value_transformation = "log_additive_inverse")
-rep1_idr_df <- idr_results$rep1_df
+#idr_results <- estimate_idr2d(rep1_df, rep2_df,
+#                               value_transformation = "log_additive_inverse")
+#rep1_idr_df <- idr_results$rep1_df
+
+# rep1_hic_file <- "D:/MIT/Research/PhD/Gifford/projects/chia-pet/data/GSE71831/GSE71831_Patski_paternal.hic"
+# rep2_hic_file <- "D:/MIT/Research/PhD/Gifford/projects/chia-pet/data/GSE71831/GSE71831_Patski_maternal.hic"
+# resolution <- 1000000
+# #mus musculus
+# #chromosomes <- paste0("chr", c(1:19, "X", "Y"))
+# #df <- estimate_idr2d_hic(rep1_hic_file, rep2_hic_file, resolution, chromosomes = chromosomes)
 ```
 
 Important to note here is that the appropriate value transformation depends
@@ -90,44 +97,44 @@ the `log_additive_inverse` transformation (`-log(x)`) is recommended.
 
 ```{r}
 # avoid CRAN warnings
-rank <- rep_rank <- value <- rep_value <- idr <- NULL
-
-header <- htmltools::withTags(table(
-  class = 'display',
-  thead(
-    tr(
-      th("rank in R1"),
-      th("rank in R2"),
-      th("transformed value in R1"),
-      th("transformed value in R2"),
-      th("IDR")
-    )
-  )
-))
-
-datatable(dplyr::select(rep1_idr_df, rank, rep_rank, value, rep_value, idr), 
-          rownames = FALSE,
-          options = list(searching = FALSE),
-          container = header) %>%
-    formatRound(c("value", "rep_value", "idr"), 3)
+# rank <- rep_rank <- value <- rep_value <- idr <- NULL
+# 
+# header <- htmltools::withTags(table(
+#   class = 'display',
+#   thead(
+#     tr(
+#       th("rank in R1"),
+#       th("rank in R2"),
+#       th("transformed value in R1"),
+#       th("transformed value in R2"),
+#       th("IDR")
+#     )
+#   )
+# ))
+# 
+# datatable(dplyr::select(rep1_idr_df, rank, rep_rank, value, rep_value, idr), 
+#           rownames = FALSE,
+#           options = list(searching = FALSE),
+#           container = header) %>%
+#     formatRound(c("value", "rep_value", "idr"), 3)
 ```
 
 ### Distribution of IDRs
 
 ```{r, echo = TRUE}
-draw_idr_distribution_histogram(rep1_idr_df)
+#draw_idr_distribution_histogram(rep1_idr_df)
 ```
 
 ### Rank - IDR dependence
 
 ```{r, echo = TRUE}
-draw_rank_idr_scatterplot(rep1_idr_df)
+#draw_rank_idr_scatterplot(rep1_idr_df)
 ```
 
 ### Value - IDR dependence
 
 ```{r, echo = TRUE}
-draw_value_idr_scatterplot(rep1_idr_df)
+#draw_value_idr_scatterplot(rep1_idr_df)
 ```
 
 # Additional information

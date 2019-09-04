@@ -13,8 +13,8 @@ establish_bijection(rep1_df, rep2_df, analysis_type = c("IDR1D",
 \item{rep1_df}{data frame of observations (i.e., genomic peaks or genomic
 interactions) of
 replicate 1. If \code{analysis_type} is IDR1D, the columns of \code{rep1_df}
-are described in \code{\link{establish_bijection_1d}}, otherwise in
-\code{\link{establish_bijection_2d}}}
+are described in \code{\link{establish_bijection1d}}, otherwise in
+\code{\link{establish_bijection2d}}}
 
 \item{rep2_df}{data frame of observations (i.e., genomic peaks or genomic
 interactions) of replicate 2. Same columns as \code{rep1_df}.}
@@ -25,8 +25,8 @@ interactions) of replicate 2. Same columns as \code{rep1_df}.}
 \item{ambiguity_resolution_method}{defines how ambiguous assignments
 (when one interaction or peak in replicate 1 overlaps with
 multiple interactions or peaks in replicate 2 or vice versa)
-are resolved. For available methods, see \code{\link{overlap_1d}} or
-\code{\link{overlap_2d}}, respectively.}
+are resolved. For available methods, see \code{\link{establish_overlap1d}} or
+\code{\link{establish_overlap2d}}, respectively.}
 
 \item{max_gap}{integer; maximum gap in nucleotides allowed between two
 anchors for
@@ -34,8 +34,8 @@ them to be considered as overlapping
 (defaults to zero, no gap between anchors)}
 }
 \value{
-See \code{\link{establish_bijection_1d}} or
-\code{\link{establish_bijection_2d}}, respectively.
+See \code{\link{establish_bijection1d}} or
+\code{\link{establish_bijection2d}}, respectively.
 }
 \description{
 Finds One-to-One Correspondence between Peaks or interactions

@@ -19,9 +19,9 @@
 #' @return ggplot2 object; IDR distribution histogram
 #'
 #' @examples
-#' idr_results <- estimate_idr_1d(idr2d:::chipseq$rep1_df,
-#'                                idr2d:::chipseq$rep2_df,
-#'                                value_transformation = "log")
+#' idr_results <- estimate_idr1d(idr2d:::chipseq$rep1_df,
+#'                               idr2d:::chipseq$rep2_df,
+#'                               value_transformation = "log")
 #' draw_idr_distribution_histogram(idr_results$rep1_df)
 #'
 #' @importFrom stats complete.cases
@@ -36,9 +36,9 @@
 #' @importFrom ggplot2 labs
 #' @export
 draw_idr_distribution_histogram <- function(df, remove_na = TRUE,
-                                     xlab = "IDR",
-                                     ylab = "density",
-                                     title = "IDR value distribution") {
+                                            xlab = "IDR",
+                                            ylab = "density",
+                                            title = "IDR value distribution") {
     # avoid CRAN warnings
     idr <- NULL
 
@@ -82,9 +82,9 @@ draw_idr_distribution_histogram <- function(df, remove_na = TRUE,
 #' @return ggplot2 object; IDR rank scatterplot
 #'
 #' @examples
-#' idr_results <- estimate_idr_1d(idr2d:::chipseq$rep1_df,
-#'                                idr2d:::chipseq$rep2_df,
-#'                                value_transformation = "log")
+#' idr_results <- estimate_idr1d(idr2d:::chipseq$rep1_df,
+#'                               idr2d:::chipseq$rep2_df,
+#'                               value_transformation = "log")
 #' draw_rank_idr_scatterplot(idr_results$rep1_df)
 #'
 #' @importFrom dplyr filter
@@ -100,11 +100,11 @@ draw_idr_distribution_histogram <- function(df, remove_na = TRUE,
 #' @importFrom grDevices rainbow
 #' @export
 draw_rank_idr_scatterplot <- function(df, remove_na = TRUE,
-                               xlab = "rank in replicate 1",
-                               ylab = "rank in replicate 2",
-                               title = "rank - IDR dependence",
-                               color_gradient = c("rainbow", "default"),
-                               max_points_shown = 2500) {
+                                      xlab = "rank in replicate 1",
+                                      ylab = "rank in replicate 2",
+                                      title = "rank - IDR dependence",
+                                      color_gradient = c("rainbow", "default"),
+                                      max_points_shown = 2500) {
     # avoid CRAN warnings
     rank <- rep_rank <- idr <- NULL
 
@@ -162,9 +162,9 @@ draw_rank_idr_scatterplot <- function(df, remove_na = TRUE,
 #' @return ggplot2 object; IDR value scatterplot
 #'
 #' @examples
-#' idr_results <- estimate_idr_1d(idr2d:::chipseq$rep1_df,
-#'                                idr2d:::chipseq$rep2_df,
-#'                                value_transformation = "log")
+#' idr_results <- estimate_idr1d(idr2d:::chipseq$rep1_df,
+#'                               idr2d:::chipseq$rep2_df,
+#'                               value_transformation = "log")
 #' draw_value_idr_scatterplot(idr_results$rep1_df)
 #'
 #' @importFrom dplyr filter

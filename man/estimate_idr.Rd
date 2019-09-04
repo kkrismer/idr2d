@@ -17,8 +17,8 @@ estimate_idr(rep1_df, rep2_df, analysis_type = "IDR2D",
 \item{rep1_df}{data frame of observations (i.e., genomic peaks or genomic
 interactions) of
 replicate 1. If \code{analysis_type} is IDR1D, the columns of \code{rep1_df}
-are described in \code{\link{establish_bijection_1d}}, otherwise in
-\code{\link{establish_bijection_2d}}}
+are described in \code{\link{establish_bijection1d}}, otherwise in
+\code{\link{establish_bijection2d}}}
 
 \item{rep2_df}{data frame of observations (i.e., genomic peaks or genomic
 interactions) of replicate 2. Same columns as \code{rep1_df}.}
@@ -49,8 +49,8 @@ interactions have lower value in \code{value} column) or \code{"descending"}
 \item{ambiguity_resolution_method}{defines how ambiguous assignments
 (when one interaction or peak in replicate 1 overlaps with
 multiple interactions or peaks in replicate 2 or vice versa)
-are resolved. For available methods, see \code{\link{overlap_1d}} or
-\code{\link{overlap_2d}}, respectively.}
+are resolved. For available methods, see \code{\link{establish_overlap1d}} or
+\code{\link{establish_overlap2d}}, respectively.}
 
 \item{remove_nonstandard_chromosomes}{removes peaks and interactions
 containing
@@ -89,8 +89,8 @@ IDR estimation (defaults to 30)}
 \item{local_idr}{see \code{\link[idr:est.IDR]{est.IDR}}}
 }
 \value{
-See \code{\link{estimate_idr_1d}} or
-\code{\link{estimate_idr_2d}}, respectively.
+See \code{\link{estimate_idr1d}} or
+\code{\link{estimate_idr2d}}, respectively.
 }
 \description{
 Estimates IDR for Genomic Peaks or Genomic Interactions

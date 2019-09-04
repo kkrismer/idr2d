@@ -25,7 +25,7 @@ get_standard_chromosomes <- function(species, style) {
 #' @param use_condaenv if Python package \code{hic-straw} is not in base
 #' conda environment, specify environment here (see
 #' \code{\link[reticulate:use_python]{use_condaenv}})
-#' @inheritParams estimate_idr_2d
+#' @inheritParams estimate_idr2d
 #'
 #' @return Data frames \code{rep1_df} and \code{rep2_df} with
 #' the following columns:

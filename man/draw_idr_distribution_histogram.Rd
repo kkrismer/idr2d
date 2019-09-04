@@ -31,9 +31,9 @@ Creates diagnostic plots to visualize the results of
 \code{\link{estimate_idr}}.
 }
 \examples{
-idr_results <- estimate_idr_1d(idr2d:::chipseq$rep1_df,
-                               idr2d:::chipseq$rep2_df,
-                               value_transformation = "log")
+idr_results <- estimate_idr1d(idr2d:::chipseq$rep1_df,
+                              idr2d:::chipseq$rep2_df,
+                              value_transformation = "log")
 draw_idr_distribution_histogram(idr_results$rep1_df)
 
 }
