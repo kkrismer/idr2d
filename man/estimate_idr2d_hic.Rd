@@ -19,6 +19,10 @@ estimate_idr2d_hic(rep1_hic_file, rep2_hic_file, resolution = 10000,
 \item{resolution}{block resolution of HiC contact matrix in base pairs,
 defaults to 10,000 bp}
 
+\item{normalization}{normalization step performed by Python package
+\code{hic-straw}, one of the following: \code{"NONE"}, \code{"VC"},
+\code{"VC_SQRT"}, \code{"KR"}.}
+
 \item{chromosomes}{list of chromosome names in HiC files, defaults to UCSC
 human chromosome names (chr1, ..., chr22, chrX, chrY, chrM)}
 
@@ -93,13 +97,4 @@ the following columns:
 }
 \description{
 TODO
-}
-\examples{
-rep1_hic_file <- "D:/MIT/Research/PhD/Gifford/projects/chia-pet/data/GSE71831/GSE71831_Patski_paternal.hic"
-rep2_hic_file <- "D:/MIT/Research/PhD/Gifford/projects/chia-pet/data/GSE71831/GSE71831_Patski_maternal.hic"
-resolution <- 1000000
-#mus musculus
-#chromosomes <- paste0("chr", c(1:19, "X", "Y"))
-#df <- estimate_idr2d_hic(rep1_hic_file, rep2_hic_file, resolution, chromosomes = chromosomes)
-
 }
