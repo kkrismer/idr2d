@@ -46,19 +46,23 @@ header <- htmltools::withTags(table(
     )
   )
 ))
-datatable(rep1_df, container = header, rownames = FALSE,
-              options = list(searching = FALSE)) %>%
-    formatRound("value", 3)
+datatable(rep1_df[seq_len(min(nrow(rep1_df), 1000)), ],
+          container = header, rownames = FALSE,
+          options = list(searching = FALSE)) %>%
+  formatRound("value", 3)
 ```
+
+Only the first 1000 peaks are shown.
 
 ## Example data - replicate 2
 
 ```{r}
-datatable(rep2_df, container = header, rownames = FALSE,
+datatable(rep2_df[seq_len(min(nrow(rep2_df), 1000)), ], container = header, rownames = FALSE,
               options = list(searching = FALSE)) %>%
     formatRound("value", 3)
 ```
 
+Only the first 1000 peaks are shown.
 
 # Analysis
 
@@ -104,13 +108,17 @@ header <- htmltools::withTags(table(
     )
   )
 ))
-datatable(dplyr::select(rep1_idr_df, chr, start, end,
-                        rank, rep_rank, value, rep_value, idr), 
+
+df <- dplyr::select(rep1_idr_df, chr, start, end,
+                    rank, rep_rank, value, rep_value, idr)
+datatable(df[seq_len(min(nrow(df), 1000)), ], 
           rownames = FALSE,
           options = list(searching = FALSE),
           container = header) %>%
-    formatRound(c("value", "rep_value", "idr"), 3)
+  formatRound(c("value", "rep_value", "idr"), 3)
 ```
+
+Only the first 1000 observations are shown.
 
 ### Distribution of IDRs
 

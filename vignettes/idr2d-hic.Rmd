@@ -48,18 +48,24 @@ header <- htmltools::withTags(table(
     )
   )
 ))
-datatable(rep1_df, container = header, rownames = FALSE,
+datatable(rep1_df[seq_len(min(nrow(rep1_df), 1000)), ],
+          container = header, rownames = FALSE,
           options = list(searching = FALSE)) %>%
-    formatRound("fdr", 3)
+  formatRound("fdr", 3)
 ```
+
+Only the first 1000 interactions are shown.
 
 ## Example data - replicate 2
 
 ```{r}
-datatable(rep2_df, container = header, rownames = FALSE,
-              options = list(searching = FALSE)) %>%
-    formatRound("fdr", 3)
+datatable(rep2_df[seq_len(min(nrow(rep2_df), 1000)), ],
+          container = header, rownames = FALSE,
+          options = list(searching = FALSE)) %>%
+  formatRound("fdr", 3)
 ```
+
+Only the first 1000 interactions are shown.
 
 # Analysis
 
@@ -112,12 +118,15 @@ the `log_additive_inverse` transformation (`-log(x)`) is recommended.
 #   )
 # ))
 # 
-# datatable(dplyr::select(rep1_idr_df, rank, rep_rank, value, rep_value, idr), 
-#           rownames = FALSE,
-#           options = list(searching = FALSE),
-#           container = header) %>%
-#     formatRound(c("value", "rep_value", "idr"), 3)
+#df <- dplyr::select(rep1_idr_df, rank, rep_rank, value, rep_value, idr)
+#datatable(df[seq_len(min(nrow(df), 1000)), ], 
+#          rownames = FALSE,
+#          options = list(searching = FALSE),
+#          container = header) %>%
+#  formatRound(c("value", "rep_value", "idr"), 3)
 ```
+
+Only the first 1000 observations are shown.
 
 ### Distribution of IDRs
 
