@@ -179,12 +179,13 @@ draw_rank_idr_scatterplot <- function(df, remove_na = TRUE,
 #' @importFrom ggplot2 scale_color_gradientn
 #' @importFrom grDevices rainbow
 #' @export
-draw_value_idr_scatterplot <- function(df, remove_na = TRUE, remove_outliers = TRUE,
-                                xlab = "transformed value in replicate 1",
-                                ylab = "transformed value in replicate 2",
-                                title = "value - IDR dependence",
-                                color_gradient = c("rainbow", "default"),
-                                max_points_shown = 2500) {
+draw_value_idr_scatterplot <- function(
+    df, remove_na = TRUE, remove_outliers = TRUE,
+    xlab = "transformed value in replicate 1",
+    ylab = "transformed value in replicate 2",
+    title = "value - IDR dependence",
+    color_gradient = c("rainbow", "default"),
+    max_points_shown = 2500) {
     # avoid CRAN warnings
     value <- rep_value <- idr <- NULL
 
