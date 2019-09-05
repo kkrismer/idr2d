@@ -3,13 +3,31 @@ get_standard_chromosomes <- function(species, style) {
     system.file(package = "GenomeInfoDb", "extdata", "dataFiles")
 }
 
-#' @title TODO
+#' @title Estimates IDR for Genomic Interactions measured by HiC experiments
 #'
 #' @description
-#' TODO
+#' This method estimates Irreproducible Discovery Rates (IDR) of
+#' genomic interactions between two replicates of HiC experiments.
+#'
+#' \code{estimate_idr2d_hic} uses the Python package \code{hic-straw} internally
+#'  to read .hic contact matrix files (see
+#' \href{https://pypi.org/project/hic-straw/}{hic-straw on PyPI} or the
+#' \href{https://pypi.org/project/hic-straw/}{Aiden lab GitHub repository}
+#' for more information).
+#'
+#' The contact matrix is subdivided into blocks, where the block size is
+#' determined by \code{resolution}. The reads per block are used to rank blocks
+#' and replicate blocks are easily matched by genomic location.
+#'
+#' @references
+#' Q. Li, J. B. Brown, H. Huang and P. J. Bickel. (2011) Measuring
+#' reproducibility of high-throughput experiments. Annals of Applied
+#' Statistics, Vol. 5, No. 3, 1752-1779.
 #'
 #' @param rep1_hic_file path to .hic file for replicate 1
+#' (either local file path or URL)
 #' @param rep2_hic_file path to .hic file for replicate 2
+#' (either local file path or URL)
 #' @param resolution block resolution of HiC contact matrix in base pairs,
 #' defaults to 10,000 bp
 #' @param normalization normalization step performed by Python package
@@ -74,7 +92,7 @@ estimate_idr2d_hic <- function(rep1_hic_file, rep2_hic_file, resolution = 10000,
     normalization <- match.arg(normalization,
                                choices = c("NONE", "VC", "VC_SQRT", "KR"))
     if (is.null(chromosomes)) {
-        chromosomes <- paste0("chr", c(1:22, "X", "Y", "M"))
+        chromosomes <- paste0("chr", c(seq_len(22), "X", "Y", "M"))
     }
 
     if (!is.null(use_python)) {

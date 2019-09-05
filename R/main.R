@@ -126,6 +126,17 @@ establish_bijection2d <- function(rep1_df, rep2_df,
 #' @title Finds One-to-One Correspondence between Peaks or interactions
 #' from Replicate 1 and 2
 #'
+#' @description
+#' This method establishes a bijective assignment between observations
+#' (genomic peaks in case of ChIP-seq, genomic interactions in case of
+#' ChIA-PET, HiChIP, and HiC) from
+#' replicate 1 and 2. An observation in replicate 1 is assigned to an
+#' observation in replicate 2 if and only if (1) the observation loci in both
+#' replicates overlap (or the gap between them is less than
+#' or equal to \code{max_gap}), and (2) there is no other observation in
+#' replicate 2 that overlaps with the observation in replicate 1 and has a
+#' lower \emph{ambiguity resolution value}.
+#'
 #'@param rep1_df data frame of observations (i.e., genomic peaks or genomic
 #' interactions) of
 #' replicate 1. If \code{analysis_type} is IDR1D, the columns of \code{rep1_df}
@@ -209,10 +220,12 @@ establish_bijection <- function(rep1_df, rep2_df,
 
         if (analysis_type == "IDR1D") {
             pairs_df <- establish_overlap1d(rep1_df, rep2_df,
-                                            ambiguity_resolution_method, max_gap)
+                                            ambiguity_resolution_method,
+                                            max_gap)
         } else if (analysis_type == "IDR2D") {
             pairs_df <- establish_overlap2d(rep1_df, rep2_df,
-                                            ambiguity_resolution_method, max_gap)
+                                            ambiguity_resolution_method,
+                                            max_gap)
         }
 
         top_pairs_df <- pairs_df %>% dplyr::group_by(rep1_idx) %>%
@@ -378,6 +391,10 @@ preprocess <- function(x, value_transformation = c("identity",
 }
 
 #' @title Estimates IDR for Genomic Peak Data
+#'
+#' @description
+#' This method estimates Irreproducible Discovery Rates (IDR) for peaks in
+#' replicated ChIP-seq experiments.
 #'
 #' @references
 #' Q. Li, J. B. Brown, H. Huang and P. J. Bickel. (2011) Measuring

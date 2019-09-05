@@ -153,7 +153,8 @@ the following columns:
 }
 }
 \description{
-Estimates IDR for Genomic Peak Data
+This method estimates Irreproducible Discovery Rates (IDR) for peaks in
+replicated ChIP-seq experiments.
 }
 \examples{
 idr_results <- estimate_idr1d(idr2d:::chipseq$rep1_df,

@@ -38,8 +38,15 @@ See \code{\link{establish_bijection1d}} or
 \code{\link{establish_bijection2d}}, respectively.
 }
 \description{
-Finds One-to-One Correspondence between Peaks or interactions
-from Replicate 1 and 2
+This method establishes a bijective assignment between observations
+(genomic peaks in case of ChIP-seq, genomic interactions in case of
+ChIA-PET, HiChIP, and HiC) from
+replicate 1 and 2. An observation in replicate 1 is assigned to an
+observation in replicate 2 if and only if (1) the observation loci in both
+replicates overlap (or the gap between them is less than
+or equal to \code{max_gap}), and (2) there is no other observation in
+replicate 2 that overlaps with the observation in replicate 1 and has a
+lower \emph{ambiguity resolution value}.
 }
 \examples{
 rep1_df <- idr2d:::chipseq$rep1_df

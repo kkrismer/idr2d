@@ -2,7 +2,7 @@
 % Please edit documentation in R/hic.R
 \name{estimate_idr2d_hic}
 \alias{estimate_idr2d_hic}
-\title{TODO}
+\title{Estimates IDR for Genomic Interactions measured by HiC experiments}
 \usage{
 estimate_idr2d_hic(rep1_hic_file, rep2_hic_file, resolution = 10000,
   normalization = c("NONE", "VC", "VC_SQRT", "KR"), chromosomes = NULL,
@@ -12,9 +12,11 @@ estimate_idr2d_hic(rep1_hic_file, rep2_hic_file, resolution = 10000,
   use_condaenv = NULL)
 }
 \arguments{
-\item{rep1_hic_file}{path to .hic file for replicate 1}
+\item{rep1_hic_file}{path to .hic file for replicate 1
+(either local file path or URL)}
 
-\item{rep2_hic_file}{path to .hic file for replicate 2}
+\item{rep2_hic_file}{path to .hic file for replicate 2
+(either local file path or URL)}
 
 \item{resolution}{block resolution of HiC contact matrix in base pairs,
 defaults to 10,000 bp}
@@ -96,5 +98,21 @@ the following columns:
 }
 }
 \description{
-TODO
+This method estimates Irreproducible Discovery Rates (IDR) of
+genomic interactions between two replicates of HiC experiments.
+
+\code{estimate_idr2d_hic} uses the Python package \code{hic-straw} internally
+ to read .hic contact matrix files (see
+\href{https://pypi.org/project/hic-straw/}{hic-straw on PyPI} or the
+\href{https://pypi.org/project/hic-straw/}{Aiden lab GitHub repository}
+for more information).
+
+The contact matrix is subdivided into blocks, where the block size is
+determined by \code{resolution}. The reads per block are used to rank blocks
+and replicate blocks are easily matched by genomic location.
+}
+\references{
+Q. Li, J. B. Brown, H. Huang and P. J. Bickel. (2011) Measuring
+reproducibility of high-throughput experiments. Annals of Applied
+Statistics, Vol. 5, No. 3, 1752-1779.
 }
