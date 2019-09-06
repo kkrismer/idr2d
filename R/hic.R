@@ -123,9 +123,17 @@ estimate_idr2d_hic <- function(rep1_hic_file, rep2_hic_file, resolution = 10000,
     straw <- reticulate::import("straw")
 
     rep1 <- lapply(chromosomes, function(chromosome) {
-        counts <- straw$straw(normalization, rep1_hic_file,
-                              chromosome, chromosome,
-                              "BP", resolution)
+        counts <- tryCatch({
+            straw$straw(normalization, rep1_hic_file,
+                        chromosome, chromosome,
+                        "BP", resolution)
+        },
+        error = function(e) {
+            stop(paste0("error occurred while reading ", chromosome,
+                        " of replicate 1: ", e,
+                        "\nresolution might be too large or too small"))
+        })
+
         futile.logger::flog.info(paste0("read ", chromosome,
                                         ", replicate 1 (resolution = ",
                                         resolution, " bp)"))
@@ -138,9 +146,17 @@ estimate_idr2d_hic <- function(rep1_hic_file, rep2_hic_file, resolution = 10000,
     rep1_df <- dplyr::bind_rows(rep1)
 
     rep2 <- lapply(chromosomes, function(chromosome) {
-        counts <- straw$straw(normalization, rep2_hic_file,
-                              chromosome, chromosome,
-                              "BP", resolution)
+        counts <- tryCatch({
+            straw$straw(normalization, rep2_hic_file,
+                        chromosome, chromosome,
+                        "BP", resolution)
+        },
+        error = function(e) {
+            stop(paste0("error occurred while reading ", chromosome,
+                        " of replicate 2: ", e,
+                        "\nresolution might be too large or too small"))
+        })
+
         futile.logger::flog.info(paste0("read ", chromosome,
                                         ", replicate 2 (resolution = ",
                                         resolution, " bp)"))
@@ -153,6 +169,8 @@ estimate_idr2d_hic <- function(rep1_hic_file, rep2_hic_file, resolution = 10000,
     rep2_df <- dplyr::bind_rows(rep2)
 
     df <- dplyr::full_join(rep1_df, rep2_df, by = "interaction")
+
+    futile.logger::flog.info(paste0("number of interaction blocks: ", nrow(df)))
 
     df$value[is.na(df$value)] <- 0
     df$rep_value[is.na(df$rep_value)] <- 0
