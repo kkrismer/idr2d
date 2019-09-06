@@ -77,6 +77,19 @@ get_standard_chromosomes <- function(species, style) {
 #'   corresponding interaction was found, \code{rep_idx} is set to \code{NA}.
 #' }
 #'
+#' @importFrom reticulate use_python
+#' @importFrom reticulate use_virtualenv
+#' @importFrom reticulate use_condaenv
+#' @importFrom reticulate import
+#' @importFrom futile.logger flog.info
+#' @importFrom stringr str_trim
+#' @importFrom dplyr bind_rows
+#' @importFrom dplyr full_join
+#' @importFrom dplyr arrange
+#' @importFrom dplyr desc
+#' @importFrom dplyr select
+#' @importFrom idr est.IDR
+#' @importFrom futile.logger flog.warn
 #' @export
 estimate_idr2d_hic <- function(rep1_hic_file, rep2_hic_file, resolution = 10000,
                                normalization = c("NONE", "VC", "VC_SQRT", "KR"),
@@ -110,14 +123,16 @@ estimate_idr2d_hic <- function(rep1_hic_file, rep2_hic_file, resolution = 10000,
     straw <- reticulate::import("straw")
 
     rep1 <- lapply(chromosomes, function(chromosome) {
-        print(chromosome)
         counts <- straw$straw(normalization, rep1_hic_file,
                               chromosome, chromosome,
                               "BP", resolution)
+        futile.logger::flog.info(paste0("read ", chromosome,
+                                        ", replicate 1 (resolution = ",
+                                        resolution, " bp)"))
         return(data.frame(interaction = paste0(
             chromosome, ":",
-            format(counts[[1]], scientific = FALSE), "-",
-            format(counts[[2]], scientific = FALSE)),
+            stringr::str_trim(format(counts[[1]], scientific = FALSE)), "-",
+            stringr::str_trim(format(counts[[2]], scientific = FALSE))),
             value = counts[[3]], stringsAsFactors = FALSE))
     })
     rep1_df <- dplyr::bind_rows(rep1)
@@ -126,11 +141,13 @@ estimate_idr2d_hic <- function(rep1_hic_file, rep2_hic_file, resolution = 10000,
         counts <- straw$straw(normalization, rep2_hic_file,
                               chromosome, chromosome,
                               "BP", resolution)
-        futile.logger::flog.info(paste0("completed ", chromosome))
+        futile.logger::flog.info(paste0("read ", chromosome,
+                                        ", replicate 2 (resolution = ",
+                                        resolution, " bp)"))
         return(data.frame(interaction = paste0(
             chromosome, ":",
-            format(counts[[1]], scientific = FALSE), "-",
-            format(counts[[2]], scientific = FALSE)),
+            stringr::str_trim(format(counts[[1]], scientific = FALSE)), "-",
+            stringr::str_trim(format(counts[[2]], scientific = FALSE))),
             rep_value = counts[[3]], stringsAsFactors = FALSE))
     })
     rep2_df <- dplyr::bind_rows(rep2)

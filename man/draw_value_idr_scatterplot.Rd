@@ -6,7 +6,7 @@
 \usage{
 draw_value_idr_scatterplot(df, remove_na = TRUE,
   remove_outliers = TRUE, xlab = "transformed value in replicate 1",
-  ylab = "transformed value in replicate 2",
+  ylab = "transformed value in replicate 2", log_axes = FALSE,
   title = "value - IDR dependence", color_gradient = c("rainbow",
   "default"), max_points_shown = 2500)
 }
@@ -29,6 +29,9 @@ least the following named columns:
 \item{xlab}{character; x axis label}
 
 \item{ylab}{character; y axis label}
+
+\item{log_axes}{logical; show logarithmized values from replicate 1 and 2
+(default value is FALSE)}
 
 \item{title}{character; plot title}
 
