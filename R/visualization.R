@@ -155,6 +155,8 @@ draw_rank_idr_scatterplot <- function(df, remove_na = TRUE,
 #' @param remove_outliers logical; removes extreme data points
 #' @param xlab character; x axis label
 #' @param ylab character; y axis label
+#' @param log_axes logical; show logarithmized values from replicate 1 and 2
+#' (default value is FALSE)
 #' @param title character; plot title
 #' @param color_gradient character; either "rainbow" or "default"
 #' @param max_points_shown integer; default is 2500
@@ -178,11 +180,18 @@ draw_rank_idr_scatterplot <- function(df, remove_na = TRUE,
 #' @importFrom ggplot2 labs
 #' @importFrom ggplot2 scale_color_gradientn
 #' @importFrom grDevices rainbow
+#' @importFrom ggplot2 scale_x_continuous
+#' @importFrom ggplot2 scale_y_continuous
+#' @importFrom scales log10_trans
+#' @importFrom scales trans_breaks
+#' @importFrom scales trans_format
+#' @importFrom scales math_format
 #' @export
 draw_value_idr_scatterplot <- function(
     df, remove_na = TRUE, remove_outliers = TRUE,
     xlab = "transformed value in replicate 1",
     ylab = "transformed value in replicate 2",
+    log_axes = FALSE,
     title = "value - IDR dependence",
     color_gradient = c("rainbow", "default"),
     max_points_shown = 2500) {
@@ -266,6 +275,11 @@ draw_value_idr_scatterplot <- function(
         df <- df[sample.int(nrow(df), max_points_shown), ]
     }
 
+    if (log_axes) {
+        df$value <- df$value + 1
+        df$rep_value <- df$rep_value + 1
+    }
+
     g <- ggplot2::ggplot(df, ggplot2::aes(x = value,
                                           y = rep_value,
                                           color = idr)) +
@@ -273,6 +287,18 @@ draw_value_idr_scatterplot <- function(
         ggplot2::theme_bw() +
         ggplot2::theme(panel.border = ggplot2::element_blank()) +
         ggplot2::labs(x = xlab, y = ylab, color = "IDR", title = title)
+
+    if (log_axes) {
+        g <- g + ggplot2::scale_x_continuous(
+            trans = scales::log10_trans(),
+            breaks = scales::trans_breaks("log10", function(x) 10^x),
+            labels = scales::trans_format("log10", scales::math_format(10^.x))
+        ) + ggplot2::scale_y_continuous(
+            trans = scales::log10_trans(),
+            breaks = scales::trans_breaks("log10", function(x) 10^x),
+            labels = scales::trans_format("log10", scales::math_format(10^.x))
+        )
+    }
 
     if (color_gradient == "rainbow") {
         g <- g + ggplot2::scale_color_gradientn(colours =
