@@ -7,8 +7,8 @@
 draw_value_idr_scatterplot(df, remove_na = TRUE,
   remove_outliers = TRUE, xlab = "transformed value in replicate 1",
   ylab = "transformed value in replicate 2", log_axes = FALSE,
-  title = "value - IDR dependence", color_gradient = c("rainbow",
-  "default"), max_points_shown = 2500)
+  log_idr = FALSE, title = "value - IDR dependence",
+  color_gradient = c("rainbow", "default"), max_points_shown = 2500)
 }
 \arguments{
 \item{df}{part of output of \code{\link{estimate_idr}}, a data frame with at
@@ -31,6 +31,10 @@ least the following named columns:
 \item{ylab}{character; y axis label}
 
 \item{log_axes}{logical; show logarithmized values from replicate 1 and 2
+(default value is FALSE)}
+
+\item{log_idr}{logical; use logarithmized IDRs for colors to better
+distinguish highly significant IDRs
 (default value is FALSE)}
 
 \item{title}{character; plot title}

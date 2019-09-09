@@ -75,6 +75,8 @@ draw_idr_distribution_histogram <- function(df, remove_na = TRUE,
 #' @param remove_na logical; should NA values be removed?
 #' @param xlab character; x axis label
 #' @param ylab character; y axis label
+#' @param log_idr logical; use logarithmized IDRs for colors to better
+#' distinguish highly significant IDRs
 #' @param title character; plot title
 #' @param color_gradient character; either "rainbow" or "default"
 #' @param max_points_shown integer; default is 2500
@@ -99,12 +101,14 @@ draw_idr_distribution_histogram <- function(df, remove_na = TRUE,
 #' @importFrom ggplot2 scale_color_gradientn
 #' @importFrom grDevices rainbow
 #' @export
-draw_rank_idr_scatterplot <- function(df, remove_na = TRUE,
-                                      xlab = "rank in replicate 1",
-                                      ylab = "rank in replicate 2",
-                                      title = "rank - IDR dependence",
-                                      color_gradient = c("rainbow", "default"),
-                                      max_points_shown = 2500) {
+draw_rank_idr_scatterplot <- function(
+    df, remove_na = TRUE,
+    xlab = "rank in replicate 1",
+    ylab = "rank in replicate 2",
+    log_idr = FALSE,
+    title = "rank - IDR dependence",
+    color_gradient = c("rainbow", "default"),
+    max_points_shown = 2500) {
     # avoid CRAN warnings
     rank <- rep_rank <- idr <- NULL
 
@@ -120,17 +124,33 @@ draw_rank_idr_scatterplot <- function(df, remove_na = TRUE,
         df <- df[sample.int(nrow(df), max_points_shown), ]
     }
 
+    if (log_idr) {
+        df$idr <- log(df$idr)
+        idr.legend.label <- "log(IDR)"
+    } else {
+        idr.legend.label <- "IDR"
+    }
+
     g <- ggplot2::ggplot(df, ggplot2::aes(x = rank,
                                           y = rep_rank,
-                                          color = abs(log(idr)))) +
+                                          color = idr)) +
         ggplot2::geom_point() +
         ggplot2::theme_bw() +
         ggplot2::theme(panel.border = ggplot2::element_blank()) +
-        ggplot2::labs(x = xlab, y = ylab, color = "IDR", title = title)
+        ggplot2::labs(x = xlab, y = ylab,
+                      color = idr.legend.label, title = title)
 
     if (color_gradient == "rainbow") {
-        g <- g + ggplot2::scale_color_gradientn(colors =
-                                                    grDevices::rainbow(10))
+        if (log_idr) {
+            g <- g + ggplot2::scale_color_gradientn(colors =
+                                                        grDevices::rainbow(10))
+        } else {
+            g <- g + ggplot2::scale_color_gradientn(colours =
+                                                        grDevices::rainbow(10),
+                                                    limits = c(0, 1.0),
+                                                    breaks = c(0.0, 0.25, 0.5,
+                                                               0.75, 1.0))
+        }
     }
     return(g)
 }
@@ -156,6 +176,9 @@ draw_rank_idr_scatterplot <- function(df, remove_na = TRUE,
 #' @param xlab character; x axis label
 #' @param ylab character; y axis label
 #' @param log_axes logical; show logarithmized values from replicate 1 and 2
+#' (default value is FALSE)
+#' @param log_idr logical; use logarithmized IDRs for colors to better
+#' distinguish highly significant IDRs
 #' (default value is FALSE)
 #' @param title character; plot title
 #' @param color_gradient character; either "rainbow" or "default"
@@ -192,6 +215,7 @@ draw_value_idr_scatterplot <- function(
     xlab = "transformed value in replicate 1",
     ylab = "transformed value in replicate 2",
     log_axes = FALSE,
+    log_idr = FALSE,
     title = "value - IDR dependence",
     color_gradient = c("rainbow", "default"),
     max_points_shown = 2500) {
@@ -280,13 +304,21 @@ draw_value_idr_scatterplot <- function(
         df$rep_value <- df$rep_value + 1
     }
 
+    if (log_idr) {
+        df$idr <- log(df$idr)
+        idr.legend.label <- "log(IDR)"
+    } else {
+        idr.legend.label <- "IDR"
+    }
+
     g <- ggplot2::ggplot(df, ggplot2::aes(x = value,
                                           y = rep_value,
                                           color = idr)) +
         ggplot2::geom_point() +
         ggplot2::theme_bw() +
         ggplot2::theme(panel.border = ggplot2::element_blank()) +
-        ggplot2::labs(x = xlab, y = ylab, color = "IDR", title = title)
+        ggplot2::labs(x = xlab, y = ylab,
+                      color = idr.legend.label, title = title)
 
     if (log_axes) {
         g <- g + ggplot2::scale_x_continuous(
@@ -301,11 +333,16 @@ draw_value_idr_scatterplot <- function(
     }
 
     if (color_gradient == "rainbow") {
-        g <- g + ggplot2::scale_color_gradientn(colours =
-                                                    grDevices::rainbow(10),
-                                                limits = c(0, 1.0),
-                                                breaks = c(0.0, 0.25, 0.5,
-                                                           0.75, 1.0))
+        if (log_idr) {
+            g <- g + ggplot2::scale_color_gradientn(colors =
+                                                        grDevices::rainbow(10))
+        } else {
+            g <- g + ggplot2::scale_color_gradientn(colours =
+                                                        grDevices::rainbow(10),
+                                                    limits = c(0, 1.0),
+                                                    breaks = c(0.0, 0.25, 0.5,
+                                                               0.75, 1.0))
+        }
     }
     return(g)
 }
