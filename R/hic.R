@@ -131,7 +131,13 @@ estimate_idr2d_hic <- function(rep1_hic_file, rep2_hic_file, resolution = 10000,
         error = function(e) {
             stop(paste0("error occurred while reading ", chromosome,
                         " of replicate 1: ", e,
-                        "\nresolution might be too large or too small"))
+                        "\npossible reasons:",
+                        "\n(1) resolution might be too large or too small",
+                        "\n(2) chromosome names are invalid, check species ",
+                        "and chromosome name style - ",
+                        "NCBI (e.g., \"1\"), UCSC (\"chr1\"), ",
+                        "dbSNP (\"ch1\"), Ensembl (\"1\")",
+                        "\n(3) Python package hic-straw is not installed"))
         })
 
         futile.logger::flog.info(paste0("read ", chromosome,
