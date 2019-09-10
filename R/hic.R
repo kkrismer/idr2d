@@ -35,6 +35,12 @@ get_standard_chromosomes <- function(species, style) {
 #' \code{"VC_SQRT"}, \code{"KR"}.
 #' @param chromosomes list of chromosome names in HiC files, defaults to UCSC
 #' human chromosome names (chr1, ..., chr22, chrX, chrY, chrM)
+#' @param combined_min_value exclude blocks with a combined (replicate 1 +
+#' replicate 2) read count or normalized read count of less than
+#'  \code{combined_min_value} (default is 20 reads)
+#' @param combined_max_value exclude blocks with a combined (replicate 1 +
+#' replicate 2) read count or normalized read count of more than
+#'  \code{combined_max_value} (default is infinity)
 #' @param use_python if Python is not on PATH, specify path to Python binary
 #' here (see \code{\link[reticulate:use_python]{use_python}})
 #' @param use_virtualenv if Python package \code{hic-straw} is not in base
@@ -94,13 +100,15 @@ get_standard_chromosomes <- function(species, style) {
 estimate_idr2d_hic <- function(rep1_hic_file, rep2_hic_file, resolution = 10000,
                                normalization = c("NONE", "VC", "VC_SQRT", "KR"),
                                chromosomes = NULL,
+                               combined_min_value = 30,
+                               combined_max_value = Inf,
                                max_factor = 1.5, jitter_factor = 0.0001,
                                mu = 0.1, sigma = 1.0, rho = 0.2, p = 0.5,
                                eps = 0.001, max_iteration = 30,
                                local_idr = TRUE,
                                use_python = NULL, use_virtualenv = NULL,
                                use_condaenv = NULL) {
-    value <- rep_value <- idr <- NULL
+    value <- rep_value <- idr <- combined_value <- NULL
 
     normalization <- match.arg(normalization,
                                choices = c("NONE", "VC", "VC_SQRT", "KR"))
@@ -137,7 +145,8 @@ estimate_idr2d_hic <- function(rep1_hic_file, rep2_hic_file, resolution = 10000,
                         "and chromosome name style - ",
                         "NCBI (e.g., \"1\"), UCSC (\"chr1\"), ",
                         "dbSNP (\"ch1\"), Ensembl (\"1\")",
-                        "\n(3) Python package hic-straw is not installed"))
+                        "\n(3) Python package hic-straw is not installed",
+                        "\n(4) rep1_hic_file does not exist"))
         })
 
         futile.logger::flog.info(paste0("read ", chromosome,
@@ -160,7 +169,13 @@ estimate_idr2d_hic <- function(rep1_hic_file, rep2_hic_file, resolution = 10000,
         error = function(e) {
             stop(paste0("error occurred while reading ", chromosome,
                         " of replicate 2: ", e,
-                        "\nresolution might be too large or too small"))
+                        "\npossible reasons:",
+                        "\n(1) resolution might be too large or too small",
+                        "\n(2) chromosome names are invalid, check species ",
+                        "and chromosome name style - ",
+                        "NCBI (e.g., \"1\"), UCSC (\"chr1\"), ",
+                        "dbSNP (\"ch1\"), Ensembl (\"1\")",
+                        "\n(3) rep2_hic_file does not exist"))
         })
 
         futile.logger::flog.info(paste0("read ", chromosome,
@@ -175,20 +190,44 @@ estimate_idr2d_hic <- function(rep1_hic_file, rep2_hic_file, resolution = 10000,
     rep2_df <- dplyr::bind_rows(rep2)
 
     df <- dplyr::full_join(rep1_df, rep2_df, by = "interaction")
-
-    futile.logger::flog.info(paste0("number of interaction blocks: ", nrow(df)))
-
     df$value[is.na(df$value)] <- 0
     df$rep_value[is.na(df$rep_value)] <- 0
+
+    if (is.infinite(combined_min_value) && is.infinite(combined_max_value)) {
+        futile.logger::flog.info(paste0("number of interaction blocks: ",
+                                        nrow(df)))
+    } else {
+        futile.logger::flog.info(paste0("number of interaction blocks ",
+                                        "(before filtering): ", nrow(df)))
+
+        df$combined_value <- df$value + df$rep_value
+        if (!is.infinite(combined_min_value)) {
+            df <- dplyr::filter(df, combined_value >= combined_min_value)
+        }
+
+        if (!is.infinite(combined_max_value)) {
+            df <- dplyr::filter(df, combined_value <= combined_max_value)
+        }
+        df$combined_value <- NULL
+
+        futile.logger::flog.info(paste0("number of interaction blocks ",
+                                        "(after filtering): ", nrow(df)))
+    }
 
     df <- dplyr::arrange(df, dplyr::desc(value))
     df$rank <- seq_len(nrow(df))
     df <- dplyr::arrange(df, dplyr::desc(rep_value))
     df$rep_rank <- seq_len(nrow(df))
 
-    idr_matrix <- as.matrix(dplyr::select(df,
-                                          value,
-                                          rep_value))
+    df$value <- preprocess(df$value, "identity",
+                           max_factor = max_factor,
+                           jitter_factor = jitter_factor)
+
+    df$rep_value <- preprocess(df$rep_value, "identity",
+                               max_factor = max_factor,
+                               jitter_factor = jitter_factor)
+
+    idr_matrix <- as.matrix(dplyr::select(df, value, rep_value))
 
     invisible(tryCatch({
         idr_results <- idr::est.IDR(idr_matrix, mu, sigma, rho, p,

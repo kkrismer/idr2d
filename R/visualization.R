@@ -220,7 +220,7 @@ draw_value_idr_scatterplot <- function(
     color_gradient = c("rainbow", "default"),
     max_points_shown = 2500) {
     # avoid CRAN warnings
-    value <- rep_value <- idr <- NULL
+    value <- rep_value <- idr <- .x <- NULL
 
     # argument handling
     color_gradient <- match.arg(color_gradient,

@@ -6,6 +6,7 @@
 \usage{
 estimate_idr2d_hic(rep1_hic_file, rep2_hic_file, resolution = 10000,
   normalization = c("NONE", "VC", "VC_SQRT", "KR"), chromosomes = NULL,
+  combined_min_value = 30, combined_max_value = Inf,
   max_factor = 1.5, jitter_factor = 1e-04, mu = 0.1, sigma = 1,
   rho = 0.2, p = 0.5, eps = 0.001, max_iteration = 30,
   local_idr = TRUE, use_python = NULL, use_virtualenv = NULL,
@@ -27,6 +28,14 @@ defaults to 10,000 bp}
 
 \item{chromosomes}{list of chromosome names in HiC files, defaults to UCSC
 human chromosome names (chr1, ..., chr22, chrX, chrY, chrM)}
+
+\item{combined_min_value}{exclude blocks with a combined (replicate 1 +
+replicate 2) read count or normalized read count of less than
+ \code{combined_min_value} (default is 20 reads)}
+
+\item{combined_max_value}{exclude blocks with a combined (replicate 1 +
+replicate 2) read count or normalized read count of more than
+ \code{combined_max_value} (default is infinity)}
 
 \item{max_factor}{numeric; controls the replacement values for \code{Inf}
 and \code{-Inf}. \code{Inf} are replaced by \code{max(x) * max_factor} and
