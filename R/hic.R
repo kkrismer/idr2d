@@ -29,7 +29,8 @@ get_standard_chromosomes <- function(species, style) {
 #' @param rep2_hic_file path to .hic file for replicate 2
 #' (either local file path or URL)
 #' @param resolution block resolution of HiC contact matrix in base pairs,
-#' defaults to 10,000 bp
+#' defaults to 1,000,000 bp (usually one of the following:
+#' 2500000, 1000000, 500000, 250000, 100000, 50000, 25000, 10000, 5000)
 #' @param normalization normalization step performed by Python package
 #' \code{hic-straw}, one of the following: \code{"NONE"}, \code{"VC"},
 #' \code{"VC_SQRT"}, \code{"KR"}.
@@ -97,7 +98,8 @@ get_standard_chromosomes <- function(species, style) {
 #' @importFrom idr est.IDR
 #' @importFrom futile.logger flog.warn
 #' @export
-estimate_idr2d_hic <- function(rep1_hic_file, rep2_hic_file, resolution = 10000,
+estimate_idr2d_hic <- function(rep1_hic_file, rep2_hic_file,
+                               resolution = 1000000,
                                normalization = c("NONE", "VC", "VC_SQRT", "KR"),
                                chromosomes = NULL,
                                combined_min_value = 30,

@@ -4,7 +4,7 @@
 \alias{estimate_idr2d_hic}
 \title{Estimates IDR for Genomic Interactions measured by HiC experiments}
 \usage{
-estimate_idr2d_hic(rep1_hic_file, rep2_hic_file, resolution = 10000,
+estimate_idr2d_hic(rep1_hic_file, rep2_hic_file, resolution = 1e+06,
   normalization = c("NONE", "VC", "VC_SQRT", "KR"), chromosomes = NULL,
   combined_min_value = 30, combined_max_value = Inf,
   max_factor = 1.5, jitter_factor = 1e-04, mu = 0.1, sigma = 1,
@@ -20,7 +20,8 @@ estimate_idr2d_hic(rep1_hic_file, rep2_hic_file, resolution = 10000,
 (either local file path or URL)}
 
 \item{resolution}{block resolution of HiC contact matrix in base pairs,
-defaults to 10,000 bp}
+defaults to 1,000,000 bp (usually one of the following:
+2500000, 1000000, 500000, 250000, 100000, 50000, 25000, 10000, 5000)}
 
 \item{normalization}{normalization step performed by Python package
 \code{hic-straw}, one of the following: \code{"NONE"}, \code{"VC"},
