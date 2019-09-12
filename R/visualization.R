@@ -126,9 +126,9 @@ draw_rank_idr_scatterplot <- function(
 
     if (log_idr) {
         df$idr <- log(df$idr)
-        idr.legend.label <- "log(IDR)"
+        idr_legend_label <- "log(IDR)"
     } else {
-        idr.legend.label <- "IDR"
+        idr_legend_label <- "IDR"
     }
 
     g <- ggplot2::ggplot(df, ggplot2::aes(x = rank,
@@ -138,7 +138,7 @@ draw_rank_idr_scatterplot <- function(
         ggplot2::theme_bw() +
         ggplot2::theme(panel.border = ggplot2::element_blank()) +
         ggplot2::labs(x = xlab, y = ylab,
-                      color = idr.legend.label, title = title)
+                      color = idr_legend_label, title = title)
 
     if (color_gradient == "rainbow") {
         if (log_idr) {
@@ -306,9 +306,9 @@ draw_value_idr_scatterplot <- function(
 
     if (log_idr) {
         df$idr <- log(df$idr)
-        idr.legend.label <- "log(IDR)"
+        idr_legend_label <- "log(IDR)"
     } else {
-        idr.legend.label <- "IDR"
+        idr_legend_label <- "IDR"
     }
 
     g <- ggplot2::ggplot(df, ggplot2::aes(x = value,
@@ -318,7 +318,7 @@ draw_value_idr_scatterplot <- function(
         ggplot2::theme_bw() +
         ggplot2::theme(panel.border = ggplot2::element_blank()) +
         ggplot2::labs(x = xlab, y = ylab,
-                      color = idr.legend.label, title = title)
+                      color = idr_legend_label, title = title)
 
     if (log_axes) {
         g <- g + ggplot2::scale_x_continuous(

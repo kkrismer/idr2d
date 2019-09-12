@@ -4,31 +4,17 @@
 \alias{estimate_idr2d_hic}
 \title{Estimates IDR for Genomic Interactions measured by HiC experiments}
 \usage{
-estimate_idr2d_hic(rep1_hic_file, rep2_hic_file, resolution = 1e+06,
-  normalization = c("NONE", "VC", "VC_SQRT", "KR"), chromosomes = NULL,
-  combined_min_value = 30, combined_max_value = Inf,
-  max_factor = 1.5, jitter_factor = 1e-04, mu = 0.1, sigma = 1,
-  rho = 0.2, p = 0.5, eps = 0.001, max_iteration = 30,
-  local_idr = TRUE, use_python = NULL, use_virtualenv = NULL,
-  use_condaenv = NULL)
+estimate_idr2d_hic(rep1_df, rep2_df, combined_min_value = 30,
+  combined_max_value = Inf, max_factor = 1.5, jitter_factor = 1e-04,
+  mu = 0.1, sigma = 1, rho = 0.2, p = 0.5, eps = 0.001,
+  max_iteration = 30, local_idr = TRUE)
 }
 \arguments{
-\item{rep1_hic_file}{path to .hic file for replicate 1
-(either local file path or URL)}
+\item{rep1_df}{data frame of parsed .hic file for replicate 1 (output of
+\code{\link{parse_hic_file}})}
 
-\item{rep2_hic_file}{path to .hic file for replicate 2
-(either local file path or URL)}
-
-\item{resolution}{block resolution of HiC contact matrix in base pairs,
-defaults to 1,000,000 bp (usually one of the following:
-2500000, 1000000, 500000, 250000, 100000, 50000, 25000, 10000, 5000)}
-
-\item{normalization}{normalization step performed by Python package
-\code{hic-straw}, one of the following: \code{"NONE"}, \code{"VC"},
-\code{"VC_SQRT"}, \code{"KR"}.}
-
-\item{chromosomes}{list of chromosome names in HiC files, defaults to UCSC
-human chromosome names (chr1, ..., chr22, chrX, chrY, chrM)}
+\item{rep2_df}{data frame of parsed .hic file for replicate 2 (output of
+\code{\link{parse_hic_file}})}
 
 \item{combined_min_value}{exclude blocks with a combined (replicate 1 +
 replicate 2) read count or normalized read count of less than
@@ -62,60 +48,27 @@ is added to \code{x}. This is done to break ties in \code{x}.}
 IDR estimation (defaults to 30)}
 
 \item{local_idr}{see \code{\link[idr:est.IDR]{est.IDR}}}
-
-\item{use_python}{if Python is not on PATH, specify path to Python binary
-here (see \code{\link[reticulate:use_python]{use_python}})}
-
-\item{use_virtualenv}{if Python package \code{hic-straw} is not in base
-virtualenv environment, specify environment here (see
-\code{\link[reticulate:use_python]{use_virtualenv}})}
-
-\item{use_condaenv}{if Python package \code{hic-straw} is not in base
-conda environment, specify environment here (see
-\code{\link[reticulate:use_python]{use_condaenv}})}
 }
 \value{
-Data frames \code{rep1_df} and \code{rep2_df} with
-the following columns:
+Data frame with the following columns:
 \tabular{rll}{
-  column 1: \tab \code{chr_a} \tab character; genomic location of anchor A -
-  chromosome (e.g., \code{"chr3"})\cr
-  column 2: \tab \code{start_a} \tab integer; genomic location of anchor A -
-  start coordinate\cr
-  column 3: \tab \code{end_a} \tab integer; genomic location of anchor A -
-  end coordinate\cr
-  column 4: \tab \code{chr_b} \tab character; genomic location of anchor B -
-  chromosome (e.g., \code{"chr3"})\cr
-  column 5: \tab \code{start_b} \tab integer; genomic location of anchor B -
-  start coordinate\cr
-  column 6: \tab \code{end_b} \tab integer; genomic location of anchor B -
-  end coordinate\cr
-  column 7: \tab \code{value} \tab numeric; p-value, FDR, or heuristic used
+  column 1: \tab \code{interaction} \tab character; genomic location of
+  interaction block (e.g., \code{"chr1:204940000-204940000"})\cr
+  column 2: \tab \code{value} \tab numeric; p-value, FDR, or heuristic used
   to rank the interactions\cr
-  column 8: \tab \code{"rep_value"} \tab numeric; value of corresponding
-  replicate interaction. If no corresponding interaction was found,
-  \code{rep_value} is set to \code{NA}.\cr
-  column 9: \tab \code{"rank"} \tab integer; rank of the interaction,
+  column 3: \tab \code{"rep_value"} \tab numeric; value of corresponding
+  replicate interaction\cr
+  column 4: \tab \code{"rank"} \tab integer; rank of the interaction,
   established by value column, ascending order\cr
-  column 10: \tab \code{"rep_rank"} \tab integer; rank of corresponding
-  replicate interaction. If no corresponding interaction was found,
-  \code{rep_rank} is set to \code{NA}.\cr
-  column 11: \tab \code{"idx"} \tab integer; interaction index,
-  primary key\cr
-  column 12: \tab \code{"rep_idx"} \tab integer; specifies the index of the
-  corresponding interaction in the other replicate (foreign key). If no
-  corresponding interaction was found, \code{rep_idx} is set to \code{NA}.
+  column 5: \tab \code{"rep_rank"} \tab integer; rank of corresponding
+  replicate interaction\cr
+  column 6: \tab \code{"idr"} \tab integer; IDR of the block and the
+  corresponding block in the other replicate
 }
 }
 \description{
 This method estimates Irreproducible Discovery Rates (IDR) of
 genomic interactions between two replicates of HiC experiments.
-
-\code{estimate_idr2d_hic} uses the Python package \code{hic-straw} internally
- to read .hic contact matrix files (see
-\href{https://pypi.org/project/hic-straw/}{hic-straw on PyPI} or the
-\href{https://pypi.org/project/hic-straw/}{Aiden lab GitHub repository}
-for more information).
 
 The contact matrix is subdivided into blocks, where the block size is
 determined by \code{resolution}. The reads per block are used to rank blocks
