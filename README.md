@@ -28,6 +28,62 @@ There are two vignettes available on Bioconductor, focusing on [*idr2d* and ChIA
 
 The [reference manual](https://bioc.ism.ac.jp/packages/devel/bioc/manuals/idr2d/man/idr2d.pdf) might also be helpful if you know what you are looking for.
 
+### Example code for ChiP-seq, ChIA-PET and HiC experiments
+
+Analyzing results from replicate **ChIP-seq** experiments
+(stored in tab-delimited files *chip-seq-rep1.txt* and *chip-seq-rep2.txt*):
+```
+library(idr2d)
+
+rep1_df <- read.table("chip-seq-rep1.txt", header = TRUE, sep = "\t",
+                      stringsAsFactors = FALSE)
+rep2_df <- read.table("chip-seq-rep2.txt", header = TRUE, sep = "\t",
+                      stringsAsFactors = FALSE)
+
+idr_results <- estimate_idr1d(rep1_df, rep2_df, 
+                              value_transformation = "identity")
+rep1_idr_df <- idr_results$rep1_df
+
+draw_idr_distribution_histogram(rep1_idr_df)
+draw_rank_idr_scatterplot(rep1_idr_df)
+draw_value_idr_scatterplot(rep1_idr_df)
+```
+
+Analyzing results from replicate **ChIA-PET** experiments
+(stored in tab-delimited files *chia-pet-rep1.txt* and *chia-pet-rep2.txt*):
+```
+library(idr2d)
+
+rep1_df <- read.table("chia-pet-rep1.txt", header = TRUE, sep = "\t",
+                      stringsAsFactors = FALSE)
+rep2_df <- read.table("chia-pet-rep2.txt", header = TRUE, sep = "\t",
+                      stringsAsFactors = FALSE)
+
+idr_results <- estimate_idr2d(rep1_df, rep2_df, 
+                              value_transformation = "identity")
+rep1_idr_df <- idr_results$rep1_df
+
+draw_idr_distribution_histogram(rep1_idr_df)
+draw_rank_idr_scatterplot(rep1_idr_df)
+draw_value_idr_scatterplot(rep1_idr_df)
+```
+
+Analyzing chromosome 1 results from replicate **HiC** experiments
+(stored in .hic files *hic-rep1.hic* and *hic-rep2.hic*):
+```
+library(idr2d)
+
+rep1_df <- parse_hic_file("hic-rep1.hic", resolution = 1e+06, chromosomes = "chr1")
+rep2_df <- parse_hic_file("hic-rep2.hic", resolution = 1e+06, chromosomes = "chr1")
+
+idr_results <- estimate_idr2d_hic(rep1_df, rep2_df)
+rep1_idr_df <- idr_results$rep1_df
+
+draw_idr_distribution_histogram(rep1_idr_df)
+draw_rank_idr_scatterplot(rep1_idr_df)
+draw_value_idr_scatterplot(rep1_idr_df)
+```
+
 ## Citation
 
 If you use IDR2D in your research, please cite:
