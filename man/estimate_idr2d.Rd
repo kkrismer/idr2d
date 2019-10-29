@@ -135,9 +135,9 @@ IDR estimation (defaults to 30)}
 \item{local_idr}{see \code{\link[idr:est.IDR]{est.IDR}}}
 }
 \value{
-List with two components (\code{rep1_df} and \code{rep2_df})
-containing the interactions from input data frames \code{rep1_df} and
-\code{rep2_df} with
+List with three components, (\code{rep1_df}, \code{rep2_df},
+and \code{analysis_type}) containing the interactions from input
+data frames \code{rep1_df} and \code{rep2_df} with
 the following additional columns:
 \tabular{rll}{
   column 1: \tab \code{chr_a} \tab character; genomic location of anchor A -

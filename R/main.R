@@ -413,10 +413,10 @@ preprocess <- function(x, value_transformation = c("identity",
 #' @inheritParams idr::est.IDR
 #' @inheritParams preprocess
 #'
-#' @return List with two components (\code{rep1_df} and \code{rep1_df})
-#' containing the peaks from input data frames \code{rep1_df} and
-#' \code{rep2_df} with
-#' the following columns:
+#' @return List with three components, (\code{rep1_df}, \code{rep2_df},
+#' and \code{analysis_type}) containing the interactions from input
+#' data frames \code{rep1_df} and \code{rep2_df} with
+#' the following additional columns:
 #' \tabular{rll}{
 #'   column 1: \tab \code{chr} \tab character; genomic location of peak -
 #'   chromosome (e.g., \code{"chr3"})\cr
@@ -497,9 +497,9 @@ estimate_idr1d <- function(rep1_df, rep2_df,
 #' @inheritParams idr::est.IDR
 #' @inheritParams preprocess
 #'
-#' @return List with two components (\code{rep1_df} and \code{rep2_df})
-#' containing the interactions from input data frames \code{rep1_df} and
-#' \code{rep2_df} with
+#' @return List with three components, (\code{rep1_df}, \code{rep2_df},
+#' and \code{analysis_type}) containing the interactions from input
+#' data frames \code{rep1_df} and \code{rep2_df} with
 #' the following additional columns:
 #' \tabular{rll}{
 #'   column 1: \tab \code{chr_a} \tab character; genomic location of anchor A -
@@ -743,5 +743,70 @@ estimate_idr <- function(rep1_df, rep2_df, analysis_type = "IDR2D",
         rep2_df <- dplyr::select(rep2_df, columns)
     }
 
-    return(list(rep1_df = rep1_df, rep2_df = rep2_df))
+    res <- list(rep1_df = rep1_df, rep2_df = rep2_df,
+                analysis_type = analysis_type)
+    class(res) <- c("idr2d_result", class(res))
+    return(res)
+}
+
+#' @importFrom methods is
+#' @importFrom dplyr filter
+#' @export
+summary.idr2d_result <- function(object, ...) {
+    idr <- NULL
+
+    stopifnot(methods::is(object, "idr2d_result"))
+
+    num_rep_df <- dplyr::filter(object$rep1_df, !is.na(idr))
+
+    num_sig_df <- dplyr::filter(num_rep_df, idr < 0.05)
+    num_high_sig_df <- dplyr::filter(num_rep_df, idr < 0.01)
+
+    res <- list(
+        analysis_type = object$analysis_type,
+        rep1_num_interactions = nrow(object$rep1_df),
+        rep2_num_interactions = nrow(object$rep2_df),
+        num_reproducible_interactions = nrow(num_rep_df),
+        num_significant_interactions = nrow(num_sig_df),
+        num_highly_significant_interactions = nrow(num_high_sig_df)
+    )
+
+    class(res) <- c("idr2d_result_summary", class(res))
+    return(res)
+}
+
+#' @importFrom methods is
+#' @export
+print.idr2d_result_summary <- function(x, ...) {
+    stopifnot(methods::is(x, "idr2d_result_summary"))
+
+    cat("analysis type: ", x$analysis_type, "\n", sep = "")
+
+    if (x$analysis_type == "IDR2D HiC") {
+        cat("number of blocks: ",
+            x$num_blocks, "\n", sep = "")
+        cat("number of blocks with significant IDR (IDR < 0.05): ",
+            x$num_significant_blocks, "\n", sep = "")
+        cat("number of blocks with highly significant IDR (IDR < 0.01): ",
+            x$num_highly_significant_blocks, "\n", sep = "")
+        cat("percentage of blocks with significant IDR (IDR < 0.05): ",
+            round(x$num_significant_blocks / x$num_blocks * 100, digits = 2),
+            " %\n", sep = "")
+    } else {
+        cat("number of interactions in replicate 1: ",
+            x$rep1_num_interactions, "\n", sep = "")
+        cat("number of interactions in replicate 2: ",
+            x$rep2_num_interactions, "\n", sep = "")
+        cat("number of reproducible interactions: ",
+            x$num_reproducible_interactions, "\n", sep = "")
+        cat("number of interactions with significant IDR (IDR < 0.05): ",
+            x$num_significant_interactions, "\n", sep = "")
+        cat("number of interactions with highly significant IDR (IDR < 0.01): ",
+            x$num_highly_significant_interactions, "\n", sep = "")
+        cat("percentage of interactions with significant IDR (IDR < 0.05): ",
+            round(x$num_significant_interactions /
+                max(x$rep1_num_interactions, x$rep2_num_interactions) * 100,
+                digits = 2),
+            " %\n", sep = "")
+    }
 }

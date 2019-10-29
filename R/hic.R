@@ -243,5 +243,29 @@ estimate_idr2d_hic <- function(rep1_df, rep2_df,
 
     df <- dplyr::arrange(df, idr)
 
+    class(df) <- c("idr2d_hic_result", class(df))
     return(df)
+}
+
+
+#' @importFrom methods is
+#' @importFrom dplyr filter
+#' @export
+summary.idr2d_hic_result <- function(object, ...) {
+    idr <- NULL
+
+    stopifnot(methods::is(object, "idr2d_hic_result"))
+
+    num_sig_df <- dplyr::filter(object, idr < 0.05)
+    num_high_sig_df <- dplyr::filter(object, idr < 0.01)
+
+    res <- list(
+        analysis_type = "IDR2D HiC",
+        num_blocks = nrow(object),
+        num_significant_blocks = nrow(num_sig_df),
+        num_highly_significant_blocks = nrow(num_high_sig_df)
+    )
+
+    class(res) <- c("idr2d_result_summary", class(res))
+    return(res)
 }

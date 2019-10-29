@@ -32,6 +32,7 @@ Imports:
     idr (>= 1.2),
     IRanges (>= 2.18.0),
     magrittr (>= 1.5),
+    methods,
     reticulate (>= 1.13),
     scales (>= 1.0.0),
     stats,
