@@ -42,8 +42,9 @@ rep2_df <- read.table("chip-seq-rep2.txt", header = TRUE, sep = "\t",
 
 idr_results <- estimate_idr1d(rep1_df, rep2_df, 
                               value_transformation = "identity")
-rep1_idr_df <- idr_results$rep1_df
+summary(idr_results)
 
+rep1_idr_df <- idr_results$rep1_df
 draw_idr_distribution_histogram(rep1_idr_df)
 draw_rank_idr_scatterplot(rep1_idr_df)
 draw_value_idr_scatterplot(rep1_idr_df)
@@ -61,8 +62,9 @@ rep2_df <- read.table("chia-pet-rep2.txt", header = TRUE, sep = "\t",
 
 idr_results <- estimate_idr2d(rep1_df, rep2_df, 
                               value_transformation = "identity")
-rep1_idr_df <- idr_results$rep1_df
+summary(idr_results)
 
+rep1_idr_df <- idr_results$rep1_df
 draw_idr_distribution_histogram(rep1_idr_df)
 draw_rank_idr_scatterplot(rep1_idr_df)
 draw_value_idr_scatterplot(rep1_idr_df)
@@ -77,8 +79,9 @@ rep1_df <- parse_hic_file("hic-rep1.hic", resolution = 1e+06, chromosomes = "chr
 rep2_df <- parse_hic_file("hic-rep2.hic", resolution = 1e+06, chromosomes = "chr1")
 
 idr_results <- estimate_idr2d_hic(rep1_df, rep2_df)
-rep1_idr_df <- idr_results$rep1_df
+summary(idr_results)
 
+rep1_idr_df <- idr_results$rep1_df
 draw_idr_distribution_histogram(rep1_idr_df)
 draw_rank_idr_scatterplot(rep1_idr_df)
 draw_value_idr_scatterplot(rep1_idr_df)
