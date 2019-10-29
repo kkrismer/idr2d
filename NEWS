@@ -1,3 +1,33 @@
+CHANGES IN VERSION 0.99.7
+-------------------------
+    o refactored HiC code
+
+CHANGES IN VERSION 0.99.6
+-------------------------
+    o added optional log scale axes to plotting functions
+    o added error handling
+    o adjusted log messages
+    o added log_idr argument
+    o added min value / max value filtering
+    o mentioned typical HiC resolutions
+
+CHANGES IN VERSION 0.99.5
+-------------------------
+    o fixed minor code formatting and function documentation issues
+    o changed function names from lower camel case to snake case
+    o updated reference in vignettes
+    o replaced dots in variable names with underscores
+    o added HiC functionality
+
+CHANGES IN VERSION 0.99.4
+-------------------------
+    o fixed issue with non-standard column names
+    o added examples to function documentation
+
+CHANGES IN VERSION 0.99.3
+-------------------------
+    o added max.points.shown parameter
+
 CHANGES IN VERSION 0.99.2
 -------------------------
     o added consistent ticks and limits to IDR plot functions
