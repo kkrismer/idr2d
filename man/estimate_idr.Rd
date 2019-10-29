@@ -100,6 +100,7 @@ idr_results <- estimate_idr(idr2d:::chiapet$rep1_df,
                             idr2d:::chiapet$rep2_df,
                             analysis_type = "IDR2D",
                             value_transformation = "log_additive_inverse")
+summary(idr_results)
 
 }
 \references{

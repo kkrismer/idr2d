@@ -160,6 +160,7 @@ replicated ChIP-seq experiments.
 idr_results <- estimate_idr1d(idr2d:::chipseq$rep1_df,
                               idr2d:::chipseq$rep2_df,
                               value_transformation = "log")
+summary(idr_results)
 
 }
 \references{

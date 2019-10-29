@@ -74,6 +74,12 @@ The contact matrix is subdivided into blocks, where the block size is
 determined by \code{resolution}. The reads per block are used to rank blocks
 and replicate blocks are easily matched by genomic location.
 }
+\examples{
+idr_results <- estimate_idr2d_hic(idr2d:::hic$rep1_df,
+                                  idr2d:::hic$rep2_df)
+summary(idr_results)
+
+}
 \references{
 Q. Li, J. B. Brown, H. Huang and P. J. Bickel. (2011) Measuring
 reproducibility of high-throughput experiments. Annals of Applied

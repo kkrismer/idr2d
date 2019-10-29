@@ -156,6 +156,11 @@ parse_hic_file <- function(hic_file,
 #'   corresponding block in the other replicate
 #' }
 #'
+#' @examples
+#' idr_results <- estimate_idr2d_hic(idr2d:::hic$rep1_df,
+#'                                   idr2d:::hic$rep2_df)
+#' summary(idr_results)
+#'
 #' @importFrom futile.logger flog.info
 #' @importFrom stringr str_trim
 #' @importFrom dplyr full_join

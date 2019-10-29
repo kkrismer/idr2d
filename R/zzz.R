@@ -4,4 +4,5 @@
     envir <- parent.env(environment())
     utils::data("chiapet", package = pkgname, envir = envir)
     utils::data("chipseq", package = pkgname, envir = envir)
+    utils::data("hic", package = pkgname, envir = envir)
 }

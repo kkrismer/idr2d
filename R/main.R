@@ -447,6 +447,7 @@ preprocess <- function(x, value_transformation = c("identity",
 #' idr_results <- estimate_idr1d(idr2d:::chipseq$rep1_df,
 #'                               idr2d:::chipseq$rep2_df,
 #'                               value_transformation = "log")
+#' summary(idr_results)
 #'
 #' @export
 estimate_idr1d <- function(rep1_df, rep2_df,
@@ -538,6 +539,7 @@ estimate_idr1d <- function(rep1_df, rep2_df,
 #' idr_results <- estimate_idr2d(idr2d:::chiapet$rep1_df,
 #'                               idr2d:::chiapet$rep2_df,
 #'                               value_transformation = "log_additive_inverse")
+#' summary(idr_results)
 #'
 #' @export
 estimate_idr2d <- function(rep1_df, rep2_df,
@@ -592,6 +594,7 @@ estimate_idr2d <- function(rep1_df, rep2_df,
 #'                             idr2d:::chiapet$rep2_df,
 #'                             analysis_type = "IDR2D",
 #'                             value_transformation = "log_additive_inverse")
+#' summary(idr_results)
 #'
 #' @importFrom dplyr arrange
 #' @importFrom dplyr select

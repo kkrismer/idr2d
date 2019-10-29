@@ -181,6 +181,7 @@ HiC, ChIA-PET, and HiChIP.
 idr_results <- estimate_idr2d(idr2d:::chiapet$rep1_df,
                               idr2d:::chiapet$rep2_df,
                               value_transformation = "log_additive_inverse")
+summary(idr_results)
 
 }
 \references{

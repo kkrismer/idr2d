@@ -40,3 +40,22 @@
 #'   to rank the peaks\cr
 #' }
 "chipseq"
+
+#' Example HiC data set
+#'
+#' This object contains data from a HiC contact map of human chromosome 1 and
+#' a resolution of 2.5 * 10^6, extracted from GEO series GSE71831.
+#'
+#' @format A list with two components, the data frames \code{rep1_df} and
+#' \code{rep2_df}, which have the following four columns:
+#' \tabular{rll}{
+#'   column 1: \tab \code{chr} \tab character; genomic location of block -
+#'   chromosome (e.g., \code{"chr3"})\cr
+#'   column 2: \tab \code{region1} \tab integer; genomic location of block  -
+#'   coordinate A\cr
+#'   column 3: \tab \code{region2} \tab integer; genomic location of block -
+#'   coordinate B\cr
+#'   column 4: \tab \code{value} \tab numeric; heuristic used
+#'   to rank blocks, in this case: number of reads\cr
+#' }
+"hic"
