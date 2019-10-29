@@ -79,6 +79,8 @@ draw_idr_distribution_histogram <- function(df, remove_na = TRUE,
 #' distinguish highly significant IDRs
 #' @param title character; plot title
 #' @param color_gradient character; either "rainbow" or "default"
+#' @param alpha numeric; transparency of dots, from 0.0 - 1.0, where 1.0 is
+#' completely opaque; default is 1.0
 #' @param max_points_shown integer; default is 2500
 #'
 #' @return ggplot2 object; IDR rank scatterplot
@@ -108,6 +110,7 @@ draw_rank_idr_scatterplot <- function(
     log_idr = FALSE,
     title = "rank - IDR dependence",
     color_gradient = c("rainbow", "default"),
+    alpha = 1.0,
     max_points_shown = 2500) {
     # avoid CRAN warnings
     rank <- rep_rank <- idr <- NULL
@@ -133,7 +136,8 @@ draw_rank_idr_scatterplot <- function(
 
     g <- ggplot2::ggplot(df, ggplot2::aes(x = rank,
                                           y = rep_rank,
-                                          color = idr)) +
+                                          color = idr,
+                                          alpha = alpha)) +
         ggplot2::geom_point() +
         ggplot2::theme_bw() +
         ggplot2::theme(panel.border = ggplot2::element_blank()) +
@@ -182,6 +186,8 @@ draw_rank_idr_scatterplot <- function(
 #' (default value is FALSE)
 #' @param title character; plot title
 #' @param color_gradient character; either "rainbow" or "default"
+#' @param alpha numeric; transparency of dots, from 0.0 - 1.0, where 1.0 is
+#' completely opaque; default is 1.0
 #' @param max_points_shown integer; default is 2500
 #'
 #' @return ggplot2 object; IDR value scatterplot
@@ -218,6 +224,7 @@ draw_value_idr_scatterplot <- function(
     log_idr = FALSE,
     title = "value - IDR dependence",
     color_gradient = c("rainbow", "default"),
+    alpha = 1.0,
     max_points_shown = 2500) {
     # avoid CRAN warnings
     value <- rep_value <- idr <- .x <- NULL
@@ -313,7 +320,8 @@ draw_value_idr_scatterplot <- function(
 
     g <- ggplot2::ggplot(df, ggplot2::aes(x = value,
                                           y = rep_value,
-                                          color = idr)) +
+                                          color = idr,
+                                          alpha = alpha)) +
         ggplot2::geom_point() +
         ggplot2::theme_bw() +
         ggplot2::theme(panel.border = ggplot2::element_blank()) +

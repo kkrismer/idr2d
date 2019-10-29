@@ -7,7 +7,8 @@
 draw_rank_idr_scatterplot(df, remove_na = TRUE,
   xlab = "rank in replicate 1", ylab = "rank in replicate 2",
   log_idr = FALSE, title = "rank - IDR dependence",
-  color_gradient = c("rainbow", "default"), max_points_shown = 2500)
+  color_gradient = c("rainbow", "default"), alpha = 1,
+  max_points_shown = 2500)
 }
 \arguments{
 \item{df}{part of output of \code{\link{estimate_idr}}, a data frame with at
@@ -33,6 +34,9 @@ distinguish highly significant IDRs}
 \item{title}{character; plot title}
 
 \item{color_gradient}{character; either "rainbow" or "default"}
+
+\item{alpha}{numeric; transparency of dots, from 0.0 - 1.0, where 1.0 is
+completely opaque; default is 1.0}
 
 \item{max_points_shown}{integer; default is 2500}
 }
