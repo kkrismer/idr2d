@@ -120,6 +120,12 @@ datatable(df[seq_len(min(nrow(df), 1000)), ],
 
 Only the first 1000 observations are shown.
 
+### Summary
+
+```{r, echo = TRUE}
+summary(idr_results)
+```
+
 ### Distribution of IDRs
 
 ```{r, echo = TRUE}
