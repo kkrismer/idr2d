@@ -136,8 +136,8 @@ draw_rank_idr_scatterplot <- function(
 
     g <- ggplot2::ggplot(df, ggplot2::aes(x = rank,
                                           y = rep_rank,
-                                          color = idr,
-                                          alpha = alpha)) +
+                                          color = idr),
+                         alpha = alpha) +
         ggplot2::geom_point() +
         ggplot2::theme_bw() +
         ggplot2::theme(panel.border = ggplot2::element_blank()) +
@@ -320,8 +320,8 @@ draw_value_idr_scatterplot <- function(
 
     g <- ggplot2::ggplot(df, ggplot2::aes(x = value,
                                           y = rep_value,
-                                          color = idr,
-                                          alpha = alpha)) +
+                                          color = idr),
+                         alpha = alpha) +
         ggplot2::geom_point() +
         ggplot2::theme_bw() +
         ggplot2::theme(panel.border = ggplot2::element_blank()) +
