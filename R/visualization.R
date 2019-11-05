@@ -33,6 +33,7 @@
 #' @importFrom ggplot2 theme_bw
 #' @importFrom ggplot2 theme
 #' @importFrom ggplot2 element_blank
+#' @importFrom ggplot2 element_text
 #' @importFrom ggplot2 labs
 #' @export
 draw_idr_distribution_histogram <- function(df, remove_na = TRUE,
@@ -50,7 +51,8 @@ draw_idr_distribution_histogram <- function(df, remove_na = TRUE,
         ggplot2::geom_density() +
         ggplot2::scale_x_continuous(limits = c(0, 1.0)) +
         ggplot2::theme_bw() +
-        ggplot2::theme(panel.border = ggplot2::element_blank()) +
+        ggplot2::theme(panel.border = ggplot2::element_blank(),
+                       axis.title = ggplot2::element_text(face = "bold")) +
         ggplot2::labs(x = xlab, y = ylab, title = title)
 
     return(g)
@@ -99,6 +101,7 @@ draw_idr_distribution_histogram <- function(df, remove_na = TRUE,
 #' @importFrom ggplot2 theme_bw
 #' @importFrom ggplot2 theme
 #' @importFrom ggplot2 element_blank
+#' @importFrom ggplot2 element_text
 #' @importFrom ggplot2 labs
 #' @importFrom ggplot2 scale_color_gradientn
 #' @importFrom grDevices rainbow
@@ -140,7 +143,9 @@ draw_rank_idr_scatterplot <- function(
                          alpha = alpha) +
         ggplot2::geom_point() +
         ggplot2::theme_bw() +
-        ggplot2::theme(panel.border = ggplot2::element_blank()) +
+        ggplot2::theme(panel.border = ggplot2::element_blank(),
+                       axis.title = ggplot2::element_text(face = "bold"),
+                       legend.title = ggplot2::element_text(face = "bold")) +
         ggplot2::labs(x = xlab, y = ylab,
                       color = idr_legend_label, title = title)
 
@@ -206,6 +211,7 @@ draw_rank_idr_scatterplot <- function(
 #' @importFrom ggplot2 theme_bw
 #' @importFrom ggplot2 theme
 #' @importFrom ggplot2 element_blank
+#' @importFrom ggplot2 element_text
 #' @importFrom ggplot2 labs
 #' @importFrom ggplot2 scale_color_gradientn
 #' @importFrom grDevices rainbow
@@ -324,7 +330,9 @@ draw_value_idr_scatterplot <- function(
                          alpha = alpha) +
         ggplot2::geom_point() +
         ggplot2::theme_bw() +
-        ggplot2::theme(panel.border = ggplot2::element_blank()) +
+        ggplot2::theme(panel.border = ggplot2::element_blank(),
+                       axis.title = ggplot2::element_text(face = "bold"),
+                       legend.title = ggplot2::element_text(face = "bold")) +
         ggplot2::labs(x = xlab, y = ylab,
                       color = idr_legend_label, title = title)
 
