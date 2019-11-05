@@ -99,9 +99,9 @@ parse_hic_file <- function(hic_file,
                         "\n(4) .hic file does not exist"))
         })
 
-        futile.logger::flog.info(paste0("read ", chromosome,
-                                        ", replicate 1 (resolution = ",
-                                        resolution, " bp)"))
+        futile.logger::flog.info(paste0("processed chromosome ", chromosome,
+                                        " with block size = ",
+                                        resolution, " bp"))
 
         return(data.frame(chr = chromosome,
                           region1 = counts[[1]],
