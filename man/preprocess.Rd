@@ -4,9 +4,13 @@
 \alias{preprocess}
 \title{Prepares Data for IDR Analysis}
 \usage{
-preprocess(x, value_transformation = c("identity", "additive_inverse",
-  "multiplicative_inverse", "log", "log_additive_inverse"),
-  max_factor = 1.5, jitter_factor = 1e-04)
+preprocess(
+  x,
+  value_transformation = c("identity", "additive_inverse", "multiplicative_inverse",
+    "log", "log_additive_inverse"),
+  max_factor = 1.5,
+  jitter_factor = 1e-04
+)
 }
 \arguments{
 \item{x}{numeric vector of values}

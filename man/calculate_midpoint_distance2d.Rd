@@ -4,9 +4,16 @@
 \alias{calculate_midpoint_distance2d}
 \title{Distance between Anchor Midpoints of two Interactions}
 \usage{
-calculate_midpoint_distance2d(int1_anchor_a_start, int1_anchor_a_end,
-  int1_anchor_b_start, int1_anchor_b_end, int2_anchor_a_start,
-  int2_anchor_a_end, int2_anchor_b_start, int2_anchor_b_end)
+calculate_midpoint_distance2d(
+  int1_anchor_a_start,
+  int1_anchor_a_end,
+  int1_anchor_b_start,
+  int1_anchor_b_end,
+  int2_anchor_a_start,
+  int2_anchor_a_end,
+  int2_anchor_b_start,
+  int2_anchor_b_end
+)
 }
 \arguments{
 \item{int1_anchor_a_start}{integer vector; genomic start coordinate(s)

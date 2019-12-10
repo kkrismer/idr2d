@@ -1,9 +1,9 @@
 
-#' @title Obtain Read Counts per Block in HiC Contact Matrices
+#' @title Parse .hic files from Juicer for IDR2D analysis
 #'
 #' @description
-#' \code{parse_hic_file} uses the Python package \code{hic-straw} internally
-#'  to read .hic contact matrix files (see
+#' \code{parse_juicer_matrix} uses the Python package \code{hic-straw}
+#' internally to read .hic contact matrix files (see
 #' \href{https://pypi.org/project/hic-straw/}{hic-straw on PyPI} or the
 #' \href{https://pypi.org/project/hic-straw/}{Aiden lab GitHub repository}
 #' for more information).
@@ -19,14 +19,14 @@
 #' Cell Systems 3(1), 2016.
 #'
 #' @param hic_file path to .hic file (either local file path or URL).
-#' @param resolution block resolution of HiC contact matrix in base pairs,
+#' @param resolution block resolution of Hi-C contact matrix in base pairs,
 #' defaults to 1,000,000 bp (usually one of the following:
 #' 2500000, 1000000, 500000, 250000, 100000, 50000, 25000, 10000, 5000)
 #' @param normalization normalization step performed by Python package
 #' \code{hic-straw}, one of the following: \code{"NONE"}, \code{"VC"},
 #' \code{"VC_SQRT"}, \code{"KR"}.
-#' @param chromosomes chromsome name or list of chromosome names in HiC file
-#' to be analyzed, defaults to UCSC chromosome 1 (\code{"chr1"})
+#' @param chromosome chromsome name to be analyzed,
+#' defaults to UCSC chromosome 1 (\code{"chr1"})
 #' @param use_python if Python is not on PATH, specify path to Python binary
 #' here (see \code{\link[reticulate:use_python]{use_python}})
 #' @param use_virtualenv if Python package \code{hic-straw} is not in base
@@ -41,9 +41,9 @@
 #'   column 1: \tab \code{chr} \tab character; chromosome of block
 #'   (e.g., \code{"chr3"})\cr
 #'   column 2: \tab \code{region1} \tab integer; genomic location of side A of
-#'   block in HiC contact matrix\cr
+#'   block in Hi-C contact matrix\cr
 #'   column 3: \tab \code{region2} \tab integer; genomic location of side B of
-#'   block in HiC contact matrix\cr
+#'   block in Hi-C contact matrix\cr
 #'   column 4: \tab \code{value} \tab numeric; (normalized) read count in block
 #' }
 #'
@@ -54,70 +54,135 @@
 #' @importFrom futile.logger flog.info
 #' @importFrom dplyr bind_rows
 #' @export
-parse_hic_file <- function(hic_file,
-                           resolution = 1000000,
-                           normalization = c("NONE", "VC", "VC_SQRT", "KR"),
-                           chromosomes = NULL,
-                           use_python = NULL, use_virtualenv = NULL,
-                           use_condaenv = NULL) {
+parse_juicer_matrix <- function(hic_file,
+                              resolution = 1000000,
+                              normalization = c("NONE", "VC", "VC_SQRT", "KR"),
+                              chromosome = "chr1",
+                              use_python = NULL, use_virtualenv = NULL,
+                              use_condaenv = NULL) {
     normalization <- match.arg(normalization,
                                choices = c("NONE", "VC", "VC_SQRT", "KR"))
-    if (is.null(chromosomes)) {
-        chromosomes <- "chr1"
-    }
 
     if (!is.null(use_python)) {
         reticulate::use_python(use_python)
     }
-
     if (!is.null(use_virtualenv)) {
         reticulate::use_virtualenv(use_virtualenv)
     }
-
     if (!is.null(use_condaenv)) {
         reticulate::use_condaenv(use_condaenv)
     }
 
     straw <- reticulate::import("straw")
 
-    dfs <- lapply(chromosomes, function(chromosome) {
-        counts <- tryCatch({
-            straw$straw(normalization, hic_file,
-                        chromosome, chromosome,
-                        "BP", resolution)
-        },
-        error = function(e) {
-            stop(paste0("error occurred while reading ", chromosome,
-                        " of file '", hic_file, "': ", e,
-                        "\npossible reasons:",
-                        "\n(1) resolution might be too large or too small",
-                        "\n(2) chromosome names are invalid, check species ",
-                        "and chromosome name style - ",
-                        "NCBI (e.g., \"1\"), UCSC (\"chr1\"), ",
-                        "dbSNP (\"ch1\"), Ensembl (\"1\")",
-                        "\n(3) Python package hic-straw is not installed",
-                        "\n(4) .hic file does not exist"))
-        })
-
-        futile.logger::flog.info(paste0("processed chromosome ", chromosome,
-                                        " with block size = ",
-                                        resolution, " bp"))
-
-        return(data.frame(chr = chromosome,
-                          region1 = counts[[1]],
-                          region2 = counts[[2]],
-                          value = counts[[3]], stringsAsFactors = FALSE))
+    counts <- tryCatch({
+        straw$straw(normalization, hic_file,
+                    chromosome, chromosome,
+                    "BP", resolution)
+    },
+    error = function(e) {
+        stop(paste0("error occurred while reading ", chromosome,
+                    " of file '", hic_file, "': ", e,
+                    "\npossible reasons:",
+                    "\n(1) resolution might be too large or too small",
+                    "\n(2) chromosome names are invalid, check species ",
+                    "and chromosome name style - ",
+                    "NCBI (e.g., \"1\"), UCSC (\"chr1\"), ",
+                    "dbSNP (\"ch1\"), Ensembl (\"1\")",
+                    "\n(3) Python package hic-straw is not installed",
+                    "\n(4) .hic file does not exist"))
     })
-    df <- dplyr::bind_rows(dfs)
 
-    return(df)
+    futile.logger::flog.info(paste0("processed chromosome ", chromosome,
+                                    " with block size = ",
+                                    resolution, " bp"))
+
+    return(data.frame(chr = chromosome,
+                      region1 = counts[[1]],
+                      region2 = counts[[2]],
+                      value = counts[[3]], stringsAsFactors = FALSE))
 }
 
-#' @title Estimates IDR for Genomic Interactions measured by HiC experiments
+#' @title Parse .matrix and .bed files from HiC-Pro for IDR2D analysis
+#'
+#' This function is used to convert the contact matrix from a HiC-Pro pipeline
+#' analysis run into an IDR2D compatible format. It takes one .matrix and one
+#' .bed file per replicate from HiC-Pro and returns the contact matrix for a
+#' specific chromosome for IDR2D analysis (see \code{\link{estimate_idr2d_hic}})
+#'
+#' @references
+#' Servant, N., Varoquaux, N., Lajoie, B.R. et al. HiC-Pro: an optimized and
+#' flexible pipeline for Hi-C data processing. Genome Biol 16, 259 (2015)
+#' doi:10.1186/s13059-015-0831-x
+#'
+#' @param matrix_file path to .matrix file from HiC-Pro analysis run
+#' @param bed_file path to .bed file from HiC-Pro analysis run
+#' @param chromosome chromsome name to be analyzed, defaults to
+#' UCSC chromosome 1 (\code{"chr1"})
+#'
+#' @return Data frame with the following columns:
+#' \tabular{rll}{
+#'   column 1: \tab \code{chr} \tab character; chromosome of block
+#'   (e.g., \code{"chr3"})\cr
+#'   column 2: \tab \code{region1} \tab integer; genomic location of side A of
+#'   block in Hi-C contact matrix\cr
+#'   column 3: \tab \code{region2} \tab integer; genomic location of side B of
+#'   block in Hi-C contact matrix\cr
+#'   column 4: \tab \code{value} \tab numeric; (normalized) read count in block
+#' }
+#'
+#' @importFrom utils read.table
+#' @importFrom futile.logger flog.info
+#' @importFrom dplyr filter
+#' @export
+parse_hic_pro_matrix <- function(matrix_file, bed_file, chromosome = "chr1") {
+    # avoid CRAN warnings
+    start_idx <- stop_idx <- chr <- region1 <- region2 <- value <- NULL
+
+    if (!file.exists(matrix_file)) {
+        stop(paste0(".matrix file does not exist: ", matrix_file))
+    }
+    if (!file.exists(bed_file)) {
+        stop(paste0(".bed file does not exist: ", bed_file))
+    }
+
+    matrix_df <- utils::read.table(matrix_file, header = FALSE, sep = "\t",
+                            stringsAsFactors = FALSE)
+    bed_df <- utils::read.table(bed_file, header = FALSE, sep = "\t",
+                         stringsAsFactors = FALSE)
+
+    colnames(matrix_df) <- c("start_idx", "stop_idx", "value")
+    colnames(bed_df) <- c("chr", "start", "stop", "idx")
+
+    # keep requested chromosome, remove others
+    bed_df <- dplyr::filter(bed_df, chr == chromosome)
+    matrix_df <- dplyr::filter(matrix_df, start_idx %in% bed_df$idx)
+    matrix_df <- dplyr::filter(matrix_df, stop_idx %in% bed_df$idx)
+
+    # replace indices with IDR2D interaction format
+    bed_df$stop <- NULL
+    matrix_df <- dplyr::inner_join(matrix_df, bed_df,
+                                   by = c("start_idx" = "idx"))
+    matrix_df$region1 <- matrix_df$start
+    matrix_df$start <- NULL
+    matrix_df$start_idx <- NULL
+    matrix_df$chr <- NULL
+    matrix_df <- dplyr::inner_join(matrix_df, bed_df,
+                                   by = c("stop_idx" = "idx"))
+    matrix_df$region2 <- matrix_df$start
+    matrix_df$start <- NULL
+    matrix_df <- dplyr::select(matrix_df, chr, region1, region2, value)
+
+    return(matrix_df)
+}
+
+#' @title Estimates IDR for Genomic Interactions measured by Hi-C experiments
 #'
 #' @description
 #' This method estimates Irreproducible Discovery Rates (IDR) of
-#' genomic interactions between two replicates of HiC experiments.
+#' genomic interactions between two replicates of Hi-C experiments.
+#'
+#' Before calling this method, call Juicer .hic contact matrix c
 #'
 #' The contact matrix is subdivided into blocks, where the block size is
 #' determined by \code{resolution}. The reads per block are used to rank blocks
@@ -128,10 +193,14 @@ parse_hic_file <- function(hic_file,
 #' reproducibility of high-throughput experiments. Annals of Applied
 #' Statistics, Vol. 5, No. 3, 1752-1779.
 #'
-#' @param rep1_df data frame of parsed .hic file for replicate 1 (output of
-#' \code{\link{parse_hic_file}})
-#' @param rep2_df data frame of parsed .hic file for replicate 2 (output of
-#' \code{\link{parse_hic_file}})
+#' @param rep1_df data frame of either parsed .hic file from Juicer (output of
+#' \code{\link{parse_juicer_matrix}}) or
+#' parsed .matrix and .bed files from HiC-Pro (output of
+#' \code{\link{parse_hic_pro_matrix}}) for replicate 1
+#' @param rep2_df data frame of either parsed .hic file from Juicer (output of
+#' \code{\link{parse_juicer_matrix}}) or
+#' parsed .matrix and .bed files from HiC-Pro (output of
+#' \code{\link{parse_hic_pro_matrix}}) for replicate 2
 #' @param combined_min_value exclude blocks with a combined (replicate 1 +
 #' replicate 2) read count or normalized read count of less than
 #'  \code{combined_min_value} (default is 20 reads)
@@ -157,9 +226,9 @@ parse_hic_file <- function(hic_file,
 #' }
 #'
 #' @examples
-#' idr_results <- estimate_idr2d_hic(idr2d:::hic$rep1_df,
-#'                                   idr2d:::hic$rep2_df)
-#' summary(idr_results)
+#' idr_results_df <- estimate_idr2d_hic(idr2d:::hic$rep1_df,
+#'                                      idr2d:::hic$rep2_df)
+#' summary(idr_results_df)
 #'
 #' @importFrom futile.logger flog.info
 #' @importFrom stringr str_trim
@@ -252,7 +321,6 @@ estimate_idr2d_hic <- function(rep1_df, rep2_df,
     return(df)
 }
 
-
 #' @importFrom methods is
 #' @importFrom dplyr filter
 #' @export
@@ -265,7 +333,7 @@ summary.idr2d_hic_result <- function(object, ...) {
     num_high_sig_df <- dplyr::filter(object, idr < 0.01)
 
     res <- list(
-        analysis_type = "IDR2D HiC",
+        analysis_type = "IDR2D Hi-C",
         num_blocks = nrow(object),
         num_significant_blocks = nrow(num_sig_df),
         num_highly_significant_blocks = nrow(num_high_sig_df)

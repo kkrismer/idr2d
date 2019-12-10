@@ -3,7 +3,7 @@
 \docType{data}
 \name{hic}
 \alias{hic}
-\title{Example HiC data set}
+\title{Example Hi-C data set}
 \format{A list with two components, the data frames \code{rep1_df} and
 \code{rep2_df}, which have the following four columns:
 \tabular{rll}{
@@ -20,7 +20,7 @@
 hic
 }
 \description{
-This object contains data from a HiC contact map of human chromosome 1 and
+This object contains data from a Hi-C contact map of human chromosome 1 and
 a resolution of 2.5 * 10^6, extracted from GEO series GSE71831.
 }
 \keyword{datasets}

@@ -1,7 +1,7 @@
 #' Example Genomic Interaction Data Set
 #'
 #' This object contains genomic interactions on chromosomes 1 to 5, which could
-#' be the results of HiC or ChIA-PET experiments, done in duplicates.
+#' be the results of Hi-C or ChIA-PET experiments, done in duplicates.
 #'
 #' @format A list with two components, the data frames \code{rep1_df} and
 #' \code{rep2_df}, which have the following seven columns:
@@ -41,9 +41,9 @@
 #' }
 "chipseq"
 
-#' Example HiC data set
+#' Example Hi-C data set
 #'
-#' This object contains data from a HiC contact map of human chromosome 1 and
+#' This object contains data from a Hi-C contact map of human chromosome 1 and
 #' a resolution of 2.5 * 10^6, extracted from GEO series GSE71831.
 #'
 #' @format A list with two components, the data frames \code{rep1_df} and

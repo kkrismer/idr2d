@@ -4,9 +4,12 @@
 \alias{establish_overlap1d}
 \title{Establish m:n Mapping Between Peaks from Replicate 1 and 2}
 \usage{
-establish_overlap1d(rep1_df, rep2_df,
+establish_overlap1d(
+  rep1_df,
+  rep2_df,
   ambiguity_resolution_method = c("overlap", "midpoint", "value"),
-  max_gap = 0L)
+  max_gap = 0L
+)
 }
 \arguments{
 \item{rep1_df}{data frame of observations (i.e., genomic peaks) of

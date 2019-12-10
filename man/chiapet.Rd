@@ -27,6 +27,6 @@ chiapet
 }
 \description{
 This object contains genomic interactions on chromosomes 1 to 5, which could
-be the results of HiC or ChIA-PET experiments, done in duplicates.
+be the results of Hi-C or ChIA-PET experiments, done in duplicates.
 }
 \keyword{datasets}

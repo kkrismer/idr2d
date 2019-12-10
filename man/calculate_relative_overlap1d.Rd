@@ -4,8 +4,7 @@
 \alias{calculate_relative_overlap1d}
 \title{Relative Anchor Overlap of two Peaks}
 \usage{
-calculate_relative_overlap1d(peak1_start, peak1_end, peak2_start,
-  peak2_end)
+calculate_relative_overlap1d(peak1_start, peak1_end, peak2_start, peak2_end)
 }
 \arguments{
 \item{peak1_start}{integer vector; genomic start coordinate(s)
