@@ -15,7 +15,7 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
 BiocManager::install("idr2d")
 ```
 
-R 3.6 (or higher) is required. Additionally, the 64-bit version of Python 3.5 (or higher) and the Python package [hic-straw](https://pypi.org/project/hic-straw/) are required for HiC analysis from *.hic* files. 
+R 3.6 (or higher) is required. Additionally, the 64-bit version of Python 3.5 (or higher) and the Python package [hic-straw](https://pypi.org/project/hic-straw/) are required for Hi-C analysis from Juicer *.hic* files. 
 
 ## Usage
 
@@ -23,7 +23,7 @@ There are two vignettes available on Bioconductor, focusing on [*idr2d* and ChIA
 
 The [reference manual](https://bioc.ism.ac.jp/packages/devel/bioc/manuals/idr2d/man/idr2d.pdf) might also be helpful if you know what you are looking for.
 
-### Example code for ChiP-seq, ChIA-PET and HiC experiments
+### Example code for ChiP-seq, ChIA-PET and Hi-C experiments
 
 Analyzing results from replicate **ChIP-seq** experiments
 (stored in tab-delimited files *chip-seq-rep1.txt* and *chip-seq-rep2.txt*):
@@ -65,21 +65,36 @@ draw_rank_idr_scatterplot(rep1_idr_df)
 draw_value_idr_scatterplot(rep1_idr_df)
 ```
 
-Analyzing chromosome 1 results from replicate **HiC** experiments
-(stored in .hic files *hic-rep1.hic* and *hic-rep2.hic*):
+Analyzing chromosome 1 results in 1 Mbp resolution from replicate **Hi-C** experiments
+(stored in Juicer .hic files *hic-rep1.hic* and *hic-rep2.hic*):
 ```
 library(idr2d)
 
-rep1_df <- parse_hic_file("hic-rep1.hic", resolution = 1e+06, chromosomes = "chr1")
-rep2_df <- parse_hic_file("hic-rep2.hic", resolution = 1e+06, chromosomes = "chr1")
+rep1_df <- parse_juicer_matrix("hic-rep1.hic", resolution = 1e+06, chromosome = "chr1")
+rep2_df <- parse_juicer_matrix("hic-rep2.hic", resolution = 1e+06, chromosome = "chr1")
 
-idr_results <- estimate_idr2d_hic(rep1_df, rep2_df)
-summary(idr_results)
+idr_results_df <- estimate_idr2d_hic(rep1_df, rep2_df)
+summary(idr_results_df)
 
-rep1_idr_df <- idr_results$rep1_df
-draw_idr_distribution_histogram(rep1_idr_df)
-draw_rank_idr_scatterplot(rep1_idr_df)
-draw_value_idr_scatterplot(rep1_idr_df)
+draw_idr_distribution_histogram(idr_results_df)
+draw_rank_idr_scatterplot(idr_results_df)
+draw_value_idr_scatterplot(idr_results_df)
+```
+
+Analyzing chromosome 1 results in 1 Mbp resolution from replicate **Hi-C** experiments
+(stored in ICE normalized HiC-Pro .matrix and .bed files *rep1_1000000_iced.matrix*, *rep1_1000000_abs.bed* and *rep2_1000000_iced.matrix*, *rep2_1000000_abs.bed*):
+```
+library(idr2d)
+
+rep1_df <- parse_hic_pro_matrix("rep1_1000000_iced.matrix", "rep1_1000000_abs.bed", chromosome = "chr1")
+rep2_df <- parse_hic_pro_matrix("rep2_1000000_iced.matrix", "rep2_1000000_abs.bed", chromosome = "chr1")
+
+idr_results_df <- estimate_idr2d_hic(rep1_df, rep2_df)
+summary(idr_results_df)
+
+draw_idr_distribution_histogram(idr_results_df)
+draw_rank_idr_scatterplot(idr_results_df)
+draw_value_idr_scatterplot(idr_results_df)
 ```
 
 ## Citation

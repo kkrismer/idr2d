@@ -4,12 +4,19 @@
 \alias{draw_value_idr_scatterplot}
 \title{Create scatterplot of IDR values}
 \usage{
-draw_value_idr_scatterplot(df, remove_na = TRUE,
-  remove_outliers = TRUE, xlab = "transformed value in replicate 1",
-  ylab = "transformed value in replicate 2", log_axes = FALSE,
-  log_idr = FALSE, title = "value - IDR dependence",
-  color_gradient = c("rainbow", "default"), alpha = 1,
-  max_points_shown = 2500)
+draw_value_idr_scatterplot(
+  df,
+  remove_na = TRUE,
+  remove_outliers = TRUE,
+  xlab = "transformed value in replicate 1",
+  ylab = "transformed value in replicate 2",
+  log_axes = FALSE,
+  log_idr = FALSE,
+  title = "value - IDR dependence",
+  color_gradient = c("rainbow", "default"),
+  alpha = 1,
+  max_points_shown = 2500
+)
 }
 \arguments{
 \item{df}{part of output of \code{\link{estimate_idr}}, a data frame with at

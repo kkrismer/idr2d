@@ -4,11 +4,17 @@
 \alias{draw_rank_idr_scatterplot}
 \title{Create scatterplot of IDR values}
 \usage{
-draw_rank_idr_scatterplot(df, remove_na = TRUE,
-  xlab = "rank in replicate 1", ylab = "rank in replicate 2",
-  log_idr = FALSE, title = "rank - IDR dependence",
-  color_gradient = c("rainbow", "default"), alpha = 1,
-  max_points_shown = 2500)
+draw_rank_idr_scatterplot(
+  df,
+  remove_na = TRUE,
+  xlab = "rank in replicate 1",
+  ylab = "rank in replicate 2",
+  log_idr = FALSE,
+  title = "rank - IDR dependence",
+  color_gradient = c("rainbow", "default"),
+  alpha = 1,
+  max_points_shown = 2500
+)
 }
 \arguments{
 \item{df}{part of output of \code{\link{estimate_idr}}, a data frame with at

@@ -129,7 +129,7 @@ establish_bijection2d <- function(rep1_df, rep2_df,
 #' @description
 #' This method establishes a bijective assignment between observations
 #' (genomic peaks in case of ChIP-seq, genomic interactions in case of
-#' ChIA-PET, HiChIP, and HiC) from
+#' ChIA-PET, HiChIP, and Hi-C) from
 #' replicate 1 and 2. An observation in replicate 1 is assigned to an
 #' observation in replicate 2 if and only if (1) the observation loci in both
 #' replicates overlap (or the gap between them is less than
@@ -478,7 +478,7 @@ estimate_idr1d <- function(rep1_df, rep2_df,
 #' @description
 #' This method estimates Irreproducible Discovery Rates (IDR) between
 #' two replicates of experiments identifying genomic interactions, such as
-#' HiC, ChIA-PET, and HiChIP.
+#' Hi-C, ChIA-PET, and HiChIP.
 #'
 #' @references
 #' Q. Li, J. B. Brown, H. Huang and P. J. Bickel. (2011) Measuring
@@ -785,7 +785,7 @@ print.idr2d_result_summary <- function(x, ...) {
 
     cat("analysis type: ", x$analysis_type, "\n", sep = "")
 
-    if (x$analysis_type == "IDR2D HiC") {
+    if (x$analysis_type == "IDR2D Hi-C") {
         cat("number of blocks: ",
             x$num_blocks, "\n", sep = "")
         cat("number of blocks with significant IDR (IDR < 0.05): ",

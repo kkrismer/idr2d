@@ -4,8 +4,13 @@
 \alias{draw_idr_distribution_histogram}
 \title{Create histogram of IDR values}
 \usage{
-draw_idr_distribution_histogram(df, remove_na = TRUE, xlab = "IDR",
-  ylab = "density", title = "IDR value distribution")
+draw_idr_distribution_histogram(
+  df,
+  remove_na = TRUE,
+  xlab = "IDR",
+  ylab = "density",
+  title = "IDR value distribution"
+)
 }
 \arguments{
 \item{df}{part of output of \code{\link{estimate_idr}}, a data frame with at

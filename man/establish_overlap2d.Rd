@@ -4,9 +4,12 @@
 \alias{establish_overlap2d}
 \title{Establish m:n mapping between interactions from replicate 1 and 2}
 \usage{
-establish_overlap2d(rep1_df, rep2_df,
+establish_overlap2d(
+  rep1_df,
+  rep2_df,
   ambiguity_resolution_method = c("overlap", "midpoint", "value"),
-  max_gap = 0L)
+  max_gap = 0L
+)
 }
 \arguments{
 \item{rep1_df}{data frame of observations (i.e., genomic interactions) of

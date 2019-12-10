@@ -4,13 +4,24 @@
 \alias{estimate_idr2d}
 \title{Estimates IDR for Genomic Interaction Data}
 \usage{
-estimate_idr2d(rep1_df, rep2_df, value_transformation = c("identity",
-  "additive_inverse", "multiplicative_inverse", "log",
-  "log_additive_inverse"), ambiguity_resolution_method = c("overlap",
-  "midpoint", "value"), remove_nonstandard_chromosomes = TRUE,
-  max_factor = 1.5, jitter_factor = 1e-04, max_gap = 0L, mu = 0.1,
-  sigma = 1, rho = 0.2, p = 0.5, eps = 0.001, max_iteration = 30,
-  local_idr = TRUE)
+estimate_idr2d(
+  rep1_df,
+  rep2_df,
+  value_transformation = c("identity", "additive_inverse", "multiplicative_inverse",
+    "log", "log_additive_inverse"),
+  ambiguity_resolution_method = c("overlap", "midpoint", "value"),
+  remove_nonstandard_chromosomes = TRUE,
+  max_factor = 1.5,
+  jitter_factor = 1e-04,
+  max_gap = 0L,
+  mu = 0.1,
+  sigma = 1,
+  rho = 0.2,
+  p = 0.5,
+  eps = 0.001,
+  max_iteration = 30,
+  local_idr = TRUE
+)
 }
 \arguments{
 \item{rep1_df}{data frame of observations (i.e., genomic interactions) of
@@ -175,7 +186,7 @@ the following additional columns:
 \description{
 This method estimates Irreproducible Discovery Rates (IDR) between
 two replicates of experiments identifying genomic interactions, such as
-HiC, ChIA-PET, and HiChIP.
+Hi-C, ChIA-PET, and HiChIP.
 }
 \examples{
 idr_results <- estimate_idr2d(idr2d:::chiapet$rep1_df,

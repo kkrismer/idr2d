@@ -2,19 +2,34 @@
 % Please edit documentation in R/hic.R
 \name{estimate_idr2d_hic}
 \alias{estimate_idr2d_hic}
-\title{Estimates IDR for Genomic Interactions measured by HiC experiments}
+\title{Estimates IDR for Genomic Interactions measured by Hi-C experiments}
 \usage{
-estimate_idr2d_hic(rep1_df, rep2_df, combined_min_value = 30,
-  combined_max_value = Inf, max_factor = 1.5, jitter_factor = 1e-04,
-  mu = 0.1, sigma = 1, rho = 0.2, p = 0.5, eps = 0.001,
-  max_iteration = 30, local_idr = TRUE)
+estimate_idr2d_hic(
+  rep1_df,
+  rep2_df,
+  combined_min_value = 30,
+  combined_max_value = Inf,
+  max_factor = 1.5,
+  jitter_factor = 1e-04,
+  mu = 0.1,
+  sigma = 1,
+  rho = 0.2,
+  p = 0.5,
+  eps = 0.001,
+  max_iteration = 30,
+  local_idr = TRUE
+)
 }
 \arguments{
-\item{rep1_df}{data frame of parsed .hic file for replicate 1 (output of
-\code{\link{parse_hic_file}})}
+\item{rep1_df}{data frame of either parsed .hic file from Juicer (output of
+\code{\link{parse_juicer_matrix}}) or
+parsed .matrix and .bed files from HiC-Pro (output of
+\code{\link{parse_hic_pro_matrix}}) for replicate 1}
 
-\item{rep2_df}{data frame of parsed .hic file for replicate 2 (output of
-\code{\link{parse_hic_file}})}
+\item{rep2_df}{data frame of either parsed .hic file from Juicer (output of
+\code{\link{parse_juicer_matrix}}) or
+parsed .matrix and .bed files from HiC-Pro (output of
+\code{\link{parse_hic_pro_matrix}}) for replicate 2}
 
 \item{combined_min_value}{exclude blocks with a combined (replicate 1 +
 replicate 2) read count or normalized read count of less than
@@ -68,16 +83,18 @@ Data frame with the following columns:
 }
 \description{
 This method estimates Irreproducible Discovery Rates (IDR) of
-genomic interactions between two replicates of HiC experiments.
+genomic interactions between two replicates of Hi-C experiments.
+
+Before calling this method, call Juicer .hic contact matrix c
 
 The contact matrix is subdivided into blocks, where the block size is
 determined by \code{resolution}. The reads per block are used to rank blocks
 and replicate blocks are easily matched by genomic location.
 }
 \examples{
-idr_results <- estimate_idr2d_hic(idr2d:::hic$rep1_df,
-                                  idr2d:::hic$rep2_df)
-summary(idr_results)
+idr_results_df <- estimate_idr2d_hic(idr2d:::hic$rep1_df,
+                                     idr2d:::hic$rep2_df)
+summary(idr_results_df)
 
 }
 \references{

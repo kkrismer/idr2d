@@ -5,9 +5,13 @@
 \title{Finds One-to-One Correspondence between Peaks or interactions
 from Replicate 1 and 2}
 \usage{
-establish_bijection(rep1_df, rep2_df, analysis_type = c("IDR1D",
-  "IDR2D"), ambiguity_resolution_method = c("overlap", "midpoint",
-  "value"), max_gap = 0L)
+establish_bijection(
+  rep1_df,
+  rep2_df,
+  analysis_type = c("IDR1D", "IDR2D"),
+  ambiguity_resolution_method = c("overlap", "midpoint", "value"),
+  max_gap = 0L
+)
 }
 \arguments{
 \item{rep1_df}{data frame of observations (i.e., genomic peaks or genomic
@@ -40,7 +44,7 @@ See \code{\link{establish_bijection1d}} or
 \description{
 This method establishes a bijective assignment between observations
 (genomic peaks in case of ChIP-seq, genomic interactions in case of
-ChIA-PET, HiChIP, and HiC) from
+ChIA-PET, HiChIP, and Hi-C) from
 replicate 1 and 2. An observation in replicate 1 is assigned to an
 observation in replicate 2 if and only if (1) the observation loci in both
 replicates overlap (or the gap between them is less than
