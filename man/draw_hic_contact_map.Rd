@@ -7,7 +7,7 @@
 draw_hic_contact_map(
   df,
   idr_cutoff = NULL,
-  chromosome = "chr1",
+  chromosome = NULL,
   start_coordinate = NULL,
   end_coordinate = NULL,
   title = NULL,
@@ -36,8 +36,9 @@ the following columns:
 \item{idr_cutoff}{numeric; only show blocks with IDR < \code{idr_cutoff},
 shows all blocks by default}
 
-\item{chromosome}{character; chromsome name or list of chromosome names to be analyzed,
-defaults to UCSC chromosome 1 (\code{"chr1"})}
+\item{chromosome}{character; chromsome name or list of chromosome names to
+be analyzed, e.g., UCSC chromosome 1, \code{"chr1"}, defaults to all
+chromosomes (\code{chromosome = NULL})}
 
 \item{start_coordinate}{integer; only show contact map window between
 \code{"start_coordinate"} and \code{"end_coordinate"}, by default shows
