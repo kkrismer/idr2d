@@ -383,9 +383,11 @@ pretty_print_reads <- function(x, values_normalized) {
             if (reads < 1000000) {
                 return(paste0(round(reads), " reads"))
             } else if (reads < 1000000000) {
-                return(paste0(round(reads / 1000000, digits = 1), " million reads"))
+                return(paste0(round(reads / 1000000, digits = 1),
+                              " million reads"))
             } else {
-                return(paste0(round(reads / 1000000000, digits = 1), " billion reads"))
+                return(paste0(round(reads / 1000000000, digits = 1),
+                              " billion reads"))
             }
         }, FUN.VALUE = character(1)))
     }
@@ -415,8 +417,9 @@ pretty_print_reads <- function(x, values_normalized) {
 #' }
 #' @param idr_cutoff numeric; only show blocks with IDR < \code{idr_cutoff},
 #' shows all blocks by default
-#' @param chromosome character; chromsome name or list of chromosome names to be analyzed,
-#' defaults to UCSC chromosome 1 (\code{"chr1"})
+#' @param chromosome character; chromsome name or list of chromosome names to
+#' be analyzed, e.g., UCSC chromosome 1, \code{"chr1"}, defaults to all
+#' chromosomes (\code{chromosome = NULL})
 #' @param start_coordinate integer; only show contact map window between
 #' \code{"start_coordinate"} and \code{"end_coordinate"}, by default shows
 #' entire chromosome
@@ -451,7 +454,7 @@ pretty_print_reads <- function(x, values_normalized) {
 #' @importFrom ggplot2 vars
 #' @export
 draw_hic_contact_map <- function(df, idr_cutoff = NULL,
-                                 chromosome = "chr1",
+                                 chromosome = NULL,
                                  start_coordinate = NULL,
                                  end_coordinate = NULL,
                                  title = NULL,
@@ -465,9 +468,12 @@ draw_hic_contact_map <- function(df, idr_cutoff = NULL,
     }
 
     location <- strsplit(df$interaction, ":|-")
-    df$chr <- vapply(location, function(r) {return(as.character(r[1]))}, FUN.VALUE = character(1))
-    df$start <- vapply(location, function(r) {return(as.integer(r[2]))}, FUN.VALUE = integer(1))
-    df$end <- vapply(location, function(r) {return(as.integer(r[3]))}, FUN.VALUE = integer(1))
+    df$chr <- vapply(location, function(r) {return(as.character(r[1]))},
+                     FUN.VALUE = character(1))
+    df$start <- vapply(location, function(r) {return(as.integer(r[2]))},
+                       FUN.VALUE = integer(1))
+    df$end <- vapply(location, function(r) {return(as.integer(r[3]))},
+                     FUN.VALUE = integer(1))
 
     block_size <- min(df$start[df$start > 0])
     block_size_label <- pretty_print_block_size(block_size)
@@ -479,7 +485,8 @@ draw_hic_contact_map <- function(df, idr_cutoff = NULL,
         }
     }
     if (!is.null(start_coordinate) && !is.null(end_coordinate)) {
-        df <- dplyr::filter(df, start >= start_coordinate & end <= end_coordinate)
+        df <- dplyr::filter(df,
+                            start >= start_coordinate & end <= end_coordinate)
         if (nrow(df) == 0) {
             stop(paste0("no blocks in window ",
                         start_coordinate, " - ", end_coordinate))
@@ -514,10 +521,11 @@ draw_hic_contact_map <- function(df, idr_cutoff = NULL,
     g <- ggplot2::ggplot(df, ggplot2::aes(x = start,
                                           y = end,
                                           fill = log_value)) +
-        ggplot2::scale_fill_gradient(low = "white", high = "red",
-                                     breaks = c(min(df$log_value), max(df$log_value)),
-                                     labels = pretty_print_reads(c(min(df$value), max(df$value)),
-                                                                 values_normalized)) +
+        ggplot2::scale_fill_gradient(
+            low = "white", high = "red",
+            breaks = c(min(df$log_value), max(df$log_value)),
+            labels = pretty_print_reads(c(min(df$value), max(df$value)),
+                                        values_normalized)) +
         ggplot2::geom_tile() +
         ggplot2::theme_bw() +
         ggplot2::theme(panel.border = ggplot2::element_blank(),
