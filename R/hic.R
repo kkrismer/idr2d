@@ -203,10 +203,12 @@ parse_hic_pro_matrix <- function(matrix_file, bed_file, chromosome = "chr1") {
 #' \code{\link{parse_hic_pro_matrix}}) for replicate 2
 #' @param combined_min_value exclude blocks with a combined (replicate 1 +
 #' replicate 2) read count or normalized read count of less than
-#'  \code{combined_min_value} (default is 20 reads)
+#'  \code{combined_min_value} (default is 20 reads, set
+#'  \code{combined_min_value = -Inf} to disable)
 #' @param combined_max_value exclude blocks with a combined (replicate 1 +
 #' replicate 2) read count or normalized read count of more than
-#'  \code{combined_max_value} (default is infinity)
+#'  \code{combined_max_value} (disabled by default, set
+#'  \code{combined_max_value = Inf} to disable)
 #' @inheritParams estimate_idr2d
 #'
 #' @return Data frame with the following columns:

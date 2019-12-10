@@ -325,7 +325,8 @@ establish_bijection <- function(rep1_df, rep2_df,
 #' and \code{-Inf}. \code{Inf} are replaced by \code{max(x) * max_factor} and
 #' \code{-Inf} are replaced by \code{min(x) / max_factor}.
 #' @param jitter_factor numeric; controls the magnitude of the noise that
-#' is added to \code{x}. This is done to break ties in \code{x}.
+#' is added to \code{x}. This is done to break ties in \code{x}. Set
+#' \code{jitter_factor = NULL} for no jitter.
 #'
 #' @return numeric vector; transformed and stripped values of \code{x}, ready
 #' for IDR analysis
@@ -380,12 +381,14 @@ preprocess <- function(x, value_transformation = c("identity",
     }
 
     # add jitter to break ties
-    invisible(tryCatch({
-        x <- jitter(x, factor = jitter_factor)
-    },
-    error = function(e) {
-        futile.logger::flog.warn(stringr::str_trim(e))
-    }))
+    if (!is.null(jitter_factor)) {
+        invisible(tryCatch({
+            x <- jitter(x, factor = jitter_factor)
+        },
+        error = function(e) {
+            futile.logger::flog.warn(stringr::str_trim(e))
+        }))
+    }
 
     return(x)
 }

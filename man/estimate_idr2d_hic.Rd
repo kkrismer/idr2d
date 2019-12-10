@@ -33,18 +33,21 @@ parsed .matrix and .bed files from HiC-Pro (output of
 
 \item{combined_min_value}{exclude blocks with a combined (replicate 1 +
 replicate 2) read count or normalized read count of less than
- \code{combined_min_value} (default is 20 reads)}
+ \code{combined_min_value} (default is 20 reads, set
+ \code{combined_min_value = -Inf} to disable)}
 
 \item{combined_max_value}{exclude blocks with a combined (replicate 1 +
 replicate 2) read count or normalized read count of more than
- \code{combined_max_value} (default is infinity)}
+ \code{combined_max_value} (disabled by default, set
+ \code{combined_max_value = Inf} to disable)}
 
 \item{max_factor}{numeric; controls the replacement values for \code{Inf}
 and \code{-Inf}. \code{Inf} are replaced by \code{max(x) * max_factor} and
 \code{-Inf} are replaced by \code{min(x) / max_factor}.}
 
 \item{jitter_factor}{numeric; controls the magnitude of the noise that
-is added to \code{x}. This is done to break ties in \code{x}.}
+is added to \code{x}. This is done to break ties in \code{x}. Set
+\code{jitter_factor = NULL} for no jitter.}
 
 \item{mu}{ a starting value for the mean of the reproducible component.}
 
