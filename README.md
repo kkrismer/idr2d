@@ -79,6 +79,7 @@ summary(idr_results_df)
 draw_idr_distribution_histogram(idr_results_df)
 draw_rank_idr_scatterplot(idr_results_df)
 draw_value_idr_scatterplot(idr_results_df)
+draw_hic_contact_map(idr_results_df, idr_cutoff = 0.05, chromosome = "chr1")
 ```
 
 Analyzing chromosome 1 results in 1 Mbp resolution from replicate **Hi-C** experiments
@@ -95,6 +96,7 @@ summary(idr_results_df)
 draw_idr_distribution_histogram(idr_results_df)
 draw_rank_idr_scatterplot(idr_results_df)
 draw_value_idr_scatterplot(idr_results_df)
+draw_hic_contact_map(idr_results, idr_cutoff = 0.05, chromosome = "chr1")
 ```
 
 ## Citation

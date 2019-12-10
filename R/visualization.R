@@ -362,3 +362,180 @@ draw_value_idr_scatterplot <- function(
     }
     return(g)
 }
+
+pretty_print_block_size <- function(x) {
+    if (x < 10000) {
+        return(paste0(x, " bp"))
+    } else if (x < 1000000) {
+        return(paste0(round(x / 1000, digits = 1), " kbp"))
+    } else if (x < 1000000000) {
+        return(paste0(round(x / 1000000, digits = 1), " Mbp"))
+    } else {
+        return(paste0(round(x / 1000000000, digits = 1), " Gbp"))
+    }
+}
+
+pretty_print_reads <- function(x, values_normalized) {
+    if (values_normalized) {
+        return(paste0(round(x, digits = 2), " normalized reads"))
+    } else {
+        return(vapply(x, function(reads) {
+            if (reads < 1000000) {
+                return(paste0(round(reads), " reads"))
+            } else if (reads < 1000000000) {
+                return(paste0(round(reads / 1000000, digits = 1), " million reads"))
+            } else {
+                return(paste0(round(reads / 1000000000, digits = 1), " billion reads"))
+            }
+        }, FUN.VALUE = character(1)))
+    }
+}
+
+#' @title Create Hi-C contact map
+#'
+#' @description
+#' Creates Hi-C contact maps to visualize the results of
+#' \code{\link{estimate_idr2d_hic}}.
+#'
+#' @param df output of \code{\link{estimate_idr2d_hic}}, a data frame with
+#' the following columns:
+#' \tabular{rll}{
+#'   column 1: \tab \code{interaction} \tab character; genomic location of
+#'   interaction block (e.g., \code{"chr1:204940000-204940000"})\cr
+#'   column 2: \tab \code{value} \tab numeric; p-value, FDR, or heuristic used
+#'   to rank the interactions\cr
+#'   column 3: \tab \code{"rep_value"} \tab numeric; value of corresponding
+#'   replicate interaction\cr
+#'   column 4: \tab \code{"rank"} \tab integer; rank of the interaction,
+#'   established by value column, ascending order\cr
+#'   column 5: \tab \code{"rep_rank"} \tab integer; rank of corresponding
+#'   replicate interaction\cr
+#'   column 6: \tab \code{"idr"} \tab integer; IDR of the block and the
+#'   corresponding block in the other replicate
+#' }
+#' @param idr_cutoff numeric; only show blocks with IDR < \code{idr_cutoff},
+#' shows all blocks by default
+#' @param chromosome character; chromsome name or list of chromosome names to be analyzed,
+#' defaults to UCSC chromosome 1 (\code{"chr1"})
+#' @param start_coordinate integer; only show contact map window between
+#' \code{"start_coordinate"} and \code{"end_coordinate"}, by default shows
+#' entire chromosome
+#' @param end_coordinate integer; only show contact map window between
+#' \code{"start_coordinate"} and \code{"end_coordinate"}, by default shows
+#' entire chromosome
+#' @param title character; plot title
+#' @param values_normalized logical; are read counts in value column
+#' raw or normalized? Defaults to \code{FALSE}
+#' @param log_values logical; log-transform value column? Defaults to
+#' \code{TRUE}
+#'
+#' @return ggplot2 object; Hi-C contact map
+#'
+#' @examples
+#' idr_results_df <- estimate_idr2d_hic(idr2d:::hic$rep1_df,
+#'                                      idr2d:::hic$rep2_df)
+#' draw_hic_contact_map(idr_results_df, idr_cutoff = 0.05, chromosome = "chr1")
+#'
+#' @importFrom dplyr filter
+#' @importFrom dplyr bind_rows
+#' @importFrom ggplot2 ggplot
+#' @importFrom ggplot2 aes
+#' @importFrom ggplot2 scale_fill_gradient
+#' @importFrom ggplot2 geom_tile
+#' @importFrom ggplot2 theme_bw
+#' @importFrom ggplot2 theme
+#' @importFrom ggplot2 element_blank
+#' @importFrom ggplot2 element_text
+#' @importFrom ggplot2 labs
+#' @importFrom ggplot2 facet_grid
+#' @importFrom ggplot2 vars
+#' @export
+draw_hic_contact_map <- function(df, idr_cutoff = NULL,
+                                 chromosome = "chr1",
+                                 start_coordinate = NULL,
+                                 end_coordinate = NULL,
+                                 title = NULL,
+                                 values_normalized = FALSE,
+                                 log_values = TRUE) {
+    # avoid CRAN warnings
+    idr <- start <- end <- chr <- log_value <- NULL
+
+    if (nrow(df) == 0) {
+        stop("data frame is empty")
+    }
+
+    location <- strsplit(df$interaction, ":|-")
+    df$chr <- vapply(location, function(r) {return(as.character(r[1]))}, FUN.VALUE = character(1))
+    df$start <- vapply(location, function(r) {return(as.integer(r[2]))}, FUN.VALUE = integer(1))
+    df$end <- vapply(location, function(r) {return(as.integer(r[3]))}, FUN.VALUE = integer(1))
+
+    block_size <- min(df$start[df$start > 0])
+    block_size_label <- pretty_print_block_size(block_size)
+
+    if (!is.null(chromosome)) {
+        df <- dplyr::filter(df, chr == chromosome)
+        if (nrow(df) == 0) {
+            stop(paste0("no blocks with chromosome name ", chromosome))
+        }
+    }
+    if (!is.null(start_coordinate) && !is.null(end_coordinate)) {
+        df <- dplyr::filter(df, start >= start_coordinate & end <= end_coordinate)
+        if (nrow(df) == 0) {
+            stop(paste0("no blocks in window ",
+                        start_coordinate, " - ", end_coordinate))
+        }
+    }
+
+    df$start <- df$start / block_size
+    df$end <- df$end / block_size
+
+    if (!is.null(idr_cutoff)) {
+        df <- dplyr::filter(df, idr < idr_cutoff)
+        if (nrow(df) == 0) {
+            stop(paste0("no blocks with IDR < ", idr_cutoff))
+        }
+    }
+
+    if (log_values) {
+        if (min(df$value) < 0) {
+            futile.logger::flog.warn("log transform negative numbers")
+        }
+        df$log_value <- log(df$value)
+    } else {
+        df$log_value <- df$value
+    }
+
+    lower_triangle_df <- df
+    lower_triangle_df$start <- df$end
+    lower_triangle_df$end <- df$start
+    lower_triangle_df <- dplyr::filter(lower_triangle_df, start != end)
+    df <- dplyr::bind_rows(df, lower_triangle_df)
+
+    g <- ggplot2::ggplot(df, ggplot2::aes(x = start,
+                                          y = end,
+                                          fill = log_value)) +
+        ggplot2::scale_fill_gradient(low = "white", high = "red",
+                                     breaks = c(min(df$log_value), max(df$log_value)),
+                                     labels = pretty_print_reads(c(min(df$value), max(df$value)),
+                                                                 values_normalized)) +
+        ggplot2::geom_tile() +
+        ggplot2::theme_bw() +
+        ggplot2::theme(panel.border = ggplot2::element_blank(),
+                       axis.title = ggplot2::element_text(face = "bold"),
+                       legend.title = ggplot2::element_text(face = "bold"),
+                       panel.grid.major = ggplot2::element_blank(),
+                       panel.grid.minor = ggplot2::element_blank(),
+                       legend.position = "top",
+                       axis.title.y = ggplot2::element_blank(),
+                       axis.text.y = ggplot2::element_blank(),
+                       axis.ticks.y = ggplot2::element_blank()) +
+        ggplot2::labs(x = paste0("block (block size = ", block_size_label, ")"),
+                      y = NULL,
+                      fill = NULL, title = title)
+
+    if (length(unique(df$chr)) > 1) {
+        g <- g + ggplot2::facet_grid(rows = ggplot2::vars(chr))
+    }
+
+    return(g)
+}
