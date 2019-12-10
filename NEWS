@@ -1,3 +1,8 @@
+CHANGES IN VERSION 1.0.2
+-------------------------
+    o added parser for HiC-Pro contact maps (.matrix and .bed files)
+    o added function to visualize contact maps, showing only reproducible blocks
+
 CHANGES IN VERSION 1.0.1
 -------------------------
     o fixed alpha level in rank and value scatterplots
