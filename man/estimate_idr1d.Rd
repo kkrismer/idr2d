@@ -107,7 +107,8 @@ and \code{-Inf}. \code{Inf} are replaced by \code{max(x) * max_factor} and
 \code{-Inf} are replaced by \code{min(x) / max_factor}.}
 
 \item{jitter_factor}{numeric; controls the magnitude of the noise that
-is added to \code{x}. This is done to break ties in \code{x}.}
+is added to \code{x}. This is done to break ties in \code{x}. Set
+\code{jitter_factor = NULL} for no jitter.}
 
 \item{max_gap}{integer; maximum gap in nucleotides allowed between two
 anchors for
