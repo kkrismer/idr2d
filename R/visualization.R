@@ -377,7 +377,7 @@ pretty_print_block_size <- function(x) {
 
 pretty_print_reads <- function(x, values_normalized) {
     if (values_normalized) {
-        return(paste0(round(x, digits = 2), " normalized reads"))
+        return(paste0(round(x, digits = 2), "\nnormalized reads"))
     } else {
         return(vapply(x, function(reads) {
             if (reads < 1000000) {
@@ -452,6 +452,9 @@ pretty_print_reads <- function(x, values_normalized) {
 #' @importFrom ggplot2 labs
 #' @importFrom ggplot2 facet_grid
 #' @importFrom ggplot2 vars
+#' @importFrom ggplot2 guides
+#' @importFrom ggplot2 guide_colorbar
+#' @importFrom grid unit
 #' @export
 draw_hic_contact_map <- function(df, idr_cutoff = NULL,
                                  chromosome = NULL,
@@ -467,6 +470,9 @@ draw_hic_contact_map <- function(df, idr_cutoff = NULL,
         stop("data frame is empty")
     }
 
+    if (is.factor(df$interaction)) {
+        df$interaction <- as.character(df$interaction)
+    }
     location <- strsplit(df$interaction, ":|-")
     df$chr <- vapply(location, function(r) {return(as.character(r[1]))},
                      FUN.VALUE = character(1))
@@ -507,7 +513,7 @@ draw_hic_contact_map <- function(df, idr_cutoff = NULL,
         if (min(df$value) < 0) {
             futile.logger::flog.warn("log transform negative numbers")
         }
-        df$log_value <- log(df$value)
+        df$log_value <- log(df$value + 1)
     } else {
         df$log_value <- df$value
     }
@@ -539,7 +545,8 @@ draw_hic_contact_map <- function(df, idr_cutoff = NULL,
                        axis.ticks.y = ggplot2::element_blank()) +
         ggplot2::labs(x = paste0("block (block size = ", block_size_label, ")"),
                       y = NULL,
-                      fill = NULL, title = title)
+                      fill = NULL, title = title) +
+        ggplot2::guides(fill = ggplot2::guide_colorbar(barwidth = grid::unit(3, "inch")))
 
     if (length(unique(df$chr)) > 1) {
         g <- g + ggplot2::facet_grid(rows = ggplot2::vars(chr))
