@@ -393,6 +393,13 @@ pretty_print_reads <- function(x, values_normalized) {
     }
 }
 
+determine_block_size <- function(coords) {
+    coords <- sort(unique(coords))
+    return(min(vapply(seq_len(length(coords) - 1), function(i) {
+        return(as.integer(abs(coords[i] - coords[i + 1])))
+    }, FUN.VALUE = integer(1))))
+}
+
 #' @title Create Hi-C contact map
 #'
 #' @description
@@ -481,7 +488,7 @@ draw_hic_contact_map <- function(df, idr_cutoff = NULL,
     df$end <- vapply(location, function(r) {return(as.integer(r[3]))},
                      FUN.VALUE = integer(1))
 
-    block_size <- min(df$start[df$start > 0])
+    block_size <- determine_block_size(df$start)
     block_size_label <- pretty_print_block_size(block_size)
 
     if (!is.null(chromosome)) {
