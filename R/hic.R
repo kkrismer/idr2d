@@ -209,6 +209,12 @@ parse_hic_pro_matrix <- function(matrix_file, bed_file, chromosome = "chr1") {
 #' replicate 2) read count or normalized read count of more than
 #'  \code{combined_max_value} (disabled by default, set
 #'  \code{combined_max_value = Inf} to disable)
+#' @param min_value exclude blocks with a read count or normalized read count
+#' of less than \code{min_value} in one replicate (disabled by default, set
+#'  \code{min_value = -Inf} to disable)
+#' @param max_value exclude blocks with a read count or normalized read count
+#' of more than \code{max_value} in one replicate (disabled by default, set
+#'  \code{max_value = Inf} to disable)
 #' @inheritParams estimate_idr2d
 #'
 #' @return Data frame with the following columns:
@@ -244,6 +250,8 @@ parse_hic_pro_matrix <- function(matrix_file, bed_file, chromosome = "chr1") {
 estimate_idr2d_hic <- function(rep1_df, rep2_df,
                                combined_min_value = 30,
                                combined_max_value = Inf,
+                               min_value = -Inf,
+                               max_value = Inf,
                                max_factor = 1.5, jitter_factor = 0.0001,
                                mu = 0.1, sigma = 1.0, rho = 0.2, p = 0.5,
                                eps = 0.001, max_iteration = 30,
@@ -266,7 +274,8 @@ estimate_idr2d_hic <- function(rep1_df, rep2_df,
     df$value[is.na(df$value)] <- 0
     df$rep_value[is.na(df$rep_value)] <- 0
 
-    if (is.infinite(combined_min_value) && is.infinite(combined_max_value)) {
+    if (is.infinite(combined_min_value) && is.infinite(combined_max_value) &&
+        is.infinite(min_value) && is.infinite(max_value)) {
         futile.logger::flog.info(paste0("number of interaction blocks: ",
                                         nrow(df)))
     } else {
@@ -282,6 +291,14 @@ estimate_idr2d_hic <- function(rep1_df, rep2_df,
             df <- dplyr::filter(df, combined_value <= combined_max_value)
         }
         df$combined_value <- NULL
+
+        if (!is.infinite(min_value)) {
+            df <- dplyr::filter(df, value >= min_value & rep_value >= min_value)
+        }
+
+        if (!is.infinite(max_value)) {
+            df <- dplyr::filter(df, value <= max_value & rep_value <= max_value)
+        }
 
         futile.logger::flog.info(paste0("number of interaction blocks ",
                                         "(after filtering): ", nrow(df)))

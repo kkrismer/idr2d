@@ -9,6 +9,8 @@ estimate_idr2d_hic(
   rep2_df,
   combined_min_value = 30,
   combined_max_value = Inf,
+  min_value = -Inf,
+  max_value = Inf,
   max_factor = 1.5,
   jitter_factor = 1e-04,
   mu = 0.1,
@@ -40,6 +42,14 @@ replicate 2) read count or normalized read count of less than
 replicate 2) read count or normalized read count of more than
  \code{combined_max_value} (disabled by default, set
  \code{combined_max_value = Inf} to disable)}
+
+\item{min_value}{exclude blocks with a read count or normalized read count
+of less than \code{min_value} in one replicate (disabled by default, set
+ \code{min_value = -Inf} to disable)}
+
+\item{max_value}{exclude blocks with a read count or normalized read count
+of more than \code{max_value} in one replicate (disabled by default, set
+ \code{max_value = Inf} to disable)}
 
 \item{max_factor}{numeric; controls the replacement values for \code{Inf}
 and \code{-Inf}. \code{Inf} are replaced by \code{max(x) * max_factor} and
