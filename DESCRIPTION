@@ -1,7 +1,7 @@
 Package: idr2d
 Title: Irreproducible Discovery Rate for Genomic Interactions
     Data
-Version: 1.1.2
+Version: 1.1.3
 Authors@R: 
     c(person(given = "Konstantin",
              family = "Krismer",
