@@ -104,8 +104,7 @@ draw_hic_contact_map(idr_results, idr_cutoff = 0.05, chromosome = "chr1")
 If you use IDR2D in your research, please cite:
 
 **IDR2D identifies reproducible genomic interactions**  
-Konstantin Krismer, Yuchun Guo, and David K. Gifford
-
+Konstantin Krismer, Yuchun Guo, and David K. Gifford  
 Nucleic Acids Research, advance online 03 February 2020; DOI: https://doi.org/10.1093/nar/gkaa030
 
 ## Funding
