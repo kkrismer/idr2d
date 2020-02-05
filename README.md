@@ -1,6 +1,6 @@
 # IDR2D: Irreproducible Discovery Rate for Genomic Interactions
 
-[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![Travis build status](https://travis-ci.org/kkrismer/idr2d.svg?branch=master)](https://travis-ci.org/kkrismer/idr2d) [![DOI](https://img.shields.io/badge/DOI-10.1101%2F691295-blue.svg)](https://doi.org/10.1101/691295) [![BioC](https://img.shields.io/badge/BioC-1.0.2-brightgreen.svg)](https://doi.org/doi:10.18129/B9.bioc.idr2d) [![platforms](https://www.bioconductor.org/shields/availability/3.10/idr2d.svg)](https://www.bioconductor.org/packages/release/bioc/html/idr2d.html#archives)
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![Travis build status](https://travis-ci.org/kkrismer/idr2d.svg?branch=master)](https://travis-ci.org/kkrismer/idr2d) [![DOI](https://img.shields.io/badge/DOI-10.1101%2F691295-blue.svg)](https://doi.org/10.1093/nar/gkaa030) [![BioC](https://img.shields.io/badge/BioC-1.0.3-brightgreen.svg)](https://doi.org/doi:10.18129/B9.bioc.idr2d) [![platforms](https://www.bioconductor.org/shields/availability/3.10/idr2d.svg)](https://www.bioconductor.org/packages/release/bioc/html/idr2d.html#archives)
 
 Chromatin interaction data from protocols such as ChIA-PET and HiChIP provide valuable insights into genome organization and gene regulation, but can include spurious interactions that do not reflect underlying genome biology. We introduce a generalization of the Irreproducible Discovery Rate (IDR) method called IDR2D that identifies replicable interactions shared by experiments. IDR2D provides a principled set of interactions and eliminates artifacts from single experiments.
 
@@ -105,7 +105,8 @@ If you use IDR2D in your research, please cite:
 
 **IDR2D identifies reproducible genomic interactions**  
 Konstantin Krismer, Yuchun Guo, and David K. Gifford
-bioRxiv 691295; DOI: https://doi.org/10.1101/691295
+
+Nucleic Acids Research, advance online 03 February 2020; DOI: https://doi.org/10.1093/nar/gkaa030
 
 ## Funding
 
