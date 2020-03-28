@@ -23,9 +23,8 @@
 #'   replicate 2 - end coordinate
 #' }
 #' @param max_gap integer; maximum gap in nucleotides allowed between two
-#' anchors for
-#' them to be considered as overlapping
-#' (defaults to zero, no gap between anchors)
+#' anchors for them to be considered as overlapping
+#' (defaults to -1, i.e., overlapping anchors)
 #'
 #' @return A data frame containing overlapping
 #'  anchor pairs with the following columns:
@@ -55,7 +54,7 @@
 #' @importFrom stringr str_sort
 #' @importFrom GenomicRanges findOverlaps
 #' @export
-determine_anchor_overlap <- function(rep1_anchor, rep2_anchor, max_gap = 0L) {
+determine_anchor_overlap <- function(rep1_anchor, rep2_anchor, max_gap = -1L) {
     rep1_ranges <- GenomicRanges::makeGRangesFromDataFrame(rep1_anchor)
     rep2_ranges <- GenomicRanges::makeGRangesFromDataFrame(rep2_anchor)
 
@@ -411,7 +410,7 @@ establish_overlap1d <- function(rep1_df, rep2_df,
                                 ambiguity_resolution_method = c("overlap",
                                                                 "midpoint",
                                                                 "value"),
-                                max_gap = 0L) {
+                                max_gap = -1L) {
     # argument handling
     ambiguity_resolution_method <- match.arg(ambiguity_resolution_method,
                                              choices = c("overlap",
@@ -572,7 +571,7 @@ establish_overlap2d <- function(rep1_df, rep2_df,
                                 ambiguity_resolution_method = c("overlap",
                                                                 "midpoint",
                                                                 "value"),
-                                max_gap = 0L) {
+                                max_gap = -1L) {
     # argument handling
     ambiguity_resolution_method <- match.arg(ambiguity_resolution_method,
                                              choices = c("overlap",

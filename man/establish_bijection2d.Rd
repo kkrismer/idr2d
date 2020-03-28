@@ -9,7 +9,7 @@ establish_bijection2d(
   rep1_df,
   rep2_df,
   ambiguity_resolution_method = c("overlap", "midpoint", "value"),
-  max_gap = 0L
+  max_gap = -1L
 )
 }
 \arguments{
@@ -79,9 +79,8 @@ are resolved. Available methods:
 }}
 
 \item{max_gap}{integer; maximum gap in nucleotides allowed between two
-anchors for
-them to be considered as overlapping
-(defaults to zero, no gap between anchors)}
+anchors for them to be considered as overlapping
+(defaults to -1, i.e., overlapping anchors)}
 }
 \value{
 Data frames \code{rep1_df} and \code{rep2_df} with
