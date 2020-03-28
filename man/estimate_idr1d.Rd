@@ -13,7 +13,7 @@ estimate_idr1d(
   remove_nonstandard_chromosomes = TRUE,
   max_factor = 1.5,
   jitter_factor = 1e-04,
-  max_gap = 0L,
+  max_gap = -1L,
   mu = 0.1,
   sigma = 1,
   rho = 0.2,
@@ -111,9 +111,8 @@ is added to \code{x}. This is done to break ties in \code{x}. Set
 \code{jitter_factor = NULL} for no jitter.}
 
 \item{max_gap}{integer; maximum gap in nucleotides allowed between two
-anchors for
-them to be considered as overlapping
-(defaults to zero, no gap between anchors)}
+anchors for them to be considered as overlapping
+(defaults to -1, i.e., overlapping anchors)}
 
 \item{mu}{ a starting value for the mean of the reproducible component.}
 

@@ -4,7 +4,7 @@
 \alias{determine_anchor_overlap}
 \title{Identifies Overlapping Anchors}
 \usage{
-determine_anchor_overlap(rep1_anchor, rep2_anchor, max_gap = 0L)
+determine_anchor_overlap(rep1_anchor, rep2_anchor, max_gap = -1L)
 }
 \arguments{
 \item{rep1_anchor}{data frame with the following columns:
@@ -28,9 +28,8 @@ determine_anchor_overlap(rep1_anchor, rep2_anchor, max_gap = 0L)
 }}
 
 \item{max_gap}{integer; maximum gap in nucleotides allowed between two
-anchors for
-them to be considered as overlapping
-(defaults to zero, no gap between anchors)}
+anchors for them to be considered as overlapping
+(defaults to -1, i.e., overlapping anchors)}
 }
 \value{
 A data frame containing overlapping

@@ -52,7 +52,7 @@ establish_bijection1d <- function(rep1_df, rep2_df,
                                   ambiguity_resolution_method = c("overlap",
                                                                   "midpoint",
                                                                   "value"),
-                                  max_gap = 0L) {
+                                  max_gap = -1L) {
     return(establish_bijection(rep1_df, rep2_df, "IDR1D",
                                ambiguity_resolution_method))
 }
@@ -118,7 +118,7 @@ establish_bijection2d <- function(rep1_df, rep2_df,
                                   ambiguity_resolution_method = c("overlap",
                                                                   "midpoint",
                                                                   "value"),
-                                  max_gap = 0L) {
+                                  max_gap = -1L) {
     return(establish_bijection(rep1_df, rep2_df, "IDR2D",
                                ambiguity_resolution_method))
 }
@@ -179,7 +179,7 @@ establish_bijection <- function(rep1_df, rep2_df,
                                 ambiguity_resolution_method = c("overlap",
                                                                 "midpoint",
                                                                 "value"),
-                                max_gap = 0L) {
+                                max_gap = -1L) {
     # avoid CRAN warnings
     rep1_idx <- rep2_idx <- arv <- value <- NULL
 
@@ -464,7 +464,7 @@ estimate_idr1d <- function(rep1_df, rep2_df,
                                                            "value"),
                            remove_nonstandard_chromosomes = TRUE,
                            max_factor = 1.5, jitter_factor = 0.0001,
-                           max_gap = 0L,
+                           max_gap = -1L,
                            mu = 0.1, sigma = 1.0, rho = 0.2, p = 0.5,
                            eps = 0.001, max_iteration = 30, local_idr = TRUE) {
     return(estimate_idr(rep1_df, rep2_df, "IDR1D",
@@ -556,7 +556,7 @@ estimate_idr2d <- function(rep1_df, rep2_df,
                                                            "value"),
                            remove_nonstandard_chromosomes = TRUE,
                            max_factor = 1.5, jitter_factor = 0.0001,
-                           max_gap = 0L,
+                           max_gap = -1L,
                            mu = 0.1, sigma = 1.0, rho = 0.2, p = 0.5,
                            eps = 0.001, max_iteration = 30, local_idr = TRUE) {
     return(estimate_idr(rep1_df, rep2_df, "IDR2D",
@@ -617,7 +617,7 @@ estimate_idr <- function(rep1_df, rep2_df, analysis_type = "IDR2D",
                                                          "value"),
                          remove_nonstandard_chromosomes = TRUE,
                          max_factor = 1.5, jitter_factor = 0.0001,
-                         max_gap = 0L,
+                         max_gap = -1L,
                          mu = 0.1, sigma = 1.0, rho = 0.2, p = 0.5,
                          eps = 0.001, max_iteration = 30, local_idr = TRUE) {
     # avoid CRAN warnings
