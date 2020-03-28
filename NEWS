@@ -1,3 +1,8 @@
+CHANGES IN VERSION 1.0.4
+-------------------------
+    o changed max_gap default value from 0 to -1 to conform with convention
+    o updated reference to IDR2D publication
+
 CHANGES IN VERSION 1.0.3
 -------------------------
     o added option to disable jitter
