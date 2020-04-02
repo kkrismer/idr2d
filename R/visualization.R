@@ -48,7 +48,7 @@ draw_idr_distribution_histogram <- function(df, remove_na = TRUE,
     }
 
     g <- ggplot2::ggplot(df, ggplot2::aes(x = idr)) +
-        ggplot2::geom_density() +
+        ggplot2::geom_density(fill = "lightblue", alpha = 0.6) +
         ggplot2::scale_x_continuous(limits = c(0, 1.0)) +
         ggplot2::theme_bw() +
         ggplot2::theme(panel.border = ggplot2::element_blank(),
