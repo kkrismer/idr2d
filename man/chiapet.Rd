@@ -4,7 +4,8 @@
 \name{chiapet}
 \alias{chiapet}
 \title{Example Genomic Interaction Data Set}
-\format{A list with two components, the data frames \code{rep1_df} and
+\format{
+A list with two components, the data frames \code{rep1_df} and
 \code{rep2_df}, which have the following seven columns:
 \tabular{rll}{
   column 1: \tab \code{chr_a} \tab character; genomic location of anchor A -
@@ -21,7 +22,8 @@
   end coordinate\cr
   column 7: \tab \code{fdr} \tab numeric; False Discovery Rate -
   significance of interaction
-}}
+}
+}
 \usage{
 chiapet
 }

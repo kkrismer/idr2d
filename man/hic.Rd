@@ -4,7 +4,8 @@
 \name{hic}
 \alias{hic}
 \title{Example Hi-C data set}
-\format{A list with two components, the data frames \code{rep1_df} and
+\format{
+A list with two components, the data frames \code{rep1_df} and
 \code{rep2_df}, which have the following four columns:
 \tabular{rll}{
   column 1: \tab \code{chr} \tab character; genomic location of block -
@@ -15,7 +16,8 @@
   coordinate B\cr
   column 4: \tab \code{value} \tab numeric; heuristic used
   to rank blocks, in this case: number of reads\cr
-}}
+}
+}
 \usage{
 hic
 }
