@@ -1,6 +1,6 @@
 # IDR2D: Irreproducible Discovery Rate for Genomic Interactions
 
-[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![Travis build status](https://travis-ci.org/kkrismer/idr2d.svg?branch=master)](https://travis-ci.org/kkrismer/idr2d) [![DOI](https://img.shields.io/badge/DOI-10.1101%2F691295-blue.svg)](https://doi.org/10.1093/nar/gkaa030) [![BioC](https://img.shields.io/badge/BioC-1.0.3-brightgreen.svg)](https://doi.org/doi:10.18129/B9.bioc.idr2d) [![platforms](https://www.bioconductor.org/shields/availability/3.10/idr2d.svg)](https://www.bioconductor.org/packages/release/bioc/html/idr2d.html#archives)
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![Travis build status](https://travis-ci.org/kkrismer/idr2d.svg?branch=master)](https://travis-ci.org/kkrismer/idr2d) [![DOI](https://img.shields.io/badge/DOI-10.1101%2F691295-blue.svg)](https://doi.org/10.1093/nar/gkaa030) [![BioC](https://img.shields.io/badge/BioC-1.0.4-brightgreen.svg)](https://doi.org/doi:10.18129/B9.bioc.idr2d) [![platforms](https://www.bioconductor.org/shields/availability/3.10/idr2d.svg)](https://www.bioconductor.org/packages/release/bioc/html/idr2d.html#archives)
 
 Chromatin interaction data from protocols such as ChIA-PET and HiChIP provide valuable insights into genome organization and gene regulation, but can include spurious interactions that do not reflect underlying genome biology. We introduce a generalization of the Irreproducible Discovery Rate (IDR) method called IDR2D that identifies replicable interactions shared by experiments. IDR2D provides a principled set of interactions and eliminates artifacts from single experiments.
 
@@ -9,13 +9,24 @@ Chromatin interaction data from protocols such as ChIA-PET and HiChIP provide va
 The *idr2d* package is part of Bioconductor 3.10. To install it on your system, enter:
 
 ```
-if (!requireNamespace("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+  install.packages("BiocManager")
+}
 
 BiocManager::install("idr2d")
 ```
 
-R 3.6 (or higher) is required. Additionally, the 64-bit version of Python 3.5 (or higher) and the Python package [hic-straw](https://pypi.org/project/hic-straw/) are required for Hi-C analysis from Juicer *.hic* files. 
+Alternatively, the development version can be installed directly from this repository:
+
+```
+if (!requireNamespace("remotes", quietly = TRUE)) {
+  install.packages("remotes")
+}
+
+remotes::install_github("kkrismer/idr2d")
+```
+
+R 3.6 (or higher) and Bioconductor 3.10 is required in both cases. Additionally, the 64-bit version of Python 3.5 (or higher) and the Python package [hic-straw](https://pypi.org/project/hic-straw/) are required for Hi-C analysis from Juicer *.hic* files. 
 
 ## Usage
 
