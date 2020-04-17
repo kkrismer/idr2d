@@ -1,4 +1,4 @@
-context("Overlaps and distances between interactions")
+context("overlaps and distances between interactions / peaks")
 library(idr2d)
 
 test_that("calculate_relative_overlap2d", {
@@ -10,7 +10,7 @@ test_that("calculate_relative_overlap2d", {
                                               130, 140, 260, 280), -0.25)
     expect_equal(calculate_relative_overlap2d(100, 120, 240, 250,
                                               200, 220, 340, 350), -0.7391304,
-                 tolerance = .00002)
+                 tolerance = 0.00002)
 
     expect_equal(calculate_relative_overlap2d(c(100, 100, 100, 100),
                                               c(120, 120, 120, 120),
@@ -21,7 +21,7 @@ test_that("calculate_relative_overlap2d", {
                                               c(240, 240, 260, 340),
                                               c(260, 260, 280, 350)),
                  c(1.0, 0.5, -0.25, -0.7391304),
-                 tolerance = .00002)
+                 tolerance = 0.00002)
 })
 
 test_that("calculate_midpoint_distance2d", {
@@ -49,14 +49,14 @@ test_that("calculate_relative_overlap1d", {
     expect_equal(calculate_relative_overlap1d(100, 120, 100, 110), 0.5)
     expect_equal(calculate_relative_overlap1d(100, 120, 130, 140), -0.25)
     expect_equal(calculate_relative_overlap1d(100, 120, 200, 220), -0.666666,
-                 tolerance = .00002)
+                 tolerance = 0.00002)
 
     expect_equal(calculate_relative_overlap1d(c(100, 100, 100, 100),
                                               c(120, 120, 120, 120),
                                               c(100, 100, 130, 200),
                                               c(120, 110, 140, 220)),
                  c(1.0, 0.5, -0.25, -0.666666),
-                 tolerance = .00002)
+                 tolerance = 0.00002)
 })
 
 test_that("calculate_midpoint_distance1d", {

@@ -105,6 +105,7 @@ parse_juicer_matrix <- function(hic_file,
 
 #' @title Parse .matrix and .bed files from HiC-Pro for IDR2D analysis
 #'
+#' @description
 #' This function is used to convert the contact matrix from a HiC-Pro pipeline
 #' analysis run into an IDR2D compatible format. It takes one .matrix and one
 #' .bed file per replicate from HiC-Pro and returns the contact matrix for a

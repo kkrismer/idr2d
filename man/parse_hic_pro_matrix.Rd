@@ -2,12 +2,7 @@
 % Please edit documentation in R/hic.R
 \name{parse_hic_pro_matrix}
 \alias{parse_hic_pro_matrix}
-\title{Parse .matrix and .bed files from HiC-Pro for IDR2D analysis
-
-This function is used to convert the contact matrix from a HiC-Pro pipeline
-analysis run into an IDR2D compatible format. It takes one .matrix and one
-.bed file per replicate from HiC-Pro and returns the contact matrix for a
-specific chromosome for IDR2D analysis (see \code{\link{estimate_idr2d_hic}})}
+\title{Parse .matrix and .bed files from HiC-Pro for IDR2D analysis}
 \usage{
 parse_hic_pro_matrix(matrix_file, bed_file, chromosome = "chr1")
 }
@@ -32,8 +27,6 @@ Data frame with the following columns:
 }
 }
 \description{
-Parse .matrix and .bed files from HiC-Pro for IDR2D analysis
-
 This function is used to convert the contact matrix from a HiC-Pro pipeline
 analysis run into an IDR2D compatible format. It takes one .matrix and one
 .bed file per replicate from HiC-Pro and returns the contact matrix for a
