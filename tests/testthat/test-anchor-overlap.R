@@ -37,6 +37,26 @@ test_that("establish_overlap1d", {
     expect_equal(colnames(pairs_df), c("rep1_idx", "rep2_idx", "arv"))
     expect_equal(sum(pairs_df$arv), -298.2899,
                  tolerance = 0.00002)
+
+    pairs_df <- establish_overlap1d(rep1_df, rep2_df,
+                                    ambiguity_resolution_method = "value")
+    expect_equal(sum(pairs_df$arv), 3204.912,
+                 tolerance = 0.00002)
+
+    pairs_df <- establish_overlap1d(rep1_df, rep2_df,
+                                    ambiguity_resolution_method = "midpoint")
+    expect_equal(sum(pairs_df$arv), 55044,
+                 tolerance = 0.00002)
+
+    expect_error(establish_overlap1d(rep1_df, rep2_df,
+                                     ambiguity_resolution_method = "xx"))
+
+
+    pairs_df <- establish_overlap1d(rep1_df, data.frame(chr = character(0),
+                                                        start = integer(0),
+                                                        end = integer(0),
+                                                        value = numeric(0)))
+    expect_equal(nrow(pairs_df), 0)
 })
 
 test_that("establish_overlap2d", {
@@ -60,6 +80,24 @@ test_that("establish_overlap2d", {
     expect_equal(colnames(pairs_df), c("rep1_idx", "rep2_idx", "arv"))
     expect_equal(sum(pairs_df$arv), -5298.153,
                  tolerance = 0.00002)
+
+
+    pairs_df <- establish_overlap2d(rep1_df, rep2_df,
+                                    ambiguity_resolution_method = "value")
+    expect_equal(sum(pairs_df$arv), -34394.35,
+                 tolerance = 0.00002)
+
+    pairs_df <- establish_overlap2d(rep1_df, rep2_df,
+                                    ambiguity_resolution_method = "midpoint")
+    expect_equal(sum(pairs_df$arv), 1464651,
+                 tolerance = 0.00002)
+
+    expect_error(establish_overlap2d(rep1_df, rep2_df,
+                                     ambiguity_resolution_method = "xx"))
+
+
+    pairs_df <- establish_overlap2d(rep1_df, data.frame())
+    expect_equal(nrow(pairs_df), 0)
 })
 
 test_that("remove_nonstandard_chromosomes1d", {
