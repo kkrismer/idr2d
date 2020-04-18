@@ -78,6 +78,7 @@ test_that("establish_bijection", {
 })
 
 test_that("preprocess", {
+    futile.logger::flog.threshold(futile.logger::ERROR)
     rep1_df <- idr2d:::chiapet$rep1_df
 
     expect_equal(sum(preprocess(rep1_df$fdr, "log_additive_inverse")), 14836.63,
@@ -89,6 +90,9 @@ test_that("preprocess", {
     expect_equal(sum(preprocess(c(0.1, 0.54, 2.1, 0.1, 0.3, 0.4, 0.1,
                                   0.4, 22.21, 2.111, 0.331, 0.21, 21.2),
                                 "multiplicative_inverse")), 49.01033,
+                 tolerance = 0.00002)
+    expect_equal(sum(preprocess(c(0.1, 0.54, 2.1, 0.1, 0.3, 0.4, 0.1),
+                                "multiplicative_inverse")), 38.16137,
                  tolerance = 0.00002)
     expect_equal(sum(preprocess(rep1_df$fdr, "log")), -14836.63,
                  tolerance = 0.00002)
@@ -128,6 +132,7 @@ test_that("estimate_idr2d", {
 })
 
 test_that("estimate_idr", {
+    futile.logger::flog.threshold(futile.logger::ERROR)
     set.seed(3)
     idr_results <- estimate_idr(idr2d:::chiapet$rep1_df,
                                 idr2d:::chiapet$rep2_df,
@@ -141,6 +146,15 @@ test_that("estimate_idr", {
     expect_equal(nrow(rep1_df), 9928)
     expect_equal(sum(rep1_df$idr, na.rm = TRUE), 5287.196,
                  tolerance = 0.1)
+
+    idr_results <- estimate_idr(idr2d:::chiapet$rep1_df[1:5, ],
+                                idr2d:::chiapet$rep2_df,
+                                analysis_type = "IDR2D",
+                                value_transformation = "log",
+                                local_idr = FALSE)
+
+    expect_equal(length(idr_results), 3)
+    expect_equal(names(idr_results), c("rep1_df", "rep2_df", "analysis_type"))
 
     pairs_df <- estimate_idr(idr2d:::chiapet$rep1_df,
                              data.frame(chr = character(0),

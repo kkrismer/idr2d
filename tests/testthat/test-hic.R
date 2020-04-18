@@ -29,3 +29,13 @@ test_that("estimate_idr2d_hic", {
     expect_equal(sum(idr_results_df$idr), 1.091252,
                  tolerance = 0.2)
 })
+
+test_that("parse_juicer_matrix", {
+    expect_error(expect_output(parse_juicer_matrix("wrong/path")),
+                 "ModuleNotFoundError: No module named 'straw'")
+})
+
+test_that("parse_juicer_matrix", {
+    expect_error(parse_hic_pro_matrix("wrong/path", "wrong/path"),
+                 ".matrix file does not exist: wrong/path")
+})
