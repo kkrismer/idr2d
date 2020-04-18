@@ -146,3 +146,26 @@ test_that("estimate_idr", {
                              analysis_type = "IDR1D")
     expect_equal(nrow(pairs_df$rep2_df), 0)
 })
+
+test_that("summary.idr2d_result", {
+    set.seed(3)
+    idr_results <- estimate_idr(idr2d:::chiapet$rep1_df,
+                                idr2d:::chiapet$rep2_df,
+                                analysis_type = "IDR2D",
+                                value_transformation = "log_additive_inverse")
+    summarized_results <- summary(idr_results)
+    expect_equal(summarized_results$analysis_type, "IDR2D")
+    expect_equal(summarized_results$rep1_num_interactions, 9928)
+    expect_equal(summarized_results$rep2_num_interactions, 10326)
+    expect_equal(summarized_results$num_reproducible_interactions, 5907)
+    expect_equal(summarized_results$num_highly_significant_interactions, 116)
+})
+
+test_that("print.idr2d_result_summary", {
+    set.seed(3)
+    idr_results <- estimate_idr(idr2d:::chiapet$rep1_df,
+                                idr2d:::chiapet$rep2_df,
+                                analysis_type = "IDR2D",
+                                value_transformation = "log_additive_inverse")
+    expect_output(print(summary(idr_results)))
+})

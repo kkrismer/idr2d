@@ -1,4 +1,4 @@
-context("overlaps and distances between interactions / peaks")
+context("arv")
 library(idr2d)
 
 test_that("calculate_relative_overlap2d", {
