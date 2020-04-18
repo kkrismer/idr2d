@@ -447,9 +447,6 @@ establish_overlap1d <- function(rep1_df, rep2_df,
                 rep1_df[idx_rep1, 2], rep1_df[idx_rep1, 3],
                 rep2_df[idx_rep2, 2], rep2_df[idx_rep2, 3]
             )
-        } else {
-            stop(paste0("unknown ambiguity resolution method: ",
-                        ambiguity_resolution_method))
         }
 
         pairs_df <- data.frame(rep1_idx = idx_rep1,
@@ -634,9 +631,6 @@ establish_overlap2d <- function(rep1_df, rep2_df,
                 rep2_df[idx_rep2, 2], rep2_df[idx_rep2, 3],
                 rep2_df[idx_rep2, 5], rep2_df[idx_rep2, 6]
             )
-        } else {
-            stop(paste0("unknown ambiguity resolution method: ",
-                        ambiguity_resolution_method))
         }
 
         pairs_df <- data.frame(rep1_idx = idx_rep1,
