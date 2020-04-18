@@ -191,17 +191,15 @@ establish_bijection <- function(rep1_df, rep2_df,
     } else if (analysis_type == "IDR2D") {
         columns <- c("chr_a", "start_a", "end_a",
                      "chr_b", "start_b", "end_b", "value")
-    } else {
-        stop("unknown analysis type")
     }
 
-    # remove irrelevant columns, rename relevant columns
-    rep1_df <- rep1_df[, seq_len(length(columns))]
-    rep2_df <- rep2_df[, seq_len(length(columns))]
-    colnames(rep1_df) <- columns
-    colnames(rep2_df) <- columns
-
     if (nrow(rep1_df) > 0 && nrow(rep2_df) > 0) {
+        # remove irrelevant columns, rename relevant columns
+        rep1_df <- rep1_df[, seq_len(length(columns))]
+        rep2_df <- rep2_df[, seq_len(length(columns))]
+        colnames(rep1_df) <- columns
+        colnames(rep2_df) <- columns
+
         # shuffle to break preexisting order
         rep1_df <- rep1_df[sample.int(nrow(rep1_df)), ]
         rep2_df <- rep2_df[sample.int(nrow(rep2_df)), ]
@@ -259,26 +257,53 @@ establish_bijection <- function(rep1_df, rep2_df,
             rep2_df$value[top_pairs_df$rep2_idx]
         rep2_df$rep_value[top_pairs_df$rep2_idx] <-
             rep1_df$value[top_pairs_df$rep1_idx]
-    } else {
-        rep1_df$idx <- integer(0)
-        rep2_df$idx <- integer(0)
-        rep1_df$rep_idx <- integer(0)
-        rep2_df$rep_idx <- integer(0)
-        rep1_df$rank <- integer(0)
-        rep2_df$rank <- integer(0)
-        rep1_df$rep_rank <- integer(0)
-        rep2_df$rep_rank <- integer(0)
-        rep1_df$rep_value <- numeric(0)
-        rep2_df$rep_value <- numeric(0)
-    }
 
-    columns <- c(columns, "rep_value", "rank", "rep_rank", "idx", "rep_idx")
-    if (analysis_type == "IDR1D") {
+        columns <- c(columns, "rep_value", "rank", "rep_rank", "idx", "rep_idx")
         rep1_df <- dplyr::select(rep1_df, columns)
         rep2_df <- dplyr::select(rep2_df, columns)
-    } else if (analysis_type == "IDR2D") {
-        rep1_df <- dplyr::select(rep1_df, columns)
-        rep2_df <- dplyr::select(rep2_df, columns)
+    } else {
+        if (nrow(rep1_df) == 0) {
+            rep1_df$idx <- integer(0)
+            rep1_df$rep_idx <- integer(0)
+            rep1_df$rank <- integer(0)
+            rep1_df$rep_rank <- integer(0)
+            rep1_df$rep_value <- numeric(0)
+        } else {
+            # remove irrelevant columns, rename relevant columns
+            rep1_df <- rep1_df[, seq_len(length(columns))]
+            colnames(rep1_df) <- columns
+            columns <- c(columns, "rep_value", "rank",
+                         "rep_rank", "idx", "rep_idx")
+
+            rep1_df$idx <- NA_integer_
+            rep1_df$rep_idx <- NA_integer_
+            rep1_df$rank <- NA_integer_
+            rep1_df$rep_rank <- NA_integer_
+            rep1_df$rep_value <- NA_real_
+
+            rep1_df <- dplyr::select(rep1_df, columns)
+        }
+        if (nrow(rep2_df) == 0) {
+            rep2_df$idx <- integer(0)
+            rep2_df$rep_idx <- integer(0)
+            rep2_df$rank <- integer(0)
+            rep2_df$rep_rank <- integer(0)
+            rep2_df$rep_value <- numeric(0)
+        } else {
+            # remove irrelevant columns, rename relevant columns
+            rep2_df <- rep2_df[, seq_len(length(columns))]
+            colnames(rep2_df) <- columns
+            columns <- c(columns, "rep_value", "rank",
+                         "rep_rank", "idx", "rep_idx")
+
+            rep2_df$idx <- NA_integer_
+            rep2_df$rep_idx <- NA_integer_
+            rep2_df$rank <- NA_integer_
+            rep2_df$rep_rank <- NA_integer_
+            rep2_df$rep_value <- NA_real_
+
+            rep2_df <- dplyr::select(rep2_df, columns)
+        }
     }
 
     return(list(rep1_df = rep1_df, rep2_df = rep2_df))
@@ -631,122 +656,169 @@ estimate_idr <- function(rep1_df, rep2_df, analysis_type = "IDR2D",
     } else if (analysis_type == "IDR2D") {
         columns <- c("chr_a", "start_a", "end_a",
                      "chr_b", "start_b", "end_b", "value")
-    } else {
-        stop("unknown analysis type")
     }
 
-    # remove irrelevant columns, rename relevant columns
-    rep1_df <- rep1_df[, seq_len(length(columns))]
-    rep2_df <- rep2_df[, seq_len(length(columns))]
-    colnames(rep1_df) <- columns
-    colnames(rep2_df) <- columns
+    if (nrow(rep1_df) > 0 && nrow(rep2_df) > 0) {
+        # remove irrelevant columns, rename relevant columns
+        rep1_df <- rep1_df[, seq_len(length(columns))]
+        rep2_df <- rep2_df[, seq_len(length(columns))]
+        colnames(rep1_df) <- columns
+        colnames(rep2_df) <- columns
 
-    if (remove_nonstandard_chromosomes) {
-        if (analysis_type == "IDR1D") {
-            rep1_df <- remove_nonstandard_chromosomes1d(rep1_df)
-            rep2_df <- remove_nonstandard_chromosomes1d(rep2_df)
-        } else if (analysis_type == "IDR2D") {
-            rep1_df <- remove_nonstandard_chromosomes2d(rep1_df)
-            rep2_df <- remove_nonstandard_chromosomes2d(rep2_df)
-        }
-    }
-
-    rep1_df$value <- preprocess(rep1_df$value,
-                                value_transformation,
-                                max_factor = max_factor,
-                                jitter_factor = jitter_factor)
-
-    rep2_df$value <- preprocess(rep2_df$value,
-                                value_transformation,
-                                max_factor = max_factor,
-                                jitter_factor = jitter_factor)
-
-    mapping <- establish_bijection(rep1_df, rep2_df, analysis_type,
-                                   ambiguity_resolution_method,
-                                   max_gap = max_gap)
-
-    if (nrow(mapping$rep1_df) > 0 && nrow(mapping$rep2_df) > 0) {
-        rep1_df <- mapping$rep1_df
-        rep2_df <- mapping$rep2_df
-        idx_df <- data.frame(
-            rep1_idx = rep1_df$idx,
-            rep2_idx = rep1_df$rep_idx,
-            rep1_value = rep1_df$value,
-            rep2_value = rep1_df$rep_value
-        )
-
-        idx_df <- dplyr::filter(idx_df,
-                                !is.na(rep2_idx) & !is.infinite(rep2_idx))
-
-        if (nrow(idx_df) > 0) {
-            idr_matrix <- as.matrix(dplyr::select(idx_df,
-                                                  rep1_value,
-                                                  rep2_value))
-
-            if (length(unique(idr_matrix[, 1])) < 10 ||
-                length(unique(idr_matrix[, 2])) < 10) {
-                futile.logger::flog.warn("low complexity data set")
+        if (remove_nonstandard_chromosomes) {
+            if (analysis_type == "IDR1D") {
+                rep1_df <- remove_nonstandard_chromosomes1d(rep1_df)
+                rep2_df <- remove_nonstandard_chromosomes1d(rep2_df)
+            } else if (analysis_type == "IDR2D") {
+                rep1_df <- remove_nonstandard_chromosomes2d(rep1_df)
+                rep2_df <- remove_nonstandard_chromosomes2d(rep2_df)
             }
-
-            invisible(tryCatch({
-                idr_results <- idr::est.IDR(idr_matrix, mu, sigma, rho, p,
-                                            eps = eps,
-                                            max.ite = max_iteration)
-                if (local_idr) {
-                    idx_df$idr <- idr_results$idr
-                } else {
-                    idx_df$idr <- idr_results$IDR
-                }
-            },
-            error = function(e) {
-                idx_df$idr <- as.numeric(NA)
-                futile.logger::flog.warn(stringr::str_trim(e))
-            }))
-        } else {
-            idx_df$idr <- numeric(0)
         }
 
-        if (nrow(rep1_df) > 0) {
-            rep1_df$idr <- as.numeric(NA)
+        rep1_df$value <- preprocess(rep1_df$value,
+                                    value_transformation,
+                                    max_factor = max_factor,
+                                    jitter_factor = jitter_factor)
+
+        rep2_df$value <- preprocess(rep2_df$value,
+                                    value_transformation,
+                                    max_factor = max_factor,
+                                    jitter_factor = jitter_factor)
+
+        mapping <- establish_bijection(rep1_df, rep2_df, analysis_type,
+                                       ambiguity_resolution_method,
+                                       max_gap = max_gap)
+
+        if (nrow(mapping$rep1_df) > 0 && nrow(mapping$rep2_df) > 0) {
+            rep1_df <- mapping$rep1_df
+            rep2_df <- mapping$rep2_df
+            idx_df <- data.frame(
+                rep1_idx = rep1_df$idx,
+                rep2_idx = rep1_df$rep_idx,
+                rep1_value = rep1_df$value,
+                rep2_value = rep1_df$rep_value
+            )
+
+            idx_df <- dplyr::filter(idx_df,
+                                    !is.na(rep2_idx) & !is.infinite(rep2_idx))
+
             if (nrow(idx_df) > 0) {
-                rep1_df$idr[idx_df$rep1_idx] <- idx_df$idr
-                rep1_df <- dplyr::arrange(rep1_df, idr)
+                idr_matrix <- as.matrix(dplyr::select(idx_df,
+                                                      rep1_value,
+                                                      rep2_value))
+
+                if (length(unique(idr_matrix[, 1])) < 10 ||
+                    length(unique(idr_matrix[, 2])) < 10) {
+                    futile.logger::flog.warn("low complexity data set")
+                }
+
+                invisible(tryCatch({
+                    idr_results <- idr::est.IDR(idr_matrix, mu, sigma, rho, p,
+                                                eps = eps,
+                                                max.ite = max_iteration)
+                    if (local_idr) {
+                        idx_df$idr <- idr_results$idr
+                    } else {
+                        idx_df$idr <- idr_results$IDR
+                    }
+                },
+                error = function(e) {
+                    idx_df$idr <- as.numeric(NA)
+                    futile.logger::flog.warn(stringr::str_trim(e))
+                }))
+            } else {
+                idx_df$idr <- numeric(0)
+            }
+
+            if (nrow(rep1_df) > 0) {
+                rep1_df$idr <- as.numeric(NA)
+                if (nrow(idx_df) > 0) {
+                    rep1_df$idr[idx_df$rep1_idx] <- idx_df$idr
+                    rep1_df <- dplyr::arrange(rep1_df, idr)
+                }
+            } else {
+                rep1_df$idr <- numeric(0)
+            }
+
+            if (nrow(rep2_df) > 0) {
+                rep2_df$idr <- as.numeric(NA)
+                if (length(idx_df$idr) > 0) {
+                    rep2_df$idr[idx_df$rep2_idx] <- idx_df$idr
+                    rep2_df <- dplyr::arrange(rep2_df, idr)
+                }
+            } else {
+                rep2_df$idr <- numeric(0)
             }
         } else {
-            rep1_df$idr <- numeric(0)
+            if (nrow(rep1_df) > 0) {
+                rep1_df$idr <- as.numeric(NA)
+            } else {
+                rep1_df$idr <- numeric(0)
+            }
+
+            if (nrow(rep2_df) > 0) {
+                rep2_df$idr <- as.numeric(NA)
+            } else {
+                rep2_df$idr <- numeric(0)
+            }
         }
 
-        if (nrow(rep2_df) > 0) {
-            rep2_df$idr <- as.numeric(NA)
-            if (length(idx_df$idr) > 0) {
-                rep2_df$idr[idx_df$rep2_idx] <- idx_df$idr
-                rep2_df <- dplyr::arrange(rep2_df, idr)
-            }
-        } else {
-            rep2_df$idr <- numeric(0)
+        columns <- c(columns, "rep_value", "rank", "rep_rank",
+                     "idx", "rep_idx", "idr")
+        if (analysis_type == "IDR1D") {
+            rep1_df <- dplyr::select(rep1_df, columns)
+            rep2_df <- dplyr::select(rep2_df, columns)
+        } else if (analysis_type == "IDR2D") {
+            rep1_df <- dplyr::select(rep1_df, columns)
+            rep2_df <- dplyr::select(rep2_df, columns)
         }
     } else {
-        if (nrow(rep1_df) > 0) {
-            rep1_df$idr <- as.numeric(NA)
-        } else {
+        if (nrow(rep1_df) == 0) {
+            rep1_df$idx <- integer(0)
+            rep1_df$rep_idx <- integer(0)
+            rep1_df$rank <- integer(0)
+            rep1_df$rep_rank <- integer(0)
+            rep1_df$rep_value <- numeric(0)
             rep1_df$idr <- numeric(0)
-        }
-
-        if (nrow(rep2_df) > 0) {
-            rep2_df$idr <- as.numeric(NA)
         } else {
-            rep2_df$idr <- numeric(0)
-        }
-    }
+            # remove irrelevant columns, rename relevant columns
+            rep1_df <- rep1_df[, seq_len(length(columns))]
+            colnames(rep1_df) <- columns
+            columns <- c(columns, "rep_value", "rank",
+                         "rep_rank", "idx", "rep_idx", "idr")
 
-    columns <- c(columns, "rep_value", "rank", "rep_rank",
-                 "idx", "rep_idx", "idr")
-    if (analysis_type == "IDR1D") {
-        rep1_df <- dplyr::select(rep1_df, columns)
-        rep2_df <- dplyr::select(rep2_df, columns)
-    } else if (analysis_type == "IDR2D") {
-        rep1_df <- dplyr::select(rep1_df, columns)
-        rep2_df <- dplyr::select(rep2_df, columns)
+            rep1_df$idx <- NA_integer_
+            rep1_df$rep_idx <- NA_integer_
+            rep1_df$rank <- NA_integer_
+            rep1_df$rep_rank <- NA_integer_
+            rep1_df$rep_value <- NA_real_
+            rep1_df$idr <- NA_real_
+
+            rep1_df <- dplyr::select(rep1_df, columns)
+        }
+        if (nrow(rep2_df) == 0) {
+            rep2_df$idx <- integer(0)
+            rep2_df$rep_idx <- integer(0)
+            rep2_df$rank <- integer(0)
+            rep2_df$rep_rank <- integer(0)
+            rep2_df$rep_value <- numeric(0)
+            rep2_df$idr <- numeric(0)
+        } else {
+            # remove irrelevant columns, rename relevant columns
+            rep2_df <- rep2_df[, seq_len(length(columns))]
+            colnames(rep2_df) <- columns
+            columns <- c(columns, "rep_value", "rank",
+                         "rep_rank", "idx", "rep_idx", "idr")
+
+            rep2_df$idx <- NA_integer_
+            rep2_df$rep_idx <- NA_integer_
+            rep2_df$rank <- NA_integer_
+            rep2_df$rep_rank <- NA_integer_
+            rep2_df$rep_value <- NA_real_
+            rep2_df$idr <- NA_real_
+
+            rep2_df <- dplyr::select(rep2_df, columns)
+        }
     }
 
     res <- list(rep1_df = rep1_df, rep2_df = rep2_df,
@@ -811,8 +883,8 @@ print.idr2d_result_summary <- function(x, ...) {
             x$num_highly_significant_interactions, "\n", sep = "")
         cat("percentage of interactions with significant IDR (IDR < 0.05): ",
             round(x$num_significant_interactions /
-                max(x$rep1_num_interactions, x$rep2_num_interactions) * 100,
-                digits = 2),
+                      max(x$rep1_num_interactions, x$rep2_num_interactions) * 100,
+                  digits = 2),
             " %\n", sep = "")
     }
 }
