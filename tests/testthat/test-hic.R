@@ -32,7 +32,7 @@ test_that("estimate_idr2d_hic", {
 
 test_that("parse_juicer_matrix", {
     expect_error(expect_output(parse_juicer_matrix("wrong/path")),
-                 "ModuleNotFoundError: No module named 'straw'")
+                 "No module named 'straw'")
 })
 
 test_that("parse_juicer_matrix", {
