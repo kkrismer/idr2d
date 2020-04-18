@@ -65,12 +65,17 @@ test_that("establish_bijection", {
 
     expect_error(establish_bijection(rep1_df, rep2_df, analysis_type = "xyz"))
 
-    mapping <- establish_bijection(rep1_df, data.frame(), analysis_type = "IDR1D")
+    mapping <- establish_bijection(rep1_df, data.frame(),
+                                   analysis_type = "IDR1D")
     expect_equal(length(mapping), 2)
     expect_equal(names(mapping), c("rep1_df","rep2_df"))
+    expect_equal(nrow(mapping$rep2_df), 0)
 
-    rep2_df <- mapping$rep2_df
-    expect_equal(nrow(rep2_df), 0)
+    mapping <- establish_bijection(data.frame(), rep2_df,
+                                   analysis_type = "IDR1D")
+    expect_equal(length(mapping), 2)
+    expect_equal(names(mapping), c("rep1_df","rep2_df"))
+    expect_equal(nrow(mapping$rep1_df), 0)
 })
 
 test_that("preprocess", {
@@ -145,6 +150,14 @@ test_that("estimate_idr", {
                                         value = numeric(0)),
                              analysis_type = "IDR1D")
     expect_equal(nrow(pairs_df$rep2_df), 0)
+
+    pairs_df <- estimate_idr(data.frame(chr = character(0),
+                                        start = integer(0),
+                                        end = integer(0),
+                                        value = numeric(0)),
+                             idr2d:::chiapet$rep2_df,
+                             analysis_type = "IDR1D")
+    expect_equal(nrow(pairs_df$rep1_df), 0)
 })
 
 test_that("summary.idr2d_result", {
