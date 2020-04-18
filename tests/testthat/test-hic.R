@@ -31,7 +31,9 @@ test_that("estimate_idr2d_hic", {
 })
 
 test_that("parse_juicer_matrix", {
-    expect_error(expect_output(parse_juicer_matrix("wrong/path")),
+    expect_error(expect_output(parse_juicer_matrix("wrong/path",
+                                                   use_python = "",
+                                                   use_virtualenv = "")),
                  "No module named 'straw'")
 })
 

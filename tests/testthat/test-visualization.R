@@ -58,13 +58,20 @@ test_that("draw_value_idr_scatterplot", {
 })
 
 test_that("draw_hic_contact_map", {
-    futile.logger::flog.threshold(futile.logger::WARN)
+    futile.logger::flog.threshold(futile.logger::ERROR)
     idr_results_df <- estimate_idr2d_hic(idr2d:::hic$rep1_df,
                                          idr2d:::hic$rep2_df)
     p <- draw_hic_contact_map(idr_results_df, idr_cutoff = 0.05,
                               chromosome = "chr1")
     expect_equal(class(p), c("gg", "ggplot"))
 
+    expect_error(draw_hic_contact_map(idr_results_df, idr_cutoff = 0.00000005,
+                                      chromosome = "chr1"),
+                 "no blocks with IDR")
+    expect_error(draw_hic_contact_map(idr_results_df,
+                                      start_coordinate = 10^13,
+                                      end_coordinate = 10^14),
+                 "no blocks in window")
     expect_error(draw_hic_contact_map(data.frame(), idr_cutoff = 0.05,
                                       chromosome = "chr1"))
     expect_error(draw_hic_contact_map(idr_results_df, idr_cutoff = 0.05,
@@ -72,5 +79,19 @@ test_that("draw_hic_contact_map", {
     p <- draw_hic_contact_map(idr_results_df, idr_cutoff = 0.05,
                               chromosome = "chr1", log_values = FALSE)
     expect_equal(class(p), c("gg", "ggplot"))
+
+
+    rep1_df <- idr2d:::hic$rep1_df
+    rep2_df <- idr2d:::hic$rep2_df
+    rep1_df$chr[1:1000] <- "chr2"
+    rep2_df$chr[1:1000] <- "chr2"
+    idr_results_df <- estimate_idr2d_hic(rep1_df,
+                                         rep2_df)
+    p <- draw_hic_contact_map(idr_results_df, idr_cutoff = 0.05)
+    expect_equal(class(p), c("gg", "ggplot"))
+
+    idr_results_df$value[1:100] <- idr_results_df$value[1:100] * (-1)
+    idr_results_df$interaction <- as.factor(idr_results_df$interaction)
+    expect_warning(draw_hic_contact_map(idr_results_df, idr_cutoff = 0.05))
 })
 
