@@ -1,5 +1,4 @@
 context("visualization functions")
-library(idr2d)
 
 test_that("pretty_print_block_size", {
     expect_equal(idr2d:::pretty_print_block_size(1), "1 bp")

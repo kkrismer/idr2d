@@ -1,5 +1,4 @@
 context("auxiliary functions")
-library(idr2d)
 
 test_that("determine_anchor_overlap", {
     rep1_df <- idr2d:::chiapet$rep1_df

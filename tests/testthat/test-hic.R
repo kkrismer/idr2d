@@ -1,5 +1,4 @@
 context("Hi-C functions")
-library(idr2d)
 
 test_that("estimate_idr2d_hic", {
     futile.logger::flog.threshold(futile.logger::WARN)

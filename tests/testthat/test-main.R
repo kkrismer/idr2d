@@ -1,5 +1,4 @@
 context("main functions")
-library(idr2d)
 
 test_that("establish_bijection1d", {
     rep1_df <- idr2d:::chipseq$rep1_df

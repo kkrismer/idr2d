@@ -1,5 +1,4 @@
 context("arv")
-library(idr2d)
 
 test_that("calculate_relative_overlap2d", {
     expect_equal(calculate_relative_overlap2d(100, 120, 240, 260,
