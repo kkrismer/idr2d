@@ -1,12 +1,12 @@
 # IDR2D: Irreproducible Discovery Rate for Genomic Interactions
 
-[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![Travis build status](https://travis-ci.org/kkrismer/idr2d.svg?branch=master)](https://travis-ci.org/kkrismer/idr2d) [![DOI](https://img.shields.io/badge/DOI-10.1101%2F691295-blue.svg)](https://doi.org/10.1093/nar/gkaa030) [![BioC](https://img.shields.io/badge/BioC-1.0.4-brightgreen.svg)](https://doi.org/doi:10.18129/B9.bioc.idr2d) [![platforms](https://www.bioconductor.org/shields/availability/3.10/idr2d.svg)](https://www.bioconductor.org/packages/release/bioc/html/idr2d.html#archives) [![Coverage Status](https://coveralls.io/repos/github/kkrismer/idr2d/badge.svg?branch=master)](https://coveralls.io/github/kkrismer/idr2d?branch=master)
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![Travis build status](https://travis-ci.org/kkrismer/idr2d.svg?branch=master)](https://travis-ci.org/kkrismer/idr2d) [![DOI](https://img.shields.io/badge/DOI-10.1101%2F691295-blue.svg)](https://doi.org/10.1093/nar/gkaa030) [![BioC](https://img.shields.io/badge/BioC-1.0.4-brightgreen.svg)](https://doi.org/doi:10.18129/B9.bioc.idr2d) [![platforms](https://www.bioconductor.org/shields/availability/3.11/idr2d.svg)](https://www.bioconductor.org/packages/release/bioc/html/idr2d.html#archives) [![Coverage Status](https://coveralls.io/repos/github/kkrismer/idr2d/badge.svg?branch=master)](https://coveralls.io/github/kkrismer/idr2d?branch=master)
 
 Chromatin interaction data from protocols such as ChIA-PET and HiChIP provide valuable insights into genome organization and gene regulation, but can include spurious interactions that do not reflect underlying genome biology. We introduce a generalization of the Irreproducible Discovery Rate (IDR) method called IDR2D that identifies replicable interactions shared by experiments. IDR2D provides a principled set of interactions and eliminates artifacts from single experiments.
 
 ## Installation
 
-The *idr2d* package is part of Bioconductor 3.10. To install it on your system, enter:
+The *idr2d* package is part of Bioconductor >= 3.10. To install it on your system, enter:
 
 ```
 if (!requireNamespace("BiocManager", quietly = TRUE)) {
@@ -26,11 +26,11 @@ if (!requireNamespace("remotes", quietly = TRUE)) {
 remotes::install_github("kkrismer/idr2d")
 ```
 
-R 3.6 (or higher) and Bioconductor 3.10 is required in both cases. Additionally, the 64-bit version of Python 3.5 (or higher) and the Python package [hic-straw](https://pypi.org/project/hic-straw/) are required for Hi-C analysis from Juicer *.hic* files. 
+R 3.6 (or higher) and Bioconductor 3.10 (or higher) is required in both cases. Additionally, the 64-bit version of Python 3.5 (or higher) and the Python package [hic-straw](https://pypi.org/project/hic-straw/) are required for Hi-C analysis from Juicer *.hic* files. 
 
 ## Usage
 
-There are two vignettes available on Bioconductor, focusing on [*idr2d* and ChIA-PET data](https://bioc.ism.ac.jp/packages/devel/bioc/vignettes/idr2d/inst/doc/idr2d.html) and [*idr2d* and ChIP-seq data](https://bioc.ism.ac.jp/packages/devel/bioc/vignettes/idr2d/inst/doc/idr1d.html).
+There are two vignettes available on Bioconductor, focusing on [*idr2d* and ChIA-PET data](https://www.bioconductor.org/packages/release/bioc/vignettes/idr2d/inst/doc/idr2d.html) and [*idr2d* and ChIP-seq data](https://www.bioconductor.org/packages/release/bioc/vignettes/idr2d/inst/doc/idr1d.html).
 
 The [reference manual](https://bioc.ism.ac.jp/packages/devel/bioc/manuals/idr2d/man/idr2d.pdf) might also be helpful if you know what you are looking for.
 
