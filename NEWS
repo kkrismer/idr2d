@@ -1,3 +1,9 @@
+CHANGES IN VERSION 1.2.0
+-------------------------
+    o added blue background to IDR distribution histograms
+    o updated roxygen2 version to 7.1.0
+    o added unit tests
+
 CHANGES IN VERSION 1.0.4
 -------------------------
     o changed max_gap default value from 0 to -1 to conform with convention
