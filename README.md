@@ -1,6 +1,6 @@
 # IDR2D: Irreproducible Discovery Rate for Genomic Interactions
 
-[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![Travis build status](https://travis-ci.org/kkrismer/idr2d.svg?branch=master)](https://travis-ci.org/kkrismer/idr2d) [![DOI](https://img.shields.io/badge/DOI-10.1101%2F691295-blue.svg)](https://doi.org/10.1093/nar/gkaa030) [![BioC](https://img.shields.io/badge/BioC-1.2.1-brightgreen.svg)](https://doi.org/doi:10.18129/B9.bioc.idr2d) [![platforms](https://www.bioconductor.org/shields/availability/3.11/idr2d.svg)](https://www.bioconductor.org/packages/release/bioc/html/idr2d.html#archives) [![Coverage Status](https://coveralls.io/repos/github/kkrismer/idr2d/badge.svg?branch=master)](https://coveralls.io/github/kkrismer/idr2d?branch=master)
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![DOI](https://img.shields.io/badge/DOI-10.1101%2F691295-blue.svg)](https://doi.org/10.1093/nar/gkaa030) [![BioC](https://img.shields.io/badge/BioC-1.2.2-brightgreen.svg)](https://doi.org/doi:10.18129/B9.bioc.idr2d) [![platforms](https://www.bioconductor.org/shields/availability/3.11/idr2d.svg)](https://www.bioconductor.org/packages/release/bioc/html/idr2d.html#archives) [![Coverage Status](https://coveralls.io/repos/github/kkrismer/idr2d/badge.svg?branch=master)](https://coveralls.io/github/kkrismer/idr2d?branch=master)
 
 Chromatin interaction data from protocols such as ChIA-PET and HiChIP provide valuable insights into genome organization and gene regulation, but can include spurious interactions that do not reflect underlying genome biology. We introduce a generalization of the Irreproducible Discovery Rate (IDR) method called IDR2D that identifies replicable interactions shared by experiments. IDR2D provides a principled set of interactions and eliminates artifacts from single experiments.
 
@@ -109,6 +109,14 @@ draw_rank_idr_scatterplot(idr_results_df)
 draw_value_idr_scatterplot(idr_results_df)
 draw_hic_contact_map(idr_results, idr_cutoff = 0.05, chromosome = "chr1")
 ```
+
+## Build status
+
+| Platform | Status |
+|------|------|
+| Travis CI | [![Travis build status](https://travis-ci.org/kkrismer/idr2d.svg?branch=master)](https://travis-ci.org/kkrismer/idr2d) |
+| Bioconductor 3.11 (release) | [![BioC release](https://bioconductor.org/shields/build/release/bioc/idr2d.svg)](http://bioconductor.org/checkResults/release/bioc-LATEST/idr2d/) |
+| Bioconductor 3.12 (devel) | [![BioC devel](https://bioconductor.org/shields/build/devel/bioc/idr2d.svg)](http://bioconductor.org/checkResults/devel/bioc-LATEST/idr2d/) |
 
 ## Citation
 
