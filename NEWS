@@ -1,3 +1,8 @@
+CHANGES IN VERSION 1.2.2
+-------------------------
+    o skipped Python-dependent tests on i386 systems (64-bit version of
+    Python is required)
+
 CHANGES IN VERSION 1.2.0
 -------------------------
     o added blue background to IDR distribution histograms
