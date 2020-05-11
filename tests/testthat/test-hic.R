@@ -36,7 +36,7 @@ test_that("parse_juicer_matrix", {
     expect_error(expect_output(parse_juicer_matrix("wrong/path",
                                                    use_python = "",
                                                    use_virtualenv = "")),
-                 "No module named 'straw'")
+                 "No module named")
 })
 
 test_that("parse_juicer_matrix", {
