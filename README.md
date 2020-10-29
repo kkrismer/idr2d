@@ -114,7 +114,7 @@ draw_hic_contact_map(idr_results, idr_cutoff = 0.05, chromosome = "chr1")
 
 | Platform | Status |
 |------|------|
-| Travis CI | [![Travis build status](https://travis-ci.org/kkrismer/idr2d.svg?branch=master)](https://travis-ci.org/kkrismer/idr2d) |
+| Travis CI | [![Travis build status](https://travis-ci.com/kkrismer/idr2d.svg?branch=master)](https://travis-ci.com/kkrismer/idr2d) |
 | Bioconductor 3.12 (release) | [![BioC release](https://bioconductor.org/shields/build/release/bioc/idr2d.svg)](http://bioconductor.org/checkResults/release/bioc-LATEST/idr2d/) |
 | Bioconductor 3.13 (devel) | [![BioC devel](https://bioconductor.org/shields/build/devel/bioc/idr2d.svg)](http://bioconductor.org/checkResults/devel/bioc-LATEST/idr2d/) |
 
