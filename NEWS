@@ -1,3 +1,7 @@
+CHANGES IN VERSION 1.4.0
+-------------------------
+    o Bioconductor 3.12 release
+
 CHANGES IN VERSION 1.2.2
 -------------------------
     o skipped Python-dependent tests on i386 systems (64-bit version of
