@@ -6,7 +6,7 @@ Chromatin interaction data from protocols such as ChIA-PET and HiChIP provide va
 
 ## Installation
 
-The *idr2d* package is part of Bioconductor >= 3.10. To install it on your system, enter:
+The *idr2d* package is part of Bioconductor since release 3.10. To install it on your system, enter:
 
 ```
 if (!requireNamespace("BiocManager", quietly = TRUE)) {
