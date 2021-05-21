@@ -1,6 +1,5 @@
 Package: idr2d
-Title: Irreproducible Discovery Rate for Genomic Interactions
-    Data
+Title: Irreproducible Discovery Rate for Genomic Interactions Data
 Version: 1.5.0
 Authors@R: 
     c(person(given = "Konstantin",
@@ -13,11 +12,10 @@ Authors@R:
              role = c("ths", "cph"),
              email = "gifford@mit.edu",
              comment = c(ORCID = "0000-0003-1709-4034")))
-Description: A tool to measure reproducibility between genomic
-    experiments that produce two-dimensional peaks (interactions between
-    peaks), such as ChIA-PET, HiChIP, and HiC. idr2d is an extension of
-    the original idr package, which is intended for (one-dimensional)
-    ChIP-seq peaks.
+Description: A tool to measure reproducibility between genomic experiments
+    that produce two-dimensional peaks (interactions between peaks), such
+    as ChIA-PET, HiChIP, and HiC. idr2d is an extension of the original
+    idr package, which is intended for (one-dimensional) ChIP-seq peaks.
 License: MIT + file LICENSE
 URL: https://idr2d.mit.edu
 Depends:
@@ -29,6 +27,7 @@ Imports:
     GenomicRanges (>= 1.30),
     ggplot2 (>= 3.1.1),
     grDevices,
+    grid,
     idr (>= 1.2),
     IRanges (>= 2.18.0),
     magrittr (>= 1.5),
@@ -47,8 +46,8 @@ Suggests:
     testthat (>= 2.1.0)
 VignetteBuilder: 
     knitr
-biocViews: DNA3DStructure, GeneRegulation, PeakDetection,
-    Epigenetics, FunctionalGenomics, Classification, HiC
+biocViews: DNA3DStructure, GeneRegulation, PeakDetection, Epigenetics,
+    FunctionalGenomics, Classification, HiC
 Encoding: UTF-8
 RoxygenNote: 7.1.0
 SystemRequirements: Python (>= 3.5.0), hic-straw
