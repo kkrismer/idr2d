@@ -1,4 +1,4 @@
-citHeader("Please cite the following if utilizing Transite: ")
+citHeader("Please cite the following if utilizing idr2d: ")
 citEntry(entry="article",
   author =  personList(as.person("Konstantin Krismer"),
                        as.person("Yuchun Guo"),
@@ -9,7 +9,7 @@ citEntry(entry="article",
   number = 6,
   pages = "e31-e31",
   year = 2020,
-  month = 02,
+  month = 2,
   doi = "10.1093/nar/gkaa030",
   URL = "https://doi.org/10.1093/nar/gkaa030",
   textVersion =
