@@ -1,10 +1,10 @@
-citHeader("Please cite the following if utilizing idr2d: ")
+citHeader("Please cite the following if utilizing idr2d:")
 citEntry(
   entry = "article",
+  title = "IDR2D identifies reproducible genomic interactions",
   author = personList(as.person("Konstantin Krismer"),
                       as.person("Yuchun Guo"),
                       as.person("David K. Gifford")),
-  title = "IDR2D identifies reproducible genomic interactions",
   journal = "Nucleic Acids Research",
   volume = 48,
   number = 6,
