@@ -1,6 +1,6 @@
 # IDR2D: Irreproducible Discovery Rate for Genomic Interactions
 
-[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![DOI](https://img.shields.io/badge/DOI-10.1093%2Fnar%2Fgkaa030-blue.svg)](https://doi.org/10.1093/nar/gkaa030) [![BioC](https://img.shields.io/badge/BioC-1.6.0-brightgreen.svg)](https://doi.org/doi:10.18129/B9.bioc.idr2d) [![platforms](https://www.bioconductor.org/shields/availability/release/idr2d.svg)](https://www.bioconductor.org/packages/release/bioc/html/idr2d.html#archives) [![Coverage Status](https://coveralls.io/repos/github/kkrismer/idr2d/badge.svg?branch=master)](https://coveralls.io/github/kkrismer/idr2d?branch=master)
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![DOI](https://img.shields.io/badge/DOI-10.1093%2Fnar%2Fgkaa030-blue.svg)](https://doi.org/10.1093/nar/gkaa030) [![BioC](https://img.shields.io/badge/BioC-1.8.1-brightgreen.svg)](https://doi.org/doi:10.18129/B9.bioc.idr2d) [![platforms](https://www.bioconductor.org/shields/availability/release/idr2d.svg)](https://www.bioconductor.org/packages/release/bioc/html/idr2d.html#archives) [![Coverage Status](https://coveralls.io/repos/github/kkrismer/idr2d/badge.svg?branch=master)](https://coveralls.io/github/kkrismer/idr2d?branch=master)
 
 https://idr2d.mit.edu
 
@@ -117,8 +117,8 @@ draw_hic_contact_map(idr_results, idr_cutoff = 0.05, chromosome = "chr1")
 | Platform | Status |
 |------|------|
 | Travis CI | [![Travis build status](https://travis-ci.com/kkrismer/idr2d.svg?branch=master)](https://travis-ci.com/kkrismer/idr2d) |
-| Bioconductor 3.12 (release) | [![BioC release](https://bioconductor.org/shields/build/release/bioc/idr2d.svg)](http://bioconductor.org/checkResults/release/bioc-LATEST/idr2d/) |
-| Bioconductor 3.13 (devel) | [![BioC devel](https://bioconductor.org/shields/build/devel/bioc/idr2d.svg)](http://bioconductor.org/checkResults/devel/bioc-LATEST/idr2d/) |
+| Bioconductor 3.14 (release) | [![BioC release](https://bioconductor.org/shields/build/release/bioc/idr2d.svg)](http://bioconductor.org/checkResults/release/bioc-LATEST/idr2d/) |
+| Bioconductor 3.15 (devel) | [![BioC devel](https://bioconductor.org/shields/build/devel/bioc/idr2d.svg)](http://bioconductor.org/checkResults/devel/bioc-LATEST/idr2d/) |
 
 ## Citation
 
