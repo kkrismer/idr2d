@@ -1,3 +1,17 @@
+CHANGES IN VERSION 1.8.1
+-------------------------
+    o added grid to Imports
+    o fixed citation
+    o updated DOI
+
+CHANGES IN VERSION 1.8.0
+-------------------------
+    o Bioconductor 3.14 release
+
+CHANGES IN VERSION 1.6.0
+-------------------------
+    o Bioconductor 3.13 release
+
 CHANGES IN VERSION 1.4.0
 -------------------------
     o Bioconductor 3.12 release
