@@ -1,12 +1,7 @@
 Package: idr2d
-<<<<<<< HEAD
 Title: Irreproducible Discovery Rate for Genomic Interactions
     Data
-Version: 1.8.0
-=======
-Title: Irreproducible Discovery Rate for Genomic Interactions Data
-Version: 1.5.0
->>>>>>> 854d23f... Add grid to Imports
+Version: 1.8.1
 Authors@R: 
     c(person(given = "Konstantin",
              family = "Krismer",
